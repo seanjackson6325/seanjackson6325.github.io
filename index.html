@@ -2297,8 +2297,10 @@
     runDecryptOnActivePage();
 
     // ===== WINDOWS 95 PIXEL CURSOR =====
+    // SVG data URLs are not supported for CSS cursors in most browsers.
+    // Instead, render to a canvas and use a PNG data URL, which is universally supported.
     (function() {
-      var S = 2; // screen pixels per cursor pixel
+      var S = 3; // screen pixels per cursor pixel (3px = chunky retro look)
       // 0=transparent  1=black  2=white
       var px = [
         [1,0,0,0,0,0,0,0,0,0,0],
@@ -2317,25 +2319,29 @@
         [0,0,0,0,0,0,1,1,0,0,0],
       ];
 
-      var W = 11 * S, H = px.length * S;
-      var r = '';
+      var canvas = document.createElement('canvas');
+      canvas.width  = 11 * S;
+      canvas.height = px.length * S;
+      var ctx = canvas.getContext('2d');
+
       for (var row = 0; row < px.length; row++) {
         for (var col = 0; col < px[row].length; col++) {
           var v = px[row][col];
           if (!v) continue;
-          r += '<rect x="'+(col*S)+'" y="'+(row*S)+'" width="'+S+'" height="'+S+'" fill="'+(v===1?'#000':'#fff')+'"/>';
+          ctx.fillStyle = v === 1 ? '#000000' : '#ffffff';
+          ctx.fillRect(col * S, row * S, S, S);
         }
       }
-      var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'">'+r+'</svg>';
-      var url  = '"data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg) + '" 0 0';
+
+      var png = canvas.toDataURL('image/png');
+      var cur = 'url("' + png + '") 0 0';
 
       var st = document.createElement('style');
-      // Apply Win95 cursor globally; high-specificity rules restore grab/text where needed
       st.textContent =
-        '* { cursor: url(' + url + '), default; }\n' +
-        'a, button, .nav-btn, .help-btn, .btn, .ext-link, .note-card, .fun-links a ' +
-          '{ cursor: url(' + url + '), pointer; }\n' +
-        '#pixelCat, #pixelPenguin { cursor: url(' + url + '), grab; }';
+        '* { cursor: ' + cur + ', default; }\n' +
+        'a, button, .nav-btn, .help-btn, .btn, .ext-link, .note-card, .fun-links a' +
+          ' { cursor: ' + cur + ', pointer; }\n' +
+        '#pixelCat, #pixelPenguin { cursor: ' + cur + ', grab; }';
       document.head.appendChild(st);
     })();
 
