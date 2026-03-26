@@ -1563,7 +1563,15 @@
     // ===== MATRIX DECRYPT ANIMATION =====
     var GLYPHS = '!@#$%&*+=[]<>?/\\0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$!?><';
 
+    // Global cancel mechanism — each new decrypt invalidates all prior ones
+    var _decryptSeq = 0;
+    var _decryptCancelFns = [];
+
     function matrixDecrypt(container, duration) {
+      // Cancel every in-flight animation and restore its text immediately
+      _decryptCancelFns.forEach(function(fn) { fn(); });
+      _decryptCancelFns = [];
+
       duration = duration || 1400;
       var textElements = [];
       var walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null, false);
@@ -1576,6 +1584,15 @@
       }
       if (textElements.length === 0) return;
 
+      var mySeq = ++_decryptSeq;
+      var cancelled = false;
+
+      function cancel() {
+        cancelled = true;
+        textElements.forEach(function(item) { item.node.textContent = item.original; });
+      }
+      _decryptCancelFns.push(cancel);
+
       var startTime = performance.now();
 
       function randChar() {
@@ -1583,6 +1600,7 @@
       }
 
       function tick(now) {
+        if (cancelled || mySeq !== _decryptSeq) { cancel(); return; }
         var elapsed = now - startTime;
         var progress = Math.min(elapsed / duration, 1);
 
@@ -1608,9 +1626,8 @@
         if (progress < 1) {
           requestAnimationFrame(tick);
         } else {
-          textElements.forEach(function(item) {
-            item.node.textContent = item.original;
-          });
+          textElements.forEach(function(item) { item.node.textContent = item.original; });
+          _decryptCancelFns = _decryptCancelFns.filter(function(f) { return f !== cancel; });
         }
       }
 
@@ -2278,6 +2295,49 @@
 
     // Run decrypt on initial load
     runDecryptOnActivePage();
+
+    // ===== WINDOWS 95 PIXEL CURSOR =====
+    (function() {
+      var S = 2; // screen pixels per cursor pixel
+      // 0=transparent  1=black  2=white
+      var px = [
+        [1,0,0,0,0,0,0,0,0,0,0],
+        [1,1,0,0,0,0,0,0,0,0,0],
+        [1,2,1,0,0,0,0,0,0,0,0],
+        [1,2,2,1,0,0,0,0,0,0,0],
+        [1,2,2,2,1,0,0,0,0,0,0],
+        [1,2,2,2,2,1,0,0,0,0,0],
+        [1,2,2,2,2,2,1,0,0,0,0],
+        [1,2,2,2,2,2,2,1,0,0,0],
+        [1,2,2,2,2,2,2,2,1,0,0],
+        [1,2,2,2,2,2,1,1,1,1,0],
+        [1,2,2,1,2,2,1,0,0,0,0],
+        [1,2,1,0,1,2,2,1,0,0,0],
+        [1,1,0,0,0,1,2,1,0,0,0],
+        [0,0,0,0,0,0,1,1,0,0,0],
+      ];
+
+      var W = 11 * S, H = px.length * S;
+      var r = '';
+      for (var row = 0; row < px.length; row++) {
+        for (var col = 0; col < px[row].length; col++) {
+          var v = px[row][col];
+          if (!v) continue;
+          r += '<rect x="'+(col*S)+'" y="'+(row*S)+'" width="'+S+'" height="'+S+'" fill="'+(v===1?'#000':'#fff')+'"/>';
+        }
+      }
+      var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'">'+r+'</svg>';
+      var url  = '"data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg) + '" 0 0';
+
+      var st = document.createElement('style');
+      // Apply Win95 cursor globally; high-specificity rules restore grab/text where needed
+      st.textContent =
+        '* { cursor: url(' + url + '), default; }\n' +
+        'a, button, .nav-btn, .help-btn, .btn, .ext-link, .note-card, .fun-links a ' +
+          '{ cursor: url(' + url + '), pointer; }\n' +
+        '#pixelCat, #pixelPenguin { cursor: url(' + url + '), grab; }';
+      document.head.appendChild(st);
+    })();
 
     // Console easter egg
     console.log('%c> sean_jackson.exe loaded', 'color: #44ff44; font-size: 14px; font-weight: bold;');
