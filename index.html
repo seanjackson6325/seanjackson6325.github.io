@@ -2139,8 +2139,9 @@
         dragOffY   = clientY - obj.y;
         dragHistory = [{ x: clientX, y: clientY, t: performance.now() }];
         dragMoved   = false;
-        obj.el.style.cursor = 'grabbing';
-        document.body.style.cursor = 'grabbing';
+        var _gc = window._cursors;
+        obj.el.style.cursor = (_gc ? _gc.grabbing + ', grabbing' : 'grabbing');
+        document.body.style.cursor = (_gc ? _gc.grabbing + ', grabbing' : 'grabbing');
       }
 
       function endDrag() {
@@ -2158,7 +2159,8 @@
         }
         dragTarget = null;
         dragHistory = [];
-        obj.el.style.cursor = 'grab';
+        var _gc2 = window._cursors;
+        obj.el.style.cursor = (_gc2 ? _gc2.grab + ', grab' : 'grab');
         document.body.style.cursor = '';
       }
 
@@ -2296,13 +2298,29 @@
     // Run decrypt on initial load
     runDecryptOnActivePage();
 
-    // ===== WINDOWS 95 PIXEL CURSOR =====
-    // SVG data URLs are not supported for CSS cursors in most browsers.
-    // Instead, render to a canvas and use a PNG data URL, which is universally supported.
+    // ===== WINDOWS 95 PIXEL CURSORS =====
+    // SVG data URLs are not supported for CSS cursors; use canvas PNG data URLs instead.
     (function() {
-      var S = 3; // screen pixels per cursor pixel (3px = chunky retro look)
+      var S = 2; // 2px per cursor pixel — retro but not enormous
       // 0=transparent  1=black  2=white
-      var px = [
+      function makeCur(grid, hx, hy) {
+        var cols = grid[0].length, rows = grid.length;
+        var c = document.createElement('canvas');
+        c.width = cols * S; c.height = rows * S;
+        var ctx = c.getContext('2d');
+        for (var r = 0; r < rows; r++) {
+          for (var col = 0; col < grid[r].length; col++) {
+            var v = grid[r][col];
+            if (!v) continue;
+            ctx.fillStyle = v === 1 ? '#000' : '#fff';
+            ctx.fillRect(col * S, r * S, S, S);
+          }
+        }
+        return 'url("' + c.toDataURL('image/png') + '") ' + (hx*S) + ' ' + (hy*S);
+      }
+
+      // --- pixel grids ---
+      var arrow = [
         [1,0,0,0,0,0,0,0,0,0,0],
         [1,1,0,0,0,0,0,0,0,0,0],
         [1,2,1,0,0,0,0,0,0,0,0],
@@ -2319,29 +2337,198 @@
         [0,0,0,0,0,0,1,1,0,0,0],
       ];
 
-      var canvas = document.createElement('canvas');
-      canvas.width  = 11 * S;
-      canvas.height = px.length * S;
-      var ctx = canvas.getContext('2d');
+      // pointing hand — hotspot at fingertip (col 3, row 0)
+      var pointer = [
+        [0,0,0,1,0,0,0,0,0,0],
+        [0,0,1,2,1,0,0,0,0,0],
+        [0,0,1,2,1,0,0,0,0,0],
+        [0,0,1,2,1,1,0,0,0,0],
+        [0,0,1,2,1,2,1,1,0,0],
+        [0,0,1,2,1,2,1,2,1,0],
+        [1,1,1,2,2,2,2,2,1,0],
+        [1,2,2,2,2,2,2,2,1,0],
+        [0,1,2,2,2,2,2,2,1,0],
+        [0,1,2,2,2,2,2,1,0,0],
+        [0,0,1,2,2,2,2,1,0,0],
+        [0,0,1,2,2,2,1,0,0,0],
+        [0,0,0,1,2,1,0,0,0,0],
+        [0,0,0,0,1,0,0,0,0,0],
+      ];
 
-      for (var row = 0; row < px.length; row++) {
-        for (var col = 0; col < px[row].length; col++) {
-          var v = px[row][col];
-          if (!v) continue;
-          ctx.fillStyle = v === 1 ? '#000000' : '#ffffff';
-          ctx.fillRect(col * S, row * S, S, S);
-        }
-      }
+      // I-beam — hotspot at center (col 2, row 3)
+      var ibeam = [
+        [1,1,0,1,1],
+        [0,1,0,1,0],
+        [0,1,0,1,0],
+        [0,1,1,1,0],
+        [0,1,0,1,0],
+        [0,1,0,1,0],
+        [1,1,0,1,1],
+      ];
 
-      var png = canvas.toDataURL('image/png');
-      var cur = 'url("' + png + '") 0 0';
+      // open hand (grab) — hotspot at middle fingertip (col 4, row 0)
+      var grab = [
+        [0,0,1,0,1,0,1,0,0,0,0],
+        [0,1,2,1,2,1,2,1,0,0,0],
+        [0,1,2,1,2,1,2,1,0,0,0],
+        [0,1,2,2,2,2,2,1,1,0,0],
+        [1,2,2,2,2,2,2,2,2,1,0],
+        [1,2,2,2,2,2,2,2,2,1,0],
+        [1,2,2,2,2,2,2,2,2,1,0],
+        [0,1,2,2,2,2,2,2,1,0,0],
+        [0,0,1,2,2,2,2,1,0,0,0],
+        [0,0,0,1,2,2,1,0,0,0,0],
+        [0,0,0,0,1,1,0,0,0,0,0],
+      ];
+
+      // closed fist (grabbing) — hotspot at center (col 4, row 4)
+      var grabbing = [
+        [0,1,1,1,1,1,0,0,0],
+        [1,2,2,2,2,2,1,1,0],
+        [1,2,2,2,2,2,2,2,1],
+        [1,2,2,2,2,2,2,2,1],
+        [1,2,2,2,2,2,2,2,1],
+        [0,1,2,2,2,2,2,1,0],
+        [0,1,2,2,2,2,2,1,0],
+        [0,0,1,2,2,2,1,0,0],
+        [0,0,0,1,1,1,0,0,0],
+      ];
+
+      // crosshair — hotspot at center (col 4, row 4)
+      var crosshair = [
+        [0,0,0,0,1,0,0,0,0],
+        [0,0,0,0,1,0,0,0,0],
+        [0,0,0,0,1,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0],
+        [1,1,1,0,0,0,1,1,1],
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,1,0,0,0,0],
+        [0,0,0,0,1,0,0,0,0],
+        [0,0,0,0,1,0,0,0,0],
+      ];
+
+      // hourglass (wait) — hotspot at center (col 3, row 4)
+      var wait_cur = [
+        [1,1,1,1,1,1,1],
+        [0,1,2,2,2,1,0],
+        [0,0,1,2,1,0,0],
+        [0,0,0,1,0,0,0],
+        [0,0,0,1,0,0,0],
+        [0,0,1,2,1,0,0],
+        [0,1,2,2,2,1,0],
+        [1,1,1,1,1,1,1],
+      ];
+
+      // not-allowed — hotspot at center (col 3, row 3)
+      var notallowed = [
+        [0,0,1,1,1,1,0,0],
+        [0,1,2,1,1,2,1,0],
+        [1,2,1,0,0,1,2,1],
+        [1,2,0,0,0,0,2,1],
+        [1,2,1,0,0,1,2,1],
+        [0,1,2,1,1,2,1,0],
+        [0,0,1,1,1,1,0,0],
+        [0,0,0,0,0,0,0,0],
+      ];
+
+      // 4-way move — hotspot at center (col 4, row 4)
+      var move = [
+        [0,0,0,0,1,0,0,0,0],
+        [0,0,0,1,2,1,0,0,0],
+        [0,0,0,0,1,0,0,0,0],
+        [0,1,0,0,1,0,0,1,0],
+        [1,2,1,1,2,1,1,2,1],
+        [0,1,0,0,1,0,0,1,0],
+        [0,0,0,0,1,0,0,0,0],
+        [0,0,0,1,2,1,0,0,0],
+        [0,0,0,0,1,0,0,0,0],
+      ];
+
+      // ns-resize (↕) — hotspot at center (col 2, row 5)
+      var ns_resize = [
+        [0,0,1,0,0],
+        [0,1,2,1,0],
+        [1,2,2,2,1],
+        [0,0,1,0,0],
+        [0,0,1,0,0],
+        [0,0,1,0,0],
+        [0,0,1,0,0],
+        [1,2,2,2,1],
+        [0,1,2,1,0],
+        [0,0,1,0,0],
+      ];
+
+      // ew-resize (↔) — hotspot at center (col 4, row 3)
+      var ew_resize = [
+        [0,0,0,0,0,0,0,0,0],
+        [0,1,0,0,0,0,0,1,0],
+        [1,2,1,0,0,0,1,2,1],
+        [2,2,2,1,0,1,2,2,2],
+        [1,2,1,0,0,0,1,2,1],
+        [0,1,0,0,0,0,0,1,0],
+        [0,0,0,0,0,0,0,0,0],
+      ];
+
+      // nwse-resize (↖↘) — hotspot top-left (0,0)
+      var nwse_resize = [
+        [1,1,1,1,1,0,0,0,0],
+        [1,2,2,2,1,0,0,0,0],
+        [1,2,2,1,0,0,0,0,0],
+        [1,2,1,0,0,0,0,0,0],
+        [1,1,0,0,0,0,0,1,1],
+        [0,0,0,0,0,0,1,2,1],
+        [0,0,0,0,0,1,2,2,1],
+        [0,0,0,0,1,2,2,2,1],
+        [0,0,0,0,1,1,1,1,1],
+      ];
+
+      // nesw-resize (↗↙) — hotspot top-right (8,0)
+      var nesw_resize = [
+        [0,0,0,0,1,1,1,1,1],
+        [0,0,0,0,1,2,2,2,1],
+        [0,0,0,0,0,1,2,2,1],
+        [0,0,0,0,0,0,1,2,1],
+        [1,1,0,0,0,0,0,1,1],
+        [1,2,1,0,0,0,0,0,0],
+        [1,2,2,1,0,0,0,0,0],
+        [1,2,2,2,1,0,0,0,0],
+        [1,1,1,1,1,0,0,0,0],
+      ];
+
+      // Build all cursor values and expose for physics engine
+      window._cursors = {
+        arrow:      makeCur(arrow,      0, 0),
+        pointer:    makeCur(pointer,    3, 0),
+        ibeam:      makeCur(ibeam,      2, 3),
+        grab:       makeCur(grab,       4, 0),
+        grabbing:   makeCur(grabbing,   4, 4),
+        crosshair:  makeCur(crosshair,  4, 4),
+        wait:       makeCur(wait_cur,   3, 4),
+        notallowed: makeCur(notallowed, 3, 3),
+        move:       makeCur(move,       4, 4),
+        ns_resize:  makeCur(ns_resize,  2, 5),
+        ew_resize:  makeCur(ew_resize,  4, 3),
+        nwse_resize:makeCur(nwse_resize,0, 0),
+        nesw_resize:makeCur(nesw_resize,8, 0),
+      };
+      var C = window._cursors;
 
       var st = document.createElement('style');
-      st.textContent =
-        '* { cursor: ' + cur + ', default; }\n' +
-        'a, button, .nav-btn, .help-btn, .btn, .ext-link, .note-card, .fun-links a' +
-          ' { cursor: ' + cur + ', pointer; }\n' +
-        '#pixelCat, #pixelPenguin { cursor: ' + cur + ', grab; }';
+      st.textContent = [
+        '* { cursor: ' + C.arrow + ', default; }',
+        'a, button, .nav-btn, .help-btn, .btn, .ext-link, .note-card, .fun-links a, select'
+          + ' { cursor: ' + C.pointer + ', pointer; }',
+        'input[type="text"], input[type="search"], input[type="email"],'
+          + ' textarea, [contenteditable] { cursor: ' + C.ibeam + ', text; }',
+        '#pixelCat, #pixelPenguin { cursor: ' + C.grab + ', grab; }',
+        'input[type="range"] { cursor: ' + C.ew_resize + ', ew-resize; }',
+        '.resize-ns { cursor: ' + C.ns_resize + ', ns-resize; }',
+        '.resize-ew { cursor: ' + C.ew_resize + ', ew-resize; }',
+        '.crosshair { cursor: ' + C.crosshair + ', crosshair; }',
+        '.cursor-wait, .loading { cursor: ' + C.wait + ', wait; }',
+        '.cursor-not-allowed, [disabled] { cursor: ' + C.notallowed + ', not-allowed; }',
+        '.cursor-move { cursor: ' + C.move + ', move; }',
+      ].join('\n');
       document.head.appendChild(st);
     })();
 
