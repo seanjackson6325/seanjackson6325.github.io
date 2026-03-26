@@ -2140,8 +2140,9 @@
         dragHistory = [{ x: clientX, y: clientY, t: performance.now() }];
         dragMoved   = false;
         var _gc = window._cursors;
-        obj.el.style.cursor = (_gc ? _gc.grabbing + ', grabbing' : 'grabbing');
-        document.body.style.cursor = (_gc ? _gc.grabbing + ', grabbing' : 'grabbing');
+        var _gcv = _gc ? _gc.grabbing + ', grabbing' : 'grabbing';
+        obj.el.style.setProperty('cursor', _gcv, 'important');
+        document.body.style.setProperty('cursor', _gcv, 'important');
       }
 
       function endDrag() {
@@ -2160,8 +2161,9 @@
         dragTarget = null;
         dragHistory = [];
         var _gc2 = window._cursors;
-        obj.el.style.cursor = (_gc2 ? _gc2.grab + ', grab' : 'grab');
-        document.body.style.cursor = '';
+        var _gc2v = _gc2 ? _gc2.grab + ', grab' : 'grab';
+        obj.el.style.setProperty('cursor', _gc2v, 'important');
+        document.body.style.removeProperty('cursor');
       }
 
       // Attach mouse listeners to both animals
@@ -2513,21 +2515,22 @@
       };
       var C = window._cursors;
 
+      // Use !important to override any static CSS cursor rules
+      function cur(val, fb) { return 'cursor: ' + val + ', ' + fb + ' !important;'; }
       var st = document.createElement('style');
       st.textContent = [
-        '* { cursor: ' + C.arrow + ', default; }',
-        'a, button, .nav-btn, .help-btn, .btn, .ext-link, .note-card, .fun-links a, select'
-          + ' { cursor: ' + C.pointer + ', pointer; }',
+        '* { ' + cur(C.arrow, 'default') + ' }',
+        'a, button, .nav-btn, .help-btn, .btn, .ext-link, .note-card, .fun-links a, select,'
+          + ' .news-item, .ticker-item'
+          + ' { ' + cur(C.pointer, 'pointer') + ' }',
+        '.note-card.soon { ' + cur(C.notallowed, 'not-allowed') + ' }',
         'input[type="text"], input[type="search"], input[type="email"],'
-          + ' textarea, [contenteditable] { cursor: ' + C.ibeam + ', text; }',
-        '#pixelCat, #pixelPenguin { cursor: ' + C.grab + ', grab; }',
-        'input[type="range"] { cursor: ' + C.ew_resize + ', ew-resize; }',
-        '.resize-ns { cursor: ' + C.ns_resize + ', ns-resize; }',
-        '.resize-ew { cursor: ' + C.ew_resize + ', ew-resize; }',
-        '.crosshair { cursor: ' + C.crosshair + ', crosshair; }',
-        '.cursor-wait, .loading { cursor: ' + C.wait + ', wait; }',
-        '.cursor-not-allowed, [disabled] { cursor: ' + C.notallowed + ', not-allowed; }',
-        '.cursor-move { cursor: ' + C.move + ', move; }',
+          + ' textarea, [contenteditable] { ' + cur(C.ibeam, 'text') + ' }',
+        '#pixelCat, #pixelPenguin { ' + cur(C.grab, 'grab') + ' }',
+        'input[type="range"] { ' + cur(C.ew_resize, 'ew-resize') + ' }',
+        '.cursor-crosshair { ' + cur(C.crosshair, 'crosshair') + ' }',
+        '.cursor-wait, .loading { ' + cur(C.wait, 'wait') + ' }',
+        '.cursor-move { ' + cur(C.move, 'move') + ' }',
       ].join('\n');
       document.head.appendChild(st);
     })();
