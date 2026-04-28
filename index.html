@@ -166,6 +166,12 @@
       text-overflow: ellipsis;
     }
 
+    /* ===== 90s GIF DECORATIONS ===== */
+    .gif90 { image-rendering: pixelated; display: inline-block; vertical-align: middle; flex-shrink: 0; }
+    .gif-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 0.4rem 0; }
+    .gif-r { float: right; margin: 0 0 6px 10px; }
+    .gif-l { float: left; margin: 0 10px 6px 0; }
+
     /* ===== APP SHELL LAYOUT ===== */
     .app-shell {
       position: fixed;
@@ -1008,7 +1014,6 @@
   <!-- SPACE BACKGROUND -->
   <canvas id="starCanvas"></canvas>
   <div class="nebula-overlay"></div>
-
   <div class="scanlines"></div>
 
   <!-- APP SHELL -->
@@ -1105,6 +1110,9 @@
               <button class="btn btn-green" onclick="switchPage('projects')">View Projects</button>
               <button class="btn btn-blue" onclick="switchPage('contact')">Get in Touch</button>
             </div>
+            <div class="gif-row" style="margin-top:0.6rem;">
+              <img class="gif90" src="https://blob.gifcities.org/gifcities/TIQDBB4JHT4FML632XXHEYUDZRZFTNRD.gif" alt="">
+            </div>
           </div>
         </div>
 
@@ -1112,8 +1120,7 @@
         <div class="page" id="about">
           <div class="page-header"><span class="bracket">[</span><h2>About</h2><div class="line"></div><span class="bracket">]</span></div>
           <div class="card-grid">
-            <div class="stat-card glass" data-title="Education.inf"><div class="label">Education</div><div class="value">U of T</div><div class="sub">Honours BSc. Physics</div></div>
-            <div class="stat-card glass" data-title="Minors.inf"><div class="label">Minors</div><div class="value">CS + Math</div><div class="sub">Computer Science & Mathematics</div></div>
+            <div class="stat-card glass" data-title="Education.inf"><div class="label"><img class="gif90 gif-r" src="https://blob.gifcities.org/gifcities/FGIB7BHXN2H3N5O6KMMUNXRYIO3AP2MT.gif" alt="">Education</div><div class="value">University of Toronto</div><div class="sub">Honours BSc. Physics; Duel Minors in Computer Science and Mathematics<br>Focus on Quantum Information & Condensed Matter</div></div>
             <div class="stat-card glass" data-title="GradDate.inf"><div class="label">Graduating</div><div class="value">May 2026</div><div class="sub">Toronto, ON</div></div>
             <div class="stat-card glass" data-title="Citizenship.inf"><div class="label">Citizenship</div><div class="value">US / UK / CA</div><div class="sub">Triple Citizenship</div></div>
           </div>
@@ -1132,8 +1139,16 @@
         <!-- SKILLS -->
         <div class="page" id="skills">
           <div class="page-header"><span class="bracket">[</span><h2>Skills</h2><div class="line"></div><span class="bracket">]</span></div>
+          <div class="gif-row">
+            <img class="gif90" src="https://blob.gifcities.org/gifcities/43LQPUZA63YD3UYMJVMIOSXNAEYXBZLV.gif" alt="">
+            <img class="gif90" src="https://blob.gifcities.org/gifcities/6KOJHXTGJHP3ML3NY2S2UD53U6CD37JF.gif" alt="">
+            <img class="gif90" src="https://blob.gifcities.org/gifcities/DGZOEKPO6MR6AFXR4FAJITJJRE7OEHX7.gif" alt="">
+            <img class="gif90" src="https://blob.gifcities.org/gifcities/KUGG3AMGNE4WDQWA65UT4BZ4ERBOQZZS.gif" alt="">
+            <img class="gif90" src="https://blob.gifcities.org/gifcities/MC3GVZOGEMC4QAZPYDZEFEXUGVXBFKSS.gif" alt="">
+          </div>
           <div class="skills-grid">
             <div class="skill-card glass" data-title="DeepLearning.dll">
+              <img class="gif90 gif-r" src="https://blob.gifcities.org/gifcities/32OR64HV75CYRBNKFIPZL3OIVB4GMMZ3.gif" alt="">
               <h4>Deep Learning & Vision</h4>
               <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div></div><span class="name">PyTorch</span></div>
               <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div></div><span class="name">Computer Vision</span></div>
@@ -1155,6 +1170,7 @@
               <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p half"></div><div class="p"></div></div><span class="name">SQL</span></div>
             </div>
             <div class="skill-card glass" data-title="EmergingTech.dll">
+              <img class="gif90 gif-r" src="https://blob.gifcities.org/gifcities/73MRWTCCWXAWVACADCUMAWY6DNE7DXR6.gif" alt="">
               <h4>Emerging Technologies</h4>
               <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p half"></div><div class="p"></div></div><span class="name">LLMs / RAG / GenAI</span></div>
               <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p"></div><div class="p"></div></div><span class="name">Qiskit / Cirq</span></div>
@@ -1166,8 +1182,16 @@
         <!-- EXPERIENCE -->
         <div class="page" id="experience">
           <div class="page-header"><span class="bracket">[</span><h2>Experience</h2><div class="line"></div><span class="bracket">]</span></div>
+          <div class="gif-row">
+            <img class="gif90" src="https://blob.gifcities.org/gifcities/APAOHPOSBRHC4HXSJ6UBESMABNARPEOC.gif" alt="">
+            <img class="gif90" src="https://blob.gifcities.org/gifcities/BNR45KYPMBVVY2AEIXJ7NDKXJG2GVMIN.gif" alt="">
+            <img class="gif90" src="https://blob.gifcities.org/gifcities/23QU6F4MIBC5MKYPS33EV24JEGJM52PT.gif" alt="">
+            <img class="gif90" src="https://blob.gifcities.org/gifcities/ESUHY2UVLTK5SX2D54ZIBPPMYJXBP3QH.gif" alt="">
+            <img class="gif90" src="https://blob.gifcities.org/gifcities/GJBPOQPCGU3PZBTO6NEYWFZTCBMUW4LL.gif" alt="">
+          </div>
           <div class="exp-list">
             <div class="exp-card glass" data-title="LLNL_MLE.job">
+              <img class="gif90 gif-r" src="https://blob.gifcities.org/gifcities/DZRKDM3ZUHA2I52DFW2W5DRBSHZJMRHJ.gif" alt="">
               <div class="badge">Internship</div>
               <h3>Machine Learning Engineer</h3>
               <div class="org">Lawrence Livermore National Laboratory</div>
@@ -1178,6 +1202,7 @@
               <span class="status-pill done">Completed</span>
             </div>
             <div class="exp-card glass" data-title="UofT_Physics.edu">
+              <img class="gif90 gif-r" src="https://blob.gifcities.org/gifcities/3HRDVZEFPM3Q424JW3XEIH5PYQL3VTAU.gif" alt="">
               <div class="badge">Education</div>
               <h3>Honours BSc. Physics</h3>
               <div class="org">University of Toronto</div>
@@ -1191,8 +1216,15 @@
         <!-- PROJECTS -->
         <div class="page" id="projects">
           <div class="page-header"><span class="bracket">[</span><h2>Projects</h2><div class="line"></div><span class="bracket">]</span></div>
+          <div class="gif-row">
+            <img class="gif90" src="https://blob.gifcities.org/gifcities/5IQHC2KZBSMSHTE4VAJKWGJYPNG4Q74M.gif" alt="">
+            <img class="gif90" src="https://blob.gifcities.org/gifcities/JHGMQVVAOXV65FHPIWWHWCGCSCTRZC2A.gif" alt="">
+            <img class="gif90" src="https://blob.gifcities.org/gifcities/GDZK7TPDCJCXUIEQXF7IKCUK3VLVGPGU.gif" alt="">
+            <img class="gif90" src="https://blob.gifcities.org/gifcities/4ML44CWUOKQMJXLDMSI3EJDQGCVOTFKP.gif" alt="">
+          </div>
           <div class="proj-grid">
             <div class="proj-card glass" data-title="TMM_Scheduler.py">
+              <img class="gif90 gif-r" src="https://blob.gifcities.org/gifcities/7CK5ZEMFGQXNZ3EXNVQ3ORM2XYHFY76I.gif" alt="">
               <div class="top">
                 <h3>Time Management Manager (TMM)</h3>
                 <div class="links"><a href="#">GitHub</a></div>
@@ -1201,6 +1233,7 @@
               <div class="tags"><span>Python</span><span>Scheduling</span><span>Multi-user</span></div>
             </div>
             <div class="proj-card glass" data-title="MatQual_CV.py">
+              <img class="gif90 gif-r" src="https://blob.gifcities.org/gifcities/CJ4CC2LZMVPYKOSV5N32JVQMVJ6G7SGB.gif" alt="">
               <div class="top">
                 <h3>Material Quality Classification</h3>
                 <div class="links"><a href="#">Paper</a></div>
@@ -1215,6 +1248,12 @@
         <div class="page" id="publications">
           <div class="page-header"><span class="bracket">[</span><h2>Publications</h2><div class="line"></div><span class="bracket">]</span></div>
           <div class="pub-card glass" data-title="Publications.bib">
+            <img class="gif90 gif-r" src="https://blob.gifcities.org/gifcities/HRRSVUNJH5IBGYNIDTJ3QRSIWDWXW4FA.gif" alt="">
+            <div class="gif-row">
+              <img class="gif90" src="https://blob.gifcities.org/gifcities/2LBR7LRDZA42MRD6GFSKEYLDGHKAT4W2.gif" alt="">
+              <img class="gif90" src="https://blob.gifcities.org/gifcities/HP7LYAWZ2CPHRYITXJ7JQMNAJNYB7PPI.gif" alt="">
+              <img class="gif90" src="https://blob.gifcities.org/gifcities/M3364PB4MBYCEIRLDOYBSMFO72BDYVVB.gif" alt="">
+            </div>
             <h3>Material Quality Classification Algorithms</h3>
             <div class="meta">First Author &mdash; Under Review (2025)</div>
             <p>Research manuscript introducing a novel end-to-end computer-vision framework for automated materials surface quality assessment in self-driving laboratory environments. Presents custom vision architectures, dataset preprocessing, training pipelines, statistical benchmarking, and uncertainty analysis. Led model design, implementation, and evaluation. Imaging data from Cornell University; scientific validation with LLNL collaborators.</p>
@@ -1225,11 +1264,17 @@
         <div class="page" id="notes">
           <div class="page-header"><span class="bracket">[</span><h2>Notes</h2><div class="line"></div><span class="bracket">]</span></div>
           <div class="text-panel glass" data-title="Notes_Index.txt" style="margin-bottom:1.6rem;">
+            <img class="gif90 gif-r" src="https://blob.gifcities.org/gifcities/G5KXEPEMTL4FWQL3ZZFFW3ZTBKLNOGWP.gif" alt="">
             <p class="text-block">Notes, derivations, and write-ups I've put together for various courses and topics. Click any entry to open the PDF.</p>
           </div>
 
           <div class="notes-subject">
             <div class="notes-subject-title">// Quantum Mechanics</div>
+            <div class="gif-row" style="margin-bottom:0.4rem;">
+              <img class="gif90" src="https://blob.gifcities.org/gifcities/4POQMBYDCU5ANQKVIUACZQSNHOGQ4QBL.gif" alt="">
+              <img class="gif90" src="https://blob.gifcities.org/gifcities/AETOJO542NSXFY7S2HQDPPBQ2LLT7NGO.gif" alt="">
+              <img class="gif90" src="https://blob.gifcities.org/gifcities/JUPY4DDDPTUTZCIV35CYOMY5D7NOXD63.gif" alt="">
+            </div>
             <div class="notes-grid">
               <a class="note-card glass soon" data-title="QM1_Foundations.pdf" href="#">
                 <div class="note-icon soon-ico">PDF</div>
@@ -1248,6 +1293,11 @@
 
           <div class="notes-subject">
             <div class="notes-subject-title">// Classical Mechanics</div>
+            <div class="gif-row" style="margin-bottom:0.4rem;">
+              <img class="gif90" src="https://blob.gifcities.org/gifcities/ASN7YSB5VYVOWBDT3WTDGTMN7QAGJDGI.gif" alt="">
+              <img class="gif90" src="https://blob.gifcities.org/gifcities/E47ZJBID57WBH5ZXYB7SL2OCE22C5HH7.gif" alt="">
+              <img class="gif90" src="https://blob.gifcities.org/gifcities/KAXTCLQ675NNDECORE7QSCXMOHD7NDNF.gif" alt="">
+            </div>
             <div class="notes-grid">
               <a class="note-card glass soon" data-title="CM_Lagrangian.pdf" href="#">
                 <div class="note-icon soon-ico">PDF</div>
@@ -1262,6 +1312,11 @@
 
           <div class="notes-subject">
             <div class="notes-subject-title">// Electromagnetism</div>
+            <div class="gif-row" style="margin-bottom:0.4rem;">
+              <img class="gif90" src="https://blob.gifcities.org/gifcities/3BRQCUJYYW2BZTHNT5NCVMX7GBP3AKFT.gif" alt="">
+              <img class="gif90" src="https://blob.gifcities.org/gifcities/5SAYDEDXUAM7XUK5PSV4HZSGDHVNXS6R.gif" alt="">
+              <img class="gif90" src="https://blob.gifcities.org/gifcities/WBCA2EZ6GOAGXZCIUCEE4UH4P24DNZ5V.gif" alt="">
+            </div>
             <div class="notes-grid">
               <a class="note-card glass soon" data-title="EM_Maxwell.pdf" href="#">
                 <div class="note-icon soon-ico">PDF</div>
@@ -1276,6 +1331,11 @@
 
           <div class="notes-subject">
             <div class="notes-subject-title">// Machine Learning</div>
+            <div class="gif-row" style="margin-bottom:0.4rem;">
+              <img class="gif90" src="https://blob.gifcities.org/gifcities/EHPOIL7BZOJE6THR2QCECU3VOYXUAH4R.gif" alt="">
+              <img class="gif90" src="https://blob.gifcities.org/gifcities/74K4QOJ4HQNNDONNV6KIHAJIV5IATLJV.gif" alt="">
+              <img class="gif90" src="https://blob.gifcities.org/gifcities/NJVJOAOD6LA4W2G247EXVLGF6B2VG45M.gif" alt="">
+            </div>
             <div class="notes-grid">
               <a class="note-card glass soon" data-title="DL_Backprop.pdf" href="#">
                 <div class="note-icon soon-ico">PDF</div>
@@ -1293,12 +1353,19 @@
         <div class="page" id="fun">
           <div class="page-header"><span class="bracket">[</span><h2>Fun</h2><div class="line"></div><span class="bracket">]</span></div>
           <div class="text-panel glass fun-intro" data-title="Blog_Index.txt">
+            <div class="gif-row">
+              <img class="gif90" src="https://blob.gifcities.org/gifcities/43VVDFVF3KUMRCFBACWMSLMEGDS6VQWY.gif" alt="">
+              <img class="gif90" src="https://blob.gifcities.org/gifcities/2PTCFQ3GEBQOJGZNNUTPYLKK4TQ4CPUM.gif" alt="">
+              <img class="gif90" src="https://blob.gifcities.org/gifcities/AERPK4NT6NFQHSDWTMJ47CROGAA5PZYS.gif" alt="">
+              <img class="gif90" src="https://blob.gifcities.org/gifcities/CPG3I46BMRTLKN4BA7C6B6W3P6734QJJ.gif" alt="">
+            </div>
             <p class="text-block">Little things I've made, things I enjoy, and thoughts I've had. A small corner of the internet that's just for me.</p>
           </div>
 
           <div class="fun-grid">
 
             <div class="fun-card glass" data-title="Portfolio.html">
+              <img class="gif90 gif-r" src="https://blob.gifcities.org/gifcities/WEJ2D24KWM3K3QOKZRFZJWFVPUCP7EMG.gif" alt="">
               <div class="fun-tag">MADE THIS</div>
               <h3>This Portfolio</h3>
               <p>Built a retro terminal-aesthetic portfolio from scratch — CRT scanlines, procedural space starfield background, matrix text decryption on page load, keyboard chord navigation, and retro pixel cursors. Everything in a single HTML file.</p>
@@ -1307,6 +1374,7 @@
             </div>
 
             <div class="fun-card glass" data-title="PhysicsSims.py">
+              <img class="gif90 gif-r" src="https://blob.gifcities.org/gifcities/GXNXRO5PKWVNRGWDYA7OVX5LHWQNHQNU.gif" alt="">
               <div class="fun-tag enjoy">CURRENTLY INTO</div>
               <h3>Physics Simulations</h3>
               <p>Writing small n-body gravity simulations and wave equation solvers in Python whenever I want to see something click visually. There's something uniquely satisfying about watching an algorithm produce the same orbit Kepler described 400 years ago.</p>
@@ -1321,6 +1389,7 @@
             </div>
 
             <div class="fun-card glass" data-title="Learning_vs_Doing.thought">
+              <img class="gif90 gif-l" src="https://blob.gifcities.org/gifcities/OR4GWHT44OB7SQ2URYKQDECOCXWOEVAX.gif" alt="">
               <div class="fun-tag thought">THOUGHT</div>
               <h3>On Learning Physics vs. Doing Physics</h3>
               <p>There's a strange gap between understanding a derivation and having intuition for it. The harmonic oscillator makes perfect sense on paper — and yet every time a new system reduces to one, it still feels like a small miracle. I think that gap is where all the interesting stuff lives.</p>
@@ -1334,10 +1403,17 @@
         <div class="page" id="contact">
           <div class="page-header"><span class="bracket">[</span><h2>Contact</h2><div class="line"></div><span class="bracket">]</span></div>
           <div class="text-panel glass" data-title="Contact_Intro.txt" style="margin-bottom:1.2rem; max-width:440px;">
+            <img class="gif90 gif-r" src="https://blob.gifcities.org/gifcities/77WFEBP66I4ARTA5T3UEKCZO3WDUQPAU.gif" alt="">
             <p class="text-block" style="margin-bottom:0;">I'm always open to discussing research collaborations, engineering roles, or interesting problems. Feel free to reach out through any of the channels below.</p>
           </div>
           <div class="contact-card glass" data-title="Contact.vcf">
             <div class="ch-label">// Get in Touch</div>
+            <div class="gif-row">
+              <img class="gif90" src="https://blob.gifcities.org/gifcities/AIMVDJYWPSI7HXEABRN256QLGBFKLPB7.gif" alt="">
+              <img class="gif90" src="https://blob.gifcities.org/gifcities/BXODCCH4IPIJWZETL4NOJQ6CZI5RMFED.gif" alt="">
+              <img class="gif90" src="https://blob.gifcities.org/gifcities/ENS44DPGCNOA6IF2WGOFOZDRKCSFLKJ7.gif" alt="">
+              <img class="gif90" src="https://blob.gifcities.org/gifcities/NXKB5AHZ4VN3IE6OE42UPNUONWE2AV3V.gif" alt="">
+            </div>
             <div class="ch-row"><span class="ch-ico">@</span><a href="mailto:sjackson6325@gmail.com">sjackson6325@gmail.com</a></div>
             <div class="ch-row"><span class="ch-ico">#</span><a href="http://www.linkedin.com/in/sean-jackson-b4b965278" target="_blank">LinkedIn</a></div>
             <div class="ch-row"><span class="ch-ico">></span><a href="https://github.com/" target="_blank">GitHub</a></div>
