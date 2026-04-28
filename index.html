@@ -137,9 +137,9 @@
       contain: layout;
     }
 
-    /* Win95 title bar — gray gradient with bitmap buttons */
+    /* Win95 title bar — gray gradient with bitmap buttons and window title */
     .glass::before {
-      content: '';
+      content: attr(data-title);
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 28px;
@@ -155,6 +155,15 @@
       border-bottom: 1px solid #555555;
       z-index: 1;
       pointer-events: none;
+      font-family: 'VT323', monospace;
+      font-size: 1rem;
+      color: #111;
+      line-height: 28px;
+      padding-left: 7px;
+      padding-right: 80px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     /* ===== APP SHELL LAYOUT ===== */
@@ -1078,7 +1087,7 @@
 
         <!-- HOME -->
         <div class="page active" id="home">
-          <div class="home-panel glass">
+          <div class="home-panel glass" data-title="SeanML.exe">
             <div class="home-lines">
               > University of Toronto // Physics, CS & Mathematics<br>
               > Lawrence Livermore National Laboratory // ML Engineer<br>
@@ -1103,12 +1112,12 @@
         <div class="page" id="about">
           <div class="page-header"><span class="bracket">[</span><h2>About</h2><div class="line"></div><span class="bracket">]</span></div>
           <div class="card-grid">
-            <div class="stat-card glass"><div class="label">Education</div><div class="value">U of T</div><div class="sub">Honours BSc. Physics</div></div>
-            <div class="stat-card glass"><div class="label">Minors</div><div class="value">CS + Math</div><div class="sub">Computer Science & Mathematics</div></div>
-            <div class="stat-card glass"><div class="label">Graduating</div><div class="value">May 2026</div><div class="sub">Toronto, ON</div></div>
-            <div class="stat-card glass"><div class="label">Citizenship</div><div class="value">US / UK / CA</div><div class="sub">Triple Citizenship</div></div>
+            <div class="stat-card glass" data-title="Education.inf"><div class="label">Education</div><div class="value">U of T</div><div class="sub">Honours BSc. Physics</div></div>
+            <div class="stat-card glass" data-title="Minors.inf"><div class="label">Minors</div><div class="value">CS + Math</div><div class="sub">Computer Science & Mathematics</div></div>
+            <div class="stat-card glass" data-title="GradDate.inf"><div class="label">Graduating</div><div class="value">May 2026</div><div class="sub">Toronto, ON</div></div>
+            <div class="stat-card glass" data-title="Citizenship.inf"><div class="label">Citizenship</div><div class="value">US / UK / CA</div><div class="sub">Triple Citizenship</div></div>
           </div>
-          <div class="text-panel glass">
+          <div class="text-panel glass" data-title="Bio.txt">
             <p class="text-block">
               I work at the intersection of deep learning, computer vision, and scientific
               computing. My recent work includes deploying production vision models at
@@ -1124,14 +1133,14 @@
         <div class="page" id="skills">
           <div class="page-header"><span class="bracket">[</span><h2>Skills</h2><div class="line"></div><span class="bracket">]</span></div>
           <div class="skills-grid">
-            <div class="skill-card glass">
+            <div class="skill-card glass" data-title="DeepLearning.dll">
               <h4>Deep Learning & Vision</h4>
               <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div></div><span class="name">PyTorch</span></div>
               <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div></div><span class="name">Computer Vision</span></div>
               <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p half"></div></div><span class="name">Architecture Design</span></div>
               <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p"></div></div><span class="name">Dataset Engineering</span></div>
             </div>
-            <div class="skill-card glass">
+            <div class="skill-card glass" data-title="Software.dll">
               <h4>Software & Systems</h4>
               <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div></div><span class="name">Python</span></div>
               <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p"></div></div><span class="name">C / C++</span></div>
@@ -1139,13 +1148,13 @@
               <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p"></div></div><span class="name">Linux / Systems</span></div>
               <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p half"></div><div class="p"></div></div><span class="name">CI/CD</span></div>
             </div>
-            <div class="skill-card glass">
+            <div class="skill-card glass" data-title="DataCloud.dll">
               <h4>Data & Cloud</h4>
               <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p"></div></div><span class="name">AWS</span></div>
               <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p"></div></div><span class="name">Pandas / NumPy / sklearn</span></div>
               <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p half"></div><div class="p"></div></div><span class="name">SQL</span></div>
             </div>
-            <div class="skill-card glass">
+            <div class="skill-card glass" data-title="EmergingTech.dll">
               <h4>Emerging Technologies</h4>
               <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p half"></div><div class="p"></div></div><span class="name">LLMs / RAG / GenAI</span></div>
               <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p"></div><div class="p"></div></div><span class="name">Qiskit / Cirq</span></div>
@@ -1158,7 +1167,7 @@
         <div class="page" id="experience">
           <div class="page-header"><span class="bracket">[</span><h2>Experience</h2><div class="line"></div><span class="bracket">]</span></div>
           <div class="exp-list">
-            <div class="exp-card glass">
+            <div class="exp-card glass" data-title="LLNL_MLE.job">
               <div class="badge">Internship</div>
               <h3>Machine Learning Engineer</h3>
               <div class="org">Lawrence Livermore National Laboratory</div>
@@ -1168,7 +1177,7 @@
               <p><strong>CV Design Challenge:</strong> Competed in a two-week computer vision challenge, designing generative decoding models capable of tracking occluded objects through walls using temporal feature representations.</p>
               <span class="status-pill done">Completed</span>
             </div>
-            <div class="exp-card glass">
+            <div class="exp-card glass" data-title="UofT_Physics.edu">
               <div class="badge">Education</div>
               <h3>Honours BSc. Physics</h3>
               <div class="org">University of Toronto</div>
@@ -1183,7 +1192,7 @@
         <div class="page" id="projects">
           <div class="page-header"><span class="bracket">[</span><h2>Projects</h2><div class="line"></div><span class="bracket">]</span></div>
           <div class="proj-grid">
-            <div class="proj-card glass">
+            <div class="proj-card glass" data-title="TMM_Scheduler.py">
               <div class="top">
                 <h3>Time Management Manager (TMM)</h3>
                 <div class="links"><a href="#">GitHub</a></div>
@@ -1191,7 +1200,7 @@
               <p>Group-oriented time management system designed to streamline task scheduling and coordination. Accounts for dynamic availability across multiple users, enabling efficient task assignment with minimal manual coordination.</p>
               <div class="tags"><span>Python</span><span>Scheduling</span><span>Multi-user</span></div>
             </div>
-            <div class="proj-card glass">
+            <div class="proj-card glass" data-title="MatQual_CV.py">
               <div class="top">
                 <h3>Material Quality Classification</h3>
                 <div class="links"><a href="#">Paper</a></div>
@@ -1205,7 +1214,7 @@
         <!-- PUBLICATIONS -->
         <div class="page" id="publications">
           <div class="page-header"><span class="bracket">[</span><h2>Publications</h2><div class="line"></div><span class="bracket">]</span></div>
-          <div class="pub-card glass">
+          <div class="pub-card glass" data-title="Publications.bib">
             <h3>Material Quality Classification Algorithms</h3>
             <div class="meta">First Author &mdash; Under Review (2025)</div>
             <p>Research manuscript introducing a novel end-to-end computer-vision framework for automated materials surface quality assessment in self-driving laboratory environments. Presents custom vision architectures, dataset preprocessing, training pipelines, statistical benchmarking, and uncertainty analysis. Led model design, implementation, and evaluation. Imaging data from Cornell University; scientific validation with LLNL collaborators.</p>
@@ -1215,22 +1224,22 @@
         <!-- NOTES -->
         <div class="page" id="notes">
           <div class="page-header"><span class="bracket">[</span><h2>Notes</h2><div class="line"></div><span class="bracket">]</span></div>
-          <div class="text-panel glass" style="margin-bottom:1.6rem;">
+          <div class="text-panel glass" data-title="Notes_Index.txt" style="margin-bottom:1.6rem;">
             <p class="text-block">Notes, derivations, and write-ups I've put together for various courses and topics. Click any entry to open the PDF.</p>
           </div>
 
           <div class="notes-subject">
             <div class="notes-subject-title">// Quantum Mechanics</div>
             <div class="notes-grid">
-              <a class="note-card glass soon" href="#">
+              <a class="note-card glass soon" data-title="QM1_Foundations.pdf" href="#">
                 <div class="note-icon soon-ico">PDF</div>
                 <div><div class="note-title">Foundations & Postulates</div><div class="note-meta">QM I &mdash; Coming Soon</div></div>
               </a>
-              <a class="note-card glass soon" href="#">
+              <a class="note-card glass soon" data-title="QM1_Harmonic.pdf" href="#">
                 <div class="note-icon soon-ico">PDF</div>
                 <div><div class="note-title">Harmonic Oscillator</div><div class="note-meta">QM I &mdash; Coming Soon</div></div>
               </a>
-              <a class="note-card glass soon" href="#">
+              <a class="note-card glass soon" data-title="QM2_Perturbation.pdf" href="#">
                 <div class="note-icon soon-ico">PDF</div>
                 <div><div class="note-title">Perturbation Theory</div><div class="note-meta">QM II &mdash; Coming Soon</div></div>
               </a>
@@ -1240,11 +1249,11 @@
           <div class="notes-subject">
             <div class="notes-subject-title">// Classical Mechanics</div>
             <div class="notes-grid">
-              <a class="note-card glass soon" href="#">
+              <a class="note-card glass soon" data-title="CM_Lagrangian.pdf" href="#">
                 <div class="note-icon soon-ico">PDF</div>
                 <div><div class="note-title">Lagrangian Dynamics</div><div class="note-meta">Classical Mechanics &mdash; Coming Soon</div></div>
               </a>
-              <a class="note-card glass soon" href="#">
+              <a class="note-card glass soon" data-title="CM_Hamiltonian.pdf" href="#">
                 <div class="note-icon soon-ico">PDF</div>
                 <div><div class="note-title">Hamiltonian Mechanics</div><div class="note-meta">Classical Mechanics &mdash; Coming Soon</div></div>
               </a>
@@ -1254,11 +1263,11 @@
           <div class="notes-subject">
             <div class="notes-subject-title">// Electromagnetism</div>
             <div class="notes-grid">
-              <a class="note-card glass soon" href="#">
+              <a class="note-card glass soon" data-title="EM_Maxwell.pdf" href="#">
                 <div class="note-icon soon-ico">PDF</div>
                 <div><div class="note-title">Maxwell's Equations</div><div class="note-meta">E&amp;M &mdash; Coming Soon</div></div>
               </a>
-              <a class="note-card glass soon" href="#">
+              <a class="note-card glass soon" data-title="EM_Radiation.pdf" href="#">
                 <div class="note-icon soon-ico">PDF</div>
                 <div><div class="note-title">Radiation &amp; Waves</div><div class="note-meta">E&amp;M &mdash; Coming Soon</div></div>
               </a>
@@ -1268,11 +1277,11 @@
           <div class="notes-subject">
             <div class="notes-subject-title">// Machine Learning</div>
             <div class="notes-grid">
-              <a class="note-card glass soon" href="#">
+              <a class="note-card glass soon" data-title="DL_Backprop.pdf" href="#">
                 <div class="note-icon soon-ico">PDF</div>
                 <div><div class="note-title">Backpropagation Derivation</div><div class="note-meta">Deep Learning &mdash; Coming Soon</div></div>
               </a>
-              <a class="note-card glass soon" href="#">
+              <a class="note-card glass soon" data-title="DL_Transformer.pdf" href="#">
                 <div class="note-icon soon-ico">PDF</div>
                 <div><div class="note-title">Transformer Architecture</div><div class="note-meta">Deep Learning &mdash; Coming Soon</div></div>
               </a>
@@ -1283,13 +1292,13 @@
         <!-- FUN -->
         <div class="page" id="fun">
           <div class="page-header"><span class="bracket">[</span><h2>Fun</h2><div class="line"></div><span class="bracket">]</span></div>
-          <div class="text-panel glass fun-intro">
+          <div class="text-panel glass fun-intro" data-title="Blog_Index.txt">
             <p class="text-block">Little things I've made, things I enjoy, and thoughts I've had. A small corner of the internet that's just for me.</p>
           </div>
 
           <div class="fun-grid">
 
-            <div class="fun-card glass">
+            <div class="fun-card glass" data-title="Portfolio.html">
               <div class="fun-tag">MADE THIS</div>
               <h3>This Portfolio</h3>
               <p>Built a retro terminal-aesthetic portfolio from scratch — CRT scanlines, procedural space starfield background, matrix text decryption on page load, keyboard chord navigation, and retro pixel cursors. Everything in a single HTML file.</p>
@@ -1297,21 +1306,21 @@
               <div class="fun-date">// March 2025</div>
             </div>
 
-            <div class="fun-card glass">
+            <div class="fun-card glass" data-title="PhysicsSims.py">
               <div class="fun-tag enjoy">CURRENTLY INTO</div>
               <h3>Physics Simulations</h3>
               <p>Writing small n-body gravity simulations and wave equation solvers in Python whenever I want to see something click visually. There's something uniquely satisfying about watching an algorithm produce the same orbit Kepler described 400 years ago.</p>
               <div class="fun-date">// ongoing</div>
             </div>
 
-            <div class="fun-card glass">
+            <div class="fun-card glass" data-title="MechKB.txt">
               <div class="fun-tag enjoy">CURRENTLY INTO</div>
               <h3>Mechanical Keyboards</h3>
               <p>Deep into the rabbit hole of custom boards. Currently daily-driving a 65% with lubed Boba U4Ts. The tactile bump hits differently when you're writing code at 2am.</p>
               <div class="fun-date">// ongoing</div>
             </div>
 
-            <div class="fun-card glass">
+            <div class="fun-card glass" data-title="Learning_vs_Doing.thought">
               <div class="fun-tag thought">THOUGHT</div>
               <h3>On Learning Physics vs. Doing Physics</h3>
               <p>There's a strange gap between understanding a derivation and having intuition for it. The harmonic oscillator makes perfect sense on paper — and yet every time a new system reduces to one, it still feels like a small miracle. I think that gap is where all the interesting stuff lives.</p>
@@ -1324,10 +1333,10 @@
         <!-- CONTACT -->
         <div class="page" id="contact">
           <div class="page-header"><span class="bracket">[</span><h2>Contact</h2><div class="line"></div><span class="bracket">]</span></div>
-          <div class="text-panel glass" style="margin-bottom:1.2rem; max-width:440px;">
+          <div class="text-panel glass" data-title="Contact_Intro.txt" style="margin-bottom:1.2rem; max-width:440px;">
             <p class="text-block" style="margin-bottom:0;">I'm always open to discussing research collaborations, engineering roles, or interesting problems. Feel free to reach out through any of the channels below.</p>
           </div>
-          <div class="contact-card glass">
+          <div class="contact-card glass" data-title="Contact.vcf">
             <div class="ch-label">// Get in Touch</div>
             <div class="ch-row"><span class="ch-ico">@</span><a href="mailto:sjackson6325@gmail.com">sjackson6325@gmail.com</a></div>
             <div class="ch-row"><span class="ch-ico">#</span><a href="http://www.linkedin.com/in/sean-jackson-b4b965278" target="_blank">LinkedIn</a></div>
@@ -1353,16 +1362,39 @@
       _decryptCancelFns = [];
 
       duration = duration || 1400;
+
+      // Pin every block-level descendant to its current pixel size before
+      // mutating text nodes \u2014 prevents any reflow from escaping the container
+      var locked = [];
+      container.querySelectorAll('*').forEach(function(el) {
+        if (el.tagName === 'BUTTON' || el.closest('button')) return;
+        var d = window.getComputedStyle(el).display;
+        if (d === 'block' || d === 'inline-block' || d === 'flex' ||
+            d === 'inline-flex' || d === 'grid') {
+          locked.push({ el: el, h: el.style.height, w: el.style.width, ov: el.style.overflow });
+          el.style.height   = el.offsetHeight + 'px';
+          el.style.width    = el.offsetWidth  + 'px';
+          el.style.overflow = 'hidden';
+        }
+      });
+      function unlock() {
+        locked.forEach(function(o) {
+          o.el.style.height   = o.h;
+          o.el.style.width    = o.w;
+          o.el.style.overflow = o.ov;
+        });
+      }
+
       var textElements = [];
       var walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null, false);
       var node;
       while ((node = walker.nextNode())) {
         var text = node.textContent;
-        if (text.trim().length > 0) {
+        if (text.trim().length > 0 && !node.parentElement.closest('button')) {
           textElements.push({ node: node, original: text });
         }
       }
-      if (textElements.length === 0) return;
+      if (textElements.length === 0) { unlock(); return; }
 
       var mySeq = ++_decryptSeq;
       var cancelled = false;
@@ -1370,6 +1402,7 @@
       function cancel() {
         cancelled = true;
         textElements.forEach(function(item) { item.node.textContent = item.original; });
+        unlock();
       }
       _decryptCancelFns.push(cancel);
 
@@ -1408,6 +1441,7 @@
         } else {
           textElements.forEach(function(item) { item.node.textContent = item.original; });
           _decryptCancelFns = _decryptCancelFns.filter(function(f) { return f !== cancel; });
+          unlock();
         }
       }
 
@@ -1712,9 +1746,17 @@
       var canvas = document.getElementById('starCanvas');
       var ctx    = canvas.getContext('2d');
       var W, H, cx, cy, FOCAL;
-      var N     = 320;
+      var N     = 220;
       var DEPTH = 900;
-      var SPEED = 1;
+      var SPEED = 5;
+
+      // Pre-allocated temp arrays — no GC pressure per frame
+      var pxA = new Float32Array(N);
+      var pyA = new Float32Array(N);
+      var sxA = new Float32Array(N);
+      var syA = new Float32Array(N);
+      var tA  = new Float32Array(N);
+      var cnt = 0;
 
       function mkStar(atDepth) {
         var angle  = Math.random() * 6.2832;
@@ -1739,42 +1781,58 @@
         for (var i = 0; i < N; i++) stars[i] = mkStar(false);
       }
 
-      function tick() {
-        ctx.fillStyle = 'rgba(1, 0, 8, 0.80)';
+      // Throttle to ~30 fps — background effect doesn't need 60
+      var lastT = 0;
+      function tick(now) {
+        requestAnimationFrame(tick);
+        if (now - lastT < 33) return;
+        lastT = now;
+
+        ctx.fillStyle = 'rgba(1, 0, 8, 0.82)';
         ctx.fillRect(0, 0, W, H);
 
+        // Pass 1: update positions, collect visible stars
+        cnt = 0;
         for (var i = 0; i < N; i++) {
           var s = stars[i];
-          s.pz  = s.z;
-          s.z  -= SPEED;
-
+          s.pz = s.z;
+          s.z -= SPEED;
           if (s.z <= 1) { stars[i] = mkStar(true); continue; }
 
-          var sx = (s.x / s.z) * FOCAL + cx;
-          var sy = (s.y / s.z) * FOCAL + cy;
+          var sx = (s.x / s.z)  * FOCAL + cx;
+          var sy = (s.y / s.z)  * FOCAL + cy;
           var px = (s.x / s.pz) * FOCAL + cx;
           var py = (s.y / s.pz) * FOCAL + cy;
-
           if (sx < -20 || sx > W + 20 || sy < -20 || sy > H + 20) {
             stars[i] = mkStar(true); continue;
           }
 
-          var t     = 1 - s.z / DEPTH;
-          var alpha = Math.min(t * 1.6, 1.0);
-          var size  = t * 2.8 + 0.25;
-          var r     = Math.round(170 + t * 85);
-          var g     = Math.round(195 + t * 60);
-
-          ctx.beginPath();
-          ctx.moveTo(px, py);
-          ctx.lineTo(sx, sy);
-          ctx.strokeStyle = 'rgba(' + r + ',' + g + ',255,' + alpha + ')';
-          ctx.lineWidth   = size;
-          ctx.lineCap     = 'round';
-          ctx.stroke();
+          pxA[cnt] = px; pyA[cnt] = py;
+          sxA[cnt] = sx; syA[cnt] = sy;
+          tA[cnt]  = 1 - s.z / DEPTH;
+          cnt++;
         }
 
-        requestAnimationFrame(tick);
+        // Pass 2: draw in 3 batched tiers — only 3 ctx.stroke() calls total
+        ctx.lineCap = 'round';
+        var tiers = [
+          { min: 0,    max: 0.4,  style: 'rgba(170,195,255,0.20)', w: 0.4 },
+          { min: 0.4,  max: 0.72, style: 'rgba(200,218,255,0.55)', w: 1.1 },
+          { min: 0.72, max: 1.01, style: 'rgba(225,238,255,0.92)', w: 2.2 }
+        ];
+        for (var ti = 0; ti < 3; ti++) {
+          var lo = tiers[ti].min, hi = tiers[ti].max;
+          ctx.beginPath();
+          for (var j = 0; j < cnt; j++) {
+            var t = tA[j];
+            if (t < lo || t >= hi) continue;
+            ctx.moveTo(pxA[j], pyA[j]);
+            ctx.lineTo(sxA[j], syA[j]);
+          }
+          ctx.strokeStyle = tiers[ti].style;
+          ctx.lineWidth   = tiers[ti].w;
+          ctx.stroke();
+        }
       }
 
       init();
