@@ -22,10 +22,10 @@
       --blue-glow: rgba(0, 136, 255, 0.12);
       --red: #ff3300;
       --white: #eef4ff;
-      --text: #99bbcc;
+      --text: #b0cedd;
       --text-bright: #cce8ff;
       --text-dim: #446688;
-      --panel-bg: rgba(0, 6, 18, 0.97);
+      --panel-bg: rgba(0, 6, 18, 0.87);
       --win-gray: #787878;
       --win-gray-lt: #a8a8a8;
       --bevel-lt: #c0c0c0;
@@ -36,7 +36,7 @@
       --font-dos: 'VT323', monospace;
     }
 
-    html { font-size: 20px; }
+    html { font-size: 22px; }
     html, body { width: 100%; height: 100%; overflow: hidden; margin: 0; padding: 0; }
 
     body {
@@ -564,7 +564,7 @@
       flex: 1;
       overflow-y: scroll;
       scrollbar-gutter: stable;
-      padding: 2rem 2.5rem;
+      padding: 1.4rem 2rem;
       scrollbar-width: thin;
       scrollbar-color: var(--bevel-lt) #000814;
     }
@@ -592,7 +592,7 @@
       display: flex;
       align-items: center;
       gap: 0.8rem;
-      margin-bottom: 1.8rem;
+      margin-bottom: 1rem;
     }
 
     .page-header .bracket { display: none; }
@@ -646,10 +646,10 @@
     }
 
     .home-desc {
-      font-size: 0.9rem;
+      font-size: 1rem;
       color: var(--text);
       max-width: 520px;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       line-height: 1.8;
     }
 
@@ -735,10 +735,10 @@
     }
 
     .text-block {
-      font-size: 0.9rem;
+      font-size: 1rem;
       color: var(--text);
       max-width: 640px;
-      line-height: 1.8;
+      line-height: 1.75;
     }
 
     /* ===== SKILLS ===== */
@@ -781,7 +781,7 @@
       border-color: var(--cyan-dim);
     }
 
-    .skill-row .name { font-size: 0.8rem; color: var(--text-bright); }
+    .skill-row .name { font-size: 0.88rem; color: var(--text-bright); }
 
     /* ===== EXPERIENCE ===== */
     .exp-list { display: flex; flex-direction: column; gap: 1rem; }
@@ -813,7 +813,7 @@
 
     .exp-card .org { font-family: var(--font-dos); font-size: 1rem; color: var(--cyan); letter-spacing: 0.05em; margin-bottom: 0.15rem; }
     .exp-card .date { font-family: var(--font-dos); font-size: 0.9rem; color: var(--text-dim); margin-bottom: 0.7rem; }
-    .exp-card p { font-size: 0.85rem; color: var(--text); line-height: 1.75; }
+    .exp-card p { font-size: 0.95rem; color: var(--text); line-height: 1.75; }
     .exp-card p + p { margin-top: 0.5rem; }
     .exp-card p strong { color: var(--cyan); }
 
@@ -865,7 +865,7 @@
     }
     .proj-card .links a:hover { color: var(--cyan); }
 
-    .proj-card p { font-size: 0.85rem; color: var(--text); margin-bottom: 0.8rem; line-height: 1.75; }
+    .proj-card p { font-size: 0.95rem; color: var(--text); margin-bottom: 0.8rem; line-height: 1.75; }
 
     .tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
     .tags span {
@@ -881,10 +881,10 @@
     .pub-card { padding: 32px 1.4rem 1.4rem; border-left: 3px solid var(--green); }
     .pub-card h3 { font-family: var(--font-dos); font-size: 1.1rem; color: var(--green); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.3rem; text-shadow: 0 0 6px var(--green-glow); }
     .pub-card .meta { font-family: var(--font-dos); font-size: 0.95rem; color: var(--cyan); margin-bottom: 0.6rem; }
-    .pub-card p { font-size: 0.85rem; color: var(--text); line-height: 1.75; }
+    .pub-card p { font-size: 0.95rem; color: var(--text); line-height: 1.75; }
 
     /* ===== NOTES ===== */
-    .notes-subject { margin-bottom: 1.8rem; }
+    .notes-subject { margin-bottom: 1.2rem; }
     .notes-subject-title {
       font-family: var(--font-dos);
       font-size: 1.1rem;
@@ -961,7 +961,7 @@
       margin-bottom: 0.5rem;
       text-shadow: 0 0 8px var(--cyan-glow);
     }
-    .fun-card p { font-size: 0.85rem; color: var(--text); line-height: 1.78; margin-bottom: 0.6rem; }
+    .fun-card p { font-size: 0.95rem; color: var(--text); line-height: 1.78; margin-bottom: 0.6rem; }
     .fun-card p:last-child { margin-bottom: 0; }
     .fun-date { font-family: var(--font-dos); font-size: 0.9rem; color: var(--text-dim); margin-top: 0.6rem; }
     .fun-links { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.6rem; }
@@ -1048,7 +1048,8 @@
           <button class="nav-btn" data-page="projects"><span class="ico">></span> Projects</button>
           <button class="nav-btn" data-page="publications"><span class="ico">></span> Publications</button>
           <button class="nav-btn" data-page="notes"><span class="ico">></span> Notes</button>
-          <button class="nav-btn" data-page="fun"><span class="ico">></span> Fun</button>
+          <button class="nav-btn" data-page="journal"><span class="ico">></span> Journal</button>
+          <button class="nav-btn" data-page="interests"><span class="ico">></span> Interests</button>
           <button class="nav-btn" data-page="contact"><span class="ico">></span> Contact</button>
         </div>
         <div class="nav-sep"></div>
@@ -1070,7 +1071,8 @@
           <div class="hd-row"><span>Projects</span><span class="hd-key">Ctrl+K → P</span></div>
           <div class="hd-row"><span>Publications</span><span class="hd-key">Ctrl+K → U</span></div>
           <div class="hd-row"><span>Notes</span><span class="hd-key">Ctrl+K → N</span></div>
-          <div class="hd-row"><span>Fun</span><span class="hd-key">Ctrl+K → F</span></div>
+          <div class="hd-row"><span>Journal</span><span class="hd-key">Ctrl+K → F</span></div>
+          <div class="hd-row"><span>Interests</span><span class="hd-key">Ctrl+K → I</span></div>
           <div class="hd-row"><span>Contact</span><span class="hd-key">Ctrl+K → C</span></div>
           <div class="hd-section">// Interface</div>
           <div class="hd-row"><span>Toggle menu bar</span><span class="hd-key">Ctrl+K → M</span></div>
@@ -1094,17 +1096,16 @@
         <div class="page active" id="home">
           <div class="home-panel glass" data-title="SeanML.exe">
             <div class="home-lines">
-              > University of Toronto // Physics, CS & Mathematics<br>
-              > Lawrence Livermore National Laboratory // ML Engineer<br>
+              > University of Toronto Grad. // Physics Major , Minors CS & Mathematics<br>
+              > Lawrence Livermore National Laboratory // Machine Learning Engineer<br>
               > First-author research // Computer Vision & Deep Learning
             </div>
             <div class="home-name">Sean Jackson</div>
             <div class="home-title">Machine Learning Engineer & Physicist</div>
             <p class="home-desc">
-              Physics student at the University of Toronto specializing in deep learning,
+              Physics graduate from the University of Toronto specializing in deep learning,
               computer vision, and scientific computing. I build systems that automate
-              materials discovery — from custom vision architectures to self-driving
-              laboratory infrastructure.
+              materials discovery at Lawrence Livermore National Laboratory.
             </p>
             <div class="home-actions">
               <button class="btn btn-green" onclick="switchPage('projects')">View Projects</button>
@@ -1120,9 +1121,14 @@
         <div class="page" id="about">
           <div class="page-header"><span class="bracket">[</span><h2>About</h2><div class="line"></div><span class="bracket">]</span></div>
           <div class="card-grid">
-            <div class="stat-card glass" data-title="Education.inf"><div class="label"><img class="gif90 gif-r" src="https://blob.gifcities.org/gifcities/FGIB7BHXN2H3N5O6KMMUNXRYIO3AP2MT.gif" alt="">Education</div><div class="value">University of Toronto</div><div class="sub">Honours BSc. Physics; Duel Minors in Computer Science and Mathematics<br>Focus on Quantum Information & Condensed Matter</div></div>
-            <div class="stat-card glass" data-title="GradDate.inf"><div class="label">Graduating</div><div class="value">May 2026</div><div class="sub">Toronto, ON</div></div>
-            <div class="stat-card glass" data-title="Citizenship.inf"><div class="label">Citizenship</div><div class="value">US / UK / CA</div><div class="sub">Triple Citizenship</div></div>
+            <div class="stat-card glass" data-title="Education.inf"><img src="https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Utoronto_coa.svg/60px-Utoronto_coa.svg.png" alt="UofT" style="width:120px; float:right; margin:0 0 6px 10px; image-rendering:auto;"><div class="label">Education</div><div class="title">University of Toronto</div><div class="text-block">Honours BSc. Physics; Duel Minors in Computer Science and Mathematics<br>Focus on Quantum Information &amp; Condensed Matter Physics</div></div>
+            <div class="stat-card glass" data-title="Citizenship.inf"><div class="label">Citizenship</div><div class="value">US / UK / CA</div><div class="sub">Triple Citizenship</div>
+              <div class="gif-row" style="margin-top:0.3rem;">
+                <img class="gif90" src="https://blob.gifcities.org/gifcities/3OTLQ5OQZJDQD6QXXE4W77XYFZJ5W4CS.gif" alt="US" style="width:120px;">
+                <img class="gif90" src="https://blob.gifcities.org/gifcities/2TJTLK3NPCUQBRTK3PCAN3REKNEOV6GT.gif" alt="UK">
+                <img class="gif90" src="https://blob.gifcities.org/gifcities/2CHXNPAJ2FOJ43ZOS7Z2TZXVRIG7SC34.gif" alt="CA">
+              </div>
+            </div>
           </div>
           <div class="text-panel glass" data-title="Bio.txt">
             <p class="text-block">
@@ -1139,16 +1145,8 @@
         <!-- SKILLS -->
         <div class="page" id="skills">
           <div class="page-header"><span class="bracket">[</span><h2>Skills</h2><div class="line"></div><span class="bracket">]</span></div>
-          <div class="gif-row">
-            <img class="gif90" src="https://blob.gifcities.org/gifcities/43LQPUZA63YD3UYMJVMIOSXNAEYXBZLV.gif" alt="">
-            <img class="gif90" src="https://blob.gifcities.org/gifcities/6KOJHXTGJHP3ML3NY2S2UD53U6CD37JF.gif" alt="">
-            <img class="gif90" src="https://blob.gifcities.org/gifcities/DGZOEKPO6MR6AFXR4FAJITJJRE7OEHX7.gif" alt="">
-            <img class="gif90" src="https://blob.gifcities.org/gifcities/KUGG3AMGNE4WDQWA65UT4BZ4ERBOQZZS.gif" alt="">
-            <img class="gif90" src="https://blob.gifcities.org/gifcities/MC3GVZOGEMC4QAZPYDZEFEXUGVXBFKSS.gif" alt="">
-          </div>
           <div class="skills-grid">
             <div class="skill-card glass" data-title="DeepLearning.dll">
-              <img class="gif90 gif-r" src="https://blob.gifcities.org/gifcities/32OR64HV75CYRBNKFIPZL3OIVB4GMMZ3.gif" alt="">
               <h4>Deep Learning & Vision</h4>
               <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div></div><span class="name">PyTorch</span></div>
               <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div></div><span class="name">Computer Vision</span></div>
@@ -1170,7 +1168,6 @@
               <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p half"></div><div class="p"></div></div><span class="name">SQL</span></div>
             </div>
             <div class="skill-card glass" data-title="EmergingTech.dll">
-              <img class="gif90 gif-r" src="https://blob.gifcities.org/gifcities/73MRWTCCWXAWVACADCUMAWY6DNE7DXR6.gif" alt="">
               <h4>Emerging Technologies</h4>
               <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p half"></div><div class="p"></div></div><span class="name">LLMs / RAG / GenAI</span></div>
               <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p"></div><div class="p"></div></div><span class="name">Qiskit / Cirq</span></div>
@@ -1182,16 +1179,8 @@
         <!-- EXPERIENCE -->
         <div class="page" id="experience">
           <div class="page-header"><span class="bracket">[</span><h2>Experience</h2><div class="line"></div><span class="bracket">]</span></div>
-          <div class="gif-row">
-            <img class="gif90" src="https://blob.gifcities.org/gifcities/APAOHPOSBRHC4HXSJ6UBESMABNARPEOC.gif" alt="">
-            <img class="gif90" src="https://blob.gifcities.org/gifcities/BNR45KYPMBVVY2AEIXJ7NDKXJG2GVMIN.gif" alt="">
-            <img class="gif90" src="https://blob.gifcities.org/gifcities/23QU6F4MIBC5MKYPS33EV24JEGJM52PT.gif" alt="">
-            <img class="gif90" src="https://blob.gifcities.org/gifcities/ESUHY2UVLTK5SX2D54ZIBPPMYJXBP3QH.gif" alt="">
-            <img class="gif90" src="https://blob.gifcities.org/gifcities/GJBPOQPCGU3PZBTO6NEYWFZTCBMUW4LL.gif" alt="">
-          </div>
           <div class="exp-list">
             <div class="exp-card glass" data-title="LLNL_MLE.job">
-              <img class="gif90 gif-r" src="https://blob.gifcities.org/gifcities/DZRKDM3ZUHA2I52DFW2W5DRBSHZJMRHJ.gif" alt="">
               <div class="badge">Internship</div>
               <h3>Machine Learning Engineer</h3>
               <div class="org">Lawrence Livermore National Laboratory</div>
@@ -1202,7 +1191,6 @@
               <span class="status-pill done">Completed</span>
             </div>
             <div class="exp-card glass" data-title="UofT_Physics.edu">
-              <img class="gif90 gif-r" src="https://blob.gifcities.org/gifcities/3HRDVZEFPM3Q424JW3XEIH5PYQL3VTAU.gif" alt="">
               <div class="badge">Education</div>
               <h3>Honours BSc. Physics</h3>
               <div class="org">University of Toronto</div>
@@ -1216,15 +1204,8 @@
         <!-- PROJECTS -->
         <div class="page" id="projects">
           <div class="page-header"><span class="bracket">[</span><h2>Projects</h2><div class="line"></div><span class="bracket">]</span></div>
-          <div class="gif-row">
-            <img class="gif90" src="https://blob.gifcities.org/gifcities/5IQHC2KZBSMSHTE4VAJKWGJYPNG4Q74M.gif" alt="">
-            <img class="gif90" src="https://blob.gifcities.org/gifcities/JHGMQVVAOXV65FHPIWWHWCGCSCTRZC2A.gif" alt="">
-            <img class="gif90" src="https://blob.gifcities.org/gifcities/GDZK7TPDCJCXUIEQXF7IKCUK3VLVGPGU.gif" alt="">
-            <img class="gif90" src="https://blob.gifcities.org/gifcities/4ML44CWUOKQMJXLDMSI3EJDQGCVOTFKP.gif" alt="">
-          </div>
           <div class="proj-grid">
             <div class="proj-card glass" data-title="TMM_Scheduler.py">
-              <img class="gif90 gif-r" src="https://blob.gifcities.org/gifcities/7CK5ZEMFGQXNZ3EXNVQ3ORM2XYHFY76I.gif" alt="">
               <div class="top">
                 <h3>Time Management Manager (TMM)</h3>
                 <div class="links"><a href="#">GitHub</a></div>
@@ -1233,7 +1214,6 @@
               <div class="tags"><span>Python</span><span>Scheduling</span><span>Multi-user</span></div>
             </div>
             <div class="proj-card glass" data-title="MatQual_CV.py">
-              <img class="gif90 gif-r" src="https://blob.gifcities.org/gifcities/CJ4CC2LZMVPYKOSV5N32JVQMVJ6G7SGB.gif" alt="">
               <div class="top">
                 <h3>Material Quality Classification</h3>
                 <div class="links"><a href="#">Paper</a></div>
@@ -1248,12 +1228,6 @@
         <div class="page" id="publications">
           <div class="page-header"><span class="bracket">[</span><h2>Publications</h2><div class="line"></div><span class="bracket">]</span></div>
           <div class="pub-card glass" data-title="Publications.bib">
-            <img class="gif90 gif-r" src="https://blob.gifcities.org/gifcities/HRRSVUNJH5IBGYNIDTJ3QRSIWDWXW4FA.gif" alt="">
-            <div class="gif-row">
-              <img class="gif90" src="https://blob.gifcities.org/gifcities/2LBR7LRDZA42MRD6GFSKEYLDGHKAT4W2.gif" alt="">
-              <img class="gif90" src="https://blob.gifcities.org/gifcities/HP7LYAWZ2CPHRYITXJ7JQMNAJNYB7PPI.gif" alt="">
-              <img class="gif90" src="https://blob.gifcities.org/gifcities/M3364PB4MBYCEIRLDOYBSMFO72BDYVVB.gif" alt="">
-            </div>
             <h3>Material Quality Classification Algorithms</h3>
             <div class="meta">First Author &mdash; Under Review (2025)</div>
             <p>Research manuscript introducing a novel end-to-end computer-vision framework for automated materials surface quality assessment in self-driving laboratory environments. Presents custom vision architectures, dataset preprocessing, training pipelines, statistical benchmarking, and uncertainty analysis. Led model design, implementation, and evaluation. Imaging data from Cornell University; scientific validation with LLNL collaborators.</p>
@@ -1349,51 +1323,60 @@
           </div>
         </div>
 
-        <!-- FUN -->
-        <div class="page" id="fun">
-          <div class="page-header"><span class="bracket">[</span><h2>Fun</h2><div class="line"></div><span class="bracket">]</span></div>
-          <div class="text-panel glass fun-intro" data-title="Blog_Index.txt">
-            <div class="gif-row">
-              <img class="gif90" src="https://blob.gifcities.org/gifcities/43VVDFVF3KUMRCFBACWMSLMEGDS6VQWY.gif" alt="">
-              <img class="gif90" src="https://blob.gifcities.org/gifcities/2PTCFQ3GEBQOJGZNNUTPYLKK4TQ4CPUM.gif" alt="">
-              <img class="gif90" src="https://blob.gifcities.org/gifcities/AERPK4NT6NFQHSDWTMJ47CROGAA5PZYS.gif" alt="">
-              <img class="gif90" src="https://blob.gifcities.org/gifcities/CPG3I46BMRTLKN4BA7C6B6W3P6734QJJ.gif" alt="">
-            </div>
-            <p class="text-block">Little things I've made, things I enjoy, and thoughts I've had. A small corner of the internet that's just for me.</p>
-          </div>
+        <!-- JOURNAL -->
+        <div class="page" id="journal">
+          <div class="page-header"><span class="bracket">[</span><h2>Journal</h2><div class="line"></div><span class="bracket">]</span></div>
 
           <div class="fun-grid">
 
-            <div class="fun-card glass" data-title="Portfolio.html">
-              <img class="gif90 gif-r" src="https://blob.gifcities.org/gifcities/WEJ2D24KWM3K3QOKZRFZJWFVPUCP7EMG.gif" alt="">
-              <div class="fun-tag">MADE THIS</div>
-              <h3>This Portfolio</h3>
-              <p>Built a retro terminal-aesthetic portfolio from scratch — CRT scanlines, procedural space starfield background, matrix text decryption on page load, keyboard chord navigation, and retro pixel cursors. Everything in a single HTML file.</p>
-              <div class="fun-links"><a href="#">View Source</a></div>
-              <div class="fun-date">// March 2025</div>
-            </div>
-
-            <div class="fun-card glass" data-title="PhysicsSims.py">
-              <img class="gif90 gif-r" src="https://blob.gifcities.org/gifcities/GXNXRO5PKWVNRGWDYA7OVX5LHWQNHQNU.gif" alt="">
-              <div class="fun-tag enjoy">CURRENTLY INTO</div>
-              <h3>Physics Simulations</h3>
-              <p>Writing small n-body gravity simulations and wave equation solvers in Python whenever I want to see something click visually. There's something uniquely satisfying about watching an algorithm produce the same orbit Kepler described 400 years ago.</p>
-              <div class="fun-date">// ongoing</div>
-            </div>
-
-            <div class="fun-card glass" data-title="MechKB.txt">
-              <div class="fun-tag enjoy">CURRENTLY INTO</div>
-              <h3>Mechanical Keyboards</h3>
-              <p>Deep into the rabbit hole of custom boards. Currently daily-driving a 65% with lubed Boba U4Ts. The tactile bump hits differently when you're writing code at 2am.</p>
-              <div class="fun-date">// ongoing</div>
-            </div>
-
             <div class="fun-card glass" data-title="Learning_vs_Doing.thought">
-              <img class="gif90 gif-l" src="https://blob.gifcities.org/gifcities/OR4GWHT44OB7SQ2URYKQDECOCXWOEVAX.gif" alt="">
               <div class="fun-tag thought">THOUGHT</div>
               <h3>On Learning Physics vs. Doing Physics</h3>
               <p>There's a strange gap between understanding a derivation and having intuition for it. The harmonic oscillator makes perfect sense on paper — and yet every time a new system reduces to one, it still feels like a small miracle. I think that gap is where all the interesting stuff lives.</p>
               <div class="fun-date">// 2025</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- INTERESTS -->
+        <div class="page" id="interests">
+          <div class="page-header"><span class="bracket">[</span><h2>Interests</h2><div class="line"></div><span class="bracket">]</span></div>
+          <div class="fun-grid">
+
+            <div class="fun-card glass" data-title="Quantum_Physics.note">
+              <div class="fun-tag thought">SCIENCE</div>
+              <h3>Quantum Mechanics</h3>
+              <p>There's something uniquely compelling about a theory that forces you to abandon classical intuition entirely. I spend a lot of time with the formalism — Hilbert spaces, operators, measurement — and even more thinking about what it actually means. Quantum information is a particular fixation right now: the idea that information is physical, and that entanglement is a resource, still feels like it shouldn't be true.</p>
+              <div class="fun-date">// ongoing</div>
+            </div>
+
+            <div class="fun-card glass" data-title="ML_Research.note">
+              <div class="fun-tag enjoy">RESEARCH</div>
+              <h3>ML Research</h3>
+              <p>Outside of work projects, I try to stay current with the ML literature — particularly computer vision, geometric deep learning, and physics-informed neural networks. The intersection of physical priors and learned representations is where I think a lot of the most interesting open problems live right now.</p>
+              <div class="fun-date">// ongoing</div>
+            </div>
+
+            <div class="fun-card glass" data-title="Simulations.py">
+              <div class="fun-tag enjoy">HOBBY</div>
+              <h3>Physics Simulations</h3>
+              <p>Writing n-body gravity sims, wave equation solvers, and chaotic pendulum integrators in Python whenever I want to see something click visually. There's something uniquely satisfying about watching an algorithm produce the same orbit Kepler described 400 years ago.</p>
+              <div class="fun-date">// ongoing</div>
+            </div>
+
+            <div class="fun-card glass" data-title="MathReading.note">
+              <div class="fun-tag thought">SCIENCE</div>
+              <h3>Pure Mathematics</h3>
+              <p>Taking a math minor changed how I think about everything. Real analysis, linear algebra, and abstract algebra have a kind of austere beauty that feels completely separate from their applications — even when those applications are everywhere. I read math textbooks recreationally, which I'm told is a personality flaw.</p>
+              <div class="fun-date">// ongoing</div>
+            </div>
+
+            <div class="fun-card glass" data-title="MechKB.txt">
+              <div class="fun-tag enjoy">HOBBY</div>
+              <h3>Mechanical Keyboards</h3>
+              <p>Deep into the rabbit hole of custom boards. Currently daily-driving a 65% with lubed Boba U4Ts. The tactile bump hits differently when you're writing code at 2am.</p>
+              <div class="fun-date">// ongoing</div>
             </div>
 
           </div>
@@ -1601,7 +1584,8 @@
           case 'p': switchPage('projects');     break;
           case 'u': switchPage('publications'); break;
           case 'n': switchPage('notes');        break;
-          case 'f': switchPage('fun');          break;
+          case 'f': switchPage('journal');      break;
+          case 'i': switchPage('interests');    break;
           case 'c': switchPage('contact');      break;
           case 'm': toggleNavBar();             break;
           case '/': toggleHelpMenu();           break;
