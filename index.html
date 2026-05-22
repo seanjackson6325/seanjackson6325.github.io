@@ -57,6 +57,8 @@
       width: 100vw; height: 100vh;
       z-index: 0;
       pointer-events: none;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
     }
 
     .nebula-overlay {
@@ -130,41 +132,79 @@
       border-right-color: var(--bevel-dk);
       border-bottom-color: var(--bevel-dk);
       box-shadow:
-        inset 1px 1px 0 rgba(255, 255, 255, 0.22),
-        inset -1px -1px 0 rgba(0, 0, 0, 0.45),
-        4px 4px 0 #000000;
+        inset 2px 2px 0 rgba(255, 255, 255, 0.18),
+        inset -2px -2px 0 rgba(0, 0, 0, 0.55),
+        5px 5px 0 #000000;
       position: relative;
       contain: layout;
     }
 
-    /* Win95 title bar — gray gradient with bitmap buttons and window title */
+    /* Win95 title bar — authentic blue gradient, pixel buttons injected via JS */
     .glass::before {
       content: attr(data-title);
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 28px;
-      background-color: var(--win-gray);
-      background-image:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22'%3E%3Crect width='22' height='22' fill='%23c00000'/%3E%3Crect width='22' height='1' fill='%23ff5555'/%3E%3Crect y='21' width='22' height='1' fill='%23880000'/%3E%3Crect width='1' height='22' fill='%23ff5555'/%3E%3Crect x='21' width='1' height='22' fill='%23880000'/%3E%3Cline x1='5' y1='5' x2='17' y2='17' stroke='white' stroke-width='2.5'/%3E%3Cline x1='17' y1='5' x2='5' y2='17' stroke='white' stroke-width='2.5'/%3E%3C/svg%3E"),
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22'%3E%3Crect width='22' height='22' fill='%23b8b8b8'/%3E%3Crect width='22' height='1' fill='%23ffffff'/%3E%3Crect y='21' width='22' height='1' fill='%23555555'/%3E%3Crect width='1' height='22' fill='%23ffffff'/%3E%3Crect x='21' width='1' height='22' fill='%23555555'/%3E%3Crect x='4' y='5' width='14' height='13' fill='none' stroke='%23000' stroke-width='1.5'/%3E%3Crect x='4' y='5' width='14' height='3' fill='%23000'/%3E%3C/svg%3E"),
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22'%3E%3Crect width='22' height='22' fill='%23b8b8b8'/%3E%3Crect width='22' height='1' fill='%23ffffff'/%3E%3Crect y='21' width='22' height='1' fill='%23555555'/%3E%3Crect width='1' height='22' fill='%23ffffff'/%3E%3Crect x='21' width='1' height='22' fill='%23555555'/%3E%3Crect x='4' y='15' width='14' height='3' fill='%23000'/%3E%3C/svg%3E"),
-        linear-gradient(180deg, #a8a8a8 0%, #787878 100%);
-      background-size: 22px 22px, 22px 22px, 22px 22px, 100% 100%;
-      background-position: right 3px center, right 27px center, right 51px center, 0 0;
-      background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
-      border-bottom: 1px solid #555555;
+      background: linear-gradient(90deg, #000080 0%, #1084d0 100%);
+      border-bottom: 1px solid #000040;
       z-index: 1;
       pointer-events: none;
       font-family: 'VT323', monospace;
       font-size: 1rem;
-      color: #111;
+      color: #ffffff;
+      text-shadow: 1px 1px 0 #000040;
       line-height: 28px;
-      padding-left: 7px;
-      padding-right: 80px;
+      padding-left: 22px;
+      padding-right: 58px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
+    /* Win95 pixel-art title bar buttons (injected by JS) */
+    .win-btn {
+      position: absolute;
+      top: 4px;
+      width: 17px;
+      height: 18px;
+      background: #c0c0c0;
+      border-top: 1px solid #ffffff;
+      border-left: 1px solid #ffffff;
+      border-right: 1px solid #000000;
+      border-bottom: 1px solid #000000;
+      box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080;
+      font-family: 'Marlett', 'Arial', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 16px;
+      text-align: center;
+      color: #000000;
+      cursor: default;
+      pointer-events: none;
+      z-index: 2;
+      image-rendering: pixelated;
+      -ms-interpolation-mode: nearest-neighbor;
+    }
+    .win-btn-close {
+      right: 4px; font-size: 13px; line-height: 14px;
+      background: #aa0000;
+      border-top-color: #ff6666; border-left-color: #ff6666;
+      border-right-color: #550000; border-bottom-color: #550000;
+      box-shadow: inset 1px 1px 0 #dd3333, inset -1px -1px 0 #660000;
+      color: #ffffff;
+    }
+    .win-btn-max {
+      right: 23px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0;
+    }
+    .win-btn-max::before {
+      content: '';
+      width: 9px; height: 8px;
+      border: 1.5px solid #000000;
+      border-top-width: 3px;
+    }
+    .win-btn-min { right: 42px; font-size: 16px; line-height: 12px; }
 
     /* ===== 90s GIF DECORATIONS ===== */
     .gif90 { image-rendering: pixelated; display: inline-block; vertical-align: middle; flex-shrink: 0; }
@@ -187,9 +227,10 @@
     /* ===== TOP BAR / NEWSREEL ===== */
     .top-bar {
       height: 64px;
-      background: #000c1e;
-      border-bottom: 2px solid var(--bevel-lt);
-      box-shadow: 0 2px 0 var(--bevel-dk);
+      background: linear-gradient(180deg, #001d3d 0%, #000c1e 55%, #000814 100%);
+      border-top: 2px solid #c0c0c0;
+      border-bottom: 3px solid #000000;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.07), 0 3px 0 rgba(0,0,0,0.6);
       display: flex;
       align-items: center;
       padding: 0;
@@ -342,9 +383,10 @@
       width: 100vw;
       max-width: 100%;
       box-sizing: border-box;
-      background: #000c20;
-      border-bottom: 2px solid var(--bevel-lt);
-      box-shadow: 0 2px 0 var(--bevel-dk);
+      background: linear-gradient(180deg, #001832 0%, #000c1e 60%, #000814 100%);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      border-bottom: 3px solid #000000;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 2px 0 #000;
       display: flex;
       align-items: center;
       padding: 3px 0.5rem;
@@ -387,20 +429,22 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
       border-style: solid;
-      border-width: 1px;
+      border-width: 2px;
       border-top-color: var(--bevel-lt);
       border-left-color: var(--bevel-lt);
       border-right-color: var(--bevel-dk);
       border-bottom-color: var(--bevel-dk);
       background: #001428;
       cursor: pointer;
-      transition: color 0.1s;
+      transition: color 0.1s, box-shadow 0.05s;
       white-space: nowrap;
       flex-shrink: 0;
+      box-shadow: 2px 2px 0 #000000;
     }
     .nav-bar .nav-btn:hover {
       color: var(--green);
       text-shadow: 0 0 6px var(--green-glow);
+      box-shadow: 2px 2px 0 #000, 0 0 6px rgba(51,255,102,0.15);
     }
     .nav-bar .nav-btn.active {
       color: var(--green);
@@ -409,7 +453,9 @@
       border-right-color: var(--bevel-lt);
       border-bottom-color: var(--bevel-lt);
       background: #000c1e;
-      text-shadow: 0 0 6px var(--green-glow);
+      text-shadow: 0 0 8px var(--green-glow);
+      box-shadow: none;
+      transform: translate(1px, 1px);
     }
     .nav-bar .nav-btn .ico { display: none; }
 
@@ -426,17 +472,18 @@
       letter-spacing: 0.05em;
       text-decoration: none;
       border-style: solid;
-      border-width: 1px;
+      border-width: 2px;
       border-top-color: var(--bevel-lt);
       border-left-color: var(--bevel-lt);
       border-right-color: var(--bevel-dk);
       border-bottom-color: var(--bevel-dk);
       background: #001428;
-      transition: color 0.1s;
+      transition: color 0.1s, box-shadow 0.05s;
       white-space: nowrap;
       flex-shrink: 0;
+      box-shadow: 2px 2px 0 #000000;
     }
-    .nav-bar .ext-link:hover { color: var(--green); }
+    .nav-bar .ext-link:hover { color: var(--green); box-shadow: 2px 2px 0 #000, 0 0 6px rgba(0,238,255,0.12); }
     .nav-bar .ext-link .ico { display: none; }
 
     .nav-spacer { flex: 0; min-width: 0.5rem; }
@@ -456,17 +503,18 @@
       text-transform: uppercase;
       letter-spacing: 0.08em;
       border-style: solid;
-      border-width: 1px;
+      border-width: 2px;
       border-top-color: var(--bevel-lt);
       border-left-color: var(--bevel-lt);
       border-right-color: var(--bevel-dk);
       border-bottom-color: var(--bevel-dk);
       background: #001428;
       cursor: pointer;
-      transition: color 0.1s;
+      transition: color 0.1s, box-shadow 0.05s;
       white-space: nowrap;
+      box-shadow: 2px 2px 0 #000000;
     }
-    .help-btn:hover { color: var(--white); }
+    .help-btn:hover { color: var(--white); box-shadow: 2px 2px 0 #000, 0 0 6px rgba(0,238,255,0.12); }
 
     .help-dropdown {
       display: none;
@@ -565,13 +613,32 @@
       overflow-y: scroll;
       scrollbar-gutter: stable;
       padding: 1.4rem 2rem;
-      scrollbar-width: thin;
-      scrollbar-color: var(--bevel-lt) #000814;
+      scrollbar-width: auto;
+      scrollbar-color: #c0c0c0 #808080;
     }
 
-    .content-area::-webkit-scrollbar { width: 8px; }
-    .content-area::-webkit-scrollbar-track { background: #00060f; }
-    .content-area::-webkit-scrollbar-thumb { background: var(--bevel-lt); }
+    .content-area::-webkit-scrollbar { width: 18px; }
+    .content-area::-webkit-scrollbar-track {
+      background: #808080;
+      box-shadow: inset 1px 1px 0 #606060, inset -1px -1px 0 #a0a0a0;
+    }
+    .content-area::-webkit-scrollbar-thumb {
+      background: #c0c0c0;
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #404040;
+      border-bottom: 2px solid #404040;
+      box-shadow: inset 1px 1px 0 #e0e0e0, inset -1px -1px 0 #808080;
+    }
+    .content-area::-webkit-scrollbar-button {
+      background: #c0c0c0;
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #404040;
+      border-bottom: 2px solid #404040;
+      box-shadow: inset 1px 1px 0 #e0e0e0, inset -1px -1px 0 #808080;
+      height: 18px;
+    }
 
     @media (max-width: 800px) {
       .content-area { padding: 1.5rem 1.2rem; }
@@ -603,18 +670,25 @@
       color: var(--cyan);
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      text-shadow: 0 0 12px var(--cyan-glow);
+      text-shadow: 0 0 10px var(--cyan), 0 0 28px var(--cyan-glow);
+    }
+    .page-header h2::before {
+      content: '> ';
+      color: var(--green);
+      text-shadow: 0 0 8px var(--green-glow);
     }
 
     .page-header .line {
       flex: 1;
-      height: 2px;
-      background: linear-gradient(90deg, var(--bevel-lt), transparent);
+      height: 3px;
+      background: linear-gradient(90deg, var(--cyan) 0%, rgba(0,238,255,0.5) 15%, rgba(0,238,255,0.1) 65%, transparent);
+      box-shadow: 0 2px 0 rgba(0,0,0,0.5), 0 0 8px rgba(0,238,255,0.08);
     }
 
     /* ===== HOME PAGE ===== */
     .home-panel {
       padding: 32px 2rem 2rem;
+      max-width: 52%;
     }
 
     .home-name {
@@ -663,9 +737,10 @@
       letter-spacing: 0.06em;
       padding: 6px 20px;
       cursor: pointer;
-      transition: color 0.1s;
+      transition: color 0.1s, box-shadow 0.05s, transform 0.05s;
       border-style: solid;
       border-width: 2px;
+      box-shadow: 3px 3px 0 #000000;
     }
 
     .btn-green {
@@ -676,13 +751,15 @@
       background: #002a10;
       color: var(--green);
     }
-    .btn-green:hover { color: #ffffff; background: #003c18; }
+    .btn-green:hover { color: #ffffff; background: #003c18; box-shadow: 3px 3px 0 #000, 0 0 10px rgba(51,255,102,0.2); }
     .btn-green:active {
       border-top-color: #006622;
       border-left-color: #006622;
       border-right-color: #66ffaa;
       border-bottom-color: #66ffaa;
       background: #001a0a;
+      box-shadow: 1px 1px 0 #000;
+      transform: translate(2px, 2px);
     }
 
     .btn-blue {
@@ -693,13 +770,15 @@
       background: #001030;
       color: var(--blue-bright);
     }
-    .btn-blue:hover { color: #ffffff; background: #001844; }
+    .btn-blue:hover { color: #ffffff; background: #001844; box-shadow: 3px 3px 0 #000, 0 0 10px rgba(0,136,255,0.2); }
     .btn-blue:active {
       border-top-color: #002266;
       border-left-color: #002266;
       border-right-color: #66aaff;
       border-bottom-color: #66aaff;
       background: #000c22;
+      box-shadow: 1px 1px 0 #000;
+      transform: translate(2px, 2px);
     }
 
     /* ===== CARD COMPONENTS ===== */
@@ -757,28 +836,31 @@
       text-transform: uppercase;
       letter-spacing: 0.06em;
       margin-bottom: 0.9rem;
-      padding-bottom: 0.4rem;
-      border-bottom: 1px solid rgba(51,255,102,0.15);
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid rgba(0,238,255,0.35);
+      box-shadow: 0 2px 0 rgba(0,0,0,0.4);
+      text-shadow: 0 0 6px rgba(0,238,255,0.3);
     }
 
     .skill-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.5rem; }
-    .pips { display: flex; gap: 3px; }
+    .pips { display: flex; gap: 3px; align-items: flex-end; }
 
     .pips .p {
-      width: 9px; height: 9px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      width: 10px; height: 20px;
+      background: rgba(0,238,255,0.05);
+      border: 1px solid rgba(0,238,255,0.12);
     }
 
     .pips .p.on {
       background: var(--cyan);
       border-color: var(--cyan);
-      box-shadow: 0 0 5px rgba(102,255,255,0.3);
+      box-shadow: 0 0 6px rgba(0,238,255,0.6), inset 0 1px 0 rgba(255,255,255,0.3);
     }
 
     .pips .p.half {
       background: var(--cyan-dim);
       border-color: var(--cyan-dim);
+      box-shadow: 0 0 3px rgba(0,136,153,0.4);
     }
 
     .skill-row .name { font-size: 0.88rem; color: var(--text-bright); }
@@ -786,8 +868,8 @@
     /* ===== EXPERIENCE ===== */
     .exp-list { display: flex; flex-direction: column; gap: 1rem; }
 
-    .exp-card { padding: 32px 1.4rem 1.4rem; border-left: 3px solid var(--blue-dim); transition: border-color 0.3s; }
-    .exp-card:hover { border-left-color: var(--cyan); }
+    .exp-card { padding: 32px 1.4rem 1.4rem; border-left: 4px solid var(--blue-dim); transition: border-color 0.3s, box-shadow 0.3s; }
+    .exp-card:hover { border-left-color: var(--cyan); box-shadow: inset 1px 1px 0 rgba(255,255,255,0.22), inset -1px -1px 0 rgba(0,0,0,0.45), 4px 4px 0 #000, -4px 0 12px rgba(0,238,255,0.12); }
 
     .exp-card .badge {
       font-family: var(--font-dos);
@@ -795,10 +877,15 @@
       color: var(--cyan);
       text-transform: uppercase;
       display: inline-block;
-      background: rgba(0,238,255,0.06);
-      border: 1px solid rgba(0,238,255,0.25);
-      padding: 0.1rem 0.5rem;
+      background: rgba(0,8,24,0.85);
+      border-top: 2px solid rgba(0,238,255,0.7);
+      border-left: 2px solid rgba(0,238,255,0.7);
+      border-right: 2px solid rgba(0,238,255,0.12);
+      border-bottom: 2px solid rgba(0,238,255,0.12);
+      padding: 0.1rem 0.55rem;
       margin-bottom: 0.5rem;
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.75);
+      letter-spacing: 0.08em;
     }
 
     .exp-card h3 {
@@ -826,8 +913,8 @@
       border: 1px solid;
     }
 
-    .status-pill.done { color: var(--green); border-color: rgba(51,255,102,0.3); background: rgba(51,255,102,0.05); }
-    .status-pill.wip { color: var(--cyan); border-color: rgba(0,238,255,0.3); background: rgba(0,238,255,0.05); animation: blink 2s infinite; }
+    .status-pill.done { color: var(--green); border-color: rgba(51,255,102,0.5); background: rgba(0,8,0,0.8); text-shadow: 0 0 6px var(--green-glow); box-shadow: 0 0 6px rgba(51,255,102,0.12); }
+    .status-pill.wip { color: var(--cyan); border-color: rgba(0,238,255,0.5); background: rgba(0,8,16,0.8); animation: blink 2s infinite; text-shadow: 0 0 6px var(--cyan-glow); box-shadow: 0 0 6px rgba(0,238,255,0.12); }
 
     /* ===== PROJECTS ===== */
     .proj-grid { display: grid; gap: 1rem; }
@@ -867,18 +954,23 @@
 
     .proj-card p { font-size: 0.95rem; color: var(--text); margin-bottom: 0.8rem; line-height: 1.75; }
 
-    .tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+    .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
     .tags span {
       font-family: var(--font-dos);
       font-size: 0.9rem;
       color: var(--cyan);
-      background: rgba(0,238,255,0.04);
-      border: 1px solid rgba(0,238,255,0.2);
-      padding: 0.05rem 0.45rem;
+      background: rgba(0,8,24,0.85);
+      border-top: 2px solid rgba(0,238,255,0.65);
+      border-left: 2px solid rgba(0,238,255,0.65);
+      border-right: 2px solid rgba(0,238,255,0.12);
+      border-bottom: 2px solid rgba(0,238,255,0.12);
+      padding: 0.1rem 0.55rem;
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.75);
     }
 
     /* ===== PUBLICATIONS ===== */
-    .pub-card { padding: 32px 1.4rem 1.4rem; border-left: 3px solid var(--green); }
+    .pub-card { padding: 32px 1.4rem 1.4rem; border-left: 4px solid var(--green); transition: box-shadow 0.3s; }
+    .pub-card:hover { box-shadow: inset 1px 1px 0 rgba(255,255,255,0.22), inset -1px -1px 0 rgba(0,0,0,0.45), 4px 4px 0 #000, -4px 0 12px rgba(51,255,102,0.12); }
     .pub-card h3 { font-family: var(--font-dos); font-size: 1.1rem; color: var(--green); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.3rem; text-shadow: 0 0 6px var(--green-glow); }
     .pub-card .meta { font-family: var(--font-dos); font-size: 0.95rem; color: var(--cyan); margin-bottom: 0.6rem; }
     .pub-card p { font-size: 0.95rem; color: var(--text); line-height: 1.75; }
@@ -916,11 +1008,15 @@
       font-family: var(--font-dos);
       font-size: 0.95rem;
       color: var(--green);
-      background: rgba(51,255,102,0.05);
-      border: 1px solid rgba(51,255,102,0.25);
-      padding: 0.2rem 0.4rem;
+      background: rgba(0,8,12,0.85);
+      border-top: 2px solid rgba(51,255,102,0.7);
+      border-left: 2px solid rgba(51,255,102,0.7);
+      border-right: 2px solid rgba(51,255,102,0.12);
+      border-bottom: 2px solid rgba(51,255,102,0.12);
+      padding: 0.2rem 0.5rem;
       flex-shrink: 0;
       letter-spacing: 0.05em;
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.75), 0 0 4px rgba(51,255,102,0.1);
     }
     .note-icon.soon-ico { color: var(--text-dim); background: none; border-color: rgba(68,68,100,0.25); }
     .note-title {
@@ -1007,9 +1103,97 @@
     .ch-row a { color: var(--text-bright); }
     .ch-row a:hover { color: var(--green); }
 
+
+    /* ===== DOS BOOT SCREEN ===== */
+    #bootScreen {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: #000;
+      font-family: 'VT323', 'Courier New', monospace;
+      font-size: 1.05rem;
+      color: #aaaaaa;
+      padding: 18px 24px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.35;
+      cursor: none;
+    }
+    #bootScreen.boot-hidden { display: none; }
+
+    /* CRT scanline overlay on boot screen */
+    #bootScreen::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.18) 2px,
+        rgba(0,0,0,0.18) 4px
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    #bootLines {
+      position: relative;
+      z-index: 2;
+      flex: 1;
+    }
+
+    .boot-line {
+      display: block;
+      white-space: pre;
+      opacity: 0;
+      animation: bootFadeIn 0.04s forwards;
+    }
+    @keyframes bootFadeIn { to { opacity: 1; } }
+
+    .boot-ok   { color: #aaaaaa; }
+    .boot-hi   { color: #ffffff; }
+    .boot-grn  { color: #33ff66; }
+    .boot-cyan { color: #00eeff; }
+    .boot-dim  { color: #555555; }
+    .boot-bar  { color: #00eeff; letter-spacing: 0.5px; }
+    .boot-err  { color: #ff4422; }
+
+    /* blinking cursor */
+    #bootCursor {
+      display: inline-block;
+      width: 9px;
+      height: 1.1em;
+      background: #aaaaaa;
+      vertical-align: text-bottom;
+      animation: blinkCursor 0.6s step-end infinite;
+      position: relative;
+      z-index: 2;
+    }
+    @keyframes blinkCursor { 50% { opacity: 0; } }
+
+    /* fade-out veil */
+    #bootVeil {
+      position: fixed;
+      inset: 0;
+      z-index: 99998;
+      background: #000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+    #bootVeil.veil-on  { opacity: 1; pointer-events: all; }
+
   </style>
 </head>
 <body>
+
+  <!-- DOS BOOT SCREEN -->
+  <div id="bootVeil"></div>
+  <div id="bootScreen">
+    <div id="bootLines"><span id="bootCursor"></span></div>
+  </div>
 
   <!-- SPACE BACKGROUND -->
   <canvas id="starCanvas"></canvas>
@@ -1022,7 +1206,7 @@
     <!-- TOP BAR — live tech news ticker -->
     <div class="top-bar">
       <div class="ticker-brand">Sean Jackson</div>
-      <div class="ticker-badge">▶ Sci-News!</div>
+      <div class="ticker-badge">▶ Tech News</div>
       <div class="ticker-viewport">
         <div class="ticker-track" id="tickerTrack">Connecting to feed&hellip;</div>
       </div>
@@ -1103,9 +1287,9 @@
             <div class="home-name">Sean Jackson</div>
             <div class="home-title">Machine Learning Engineer & Physicist</div>
             <p class="home-desc">
-              Physics graduate from the University of Toronto specializing in deep learning,
-              computer vision, and scientific computing. I build systems that automate
-              materials discovery at Lawrence Livermore National Laboratory.
+              Physics graduate from the University of Toronto, proficient in deep learning,
+              quantum computing, and robotics. I currently build systems that automate
+              materials discovery for advanced manufacturing at Lawrence Livermore National Laboratory.
             </p>
             <div class="home-actions">
               <button class="btn btn-green" onclick="switchPage('projects')">View Projects</button>
@@ -1408,6 +1592,133 @@
   </div><!-- /app-shell -->
 
   <script>
+    // ===== SOUND ENGINE — Windows 7 style (warm sine + convolution reverb) =====
+    var SFX = (function () {
+      var _ctx   = null;
+      var _irbuf = null;
+      var _decGen = 0;
+
+      function ac() {
+        if (!_ctx) {
+          try { _ctx = new (window.AudioContext || window.webkitAudioContext)(); }
+          catch (e) { return null; }
+        }
+        if (_ctx.state === 'suspended') _ctx.resume();
+        return _ctx;
+      }
+
+      // Synthetic room IR — built once, pre-warmed at load time
+      function ir(c) {
+        if (_irbuf) return _irbuf;
+        var len = Math.ceil(c.sampleRate * 0.55);
+        _irbuf  = c.createBuffer(2, len, c.sampleRate);
+        for (var ch = 0; ch < 2; ch++) {
+          var d = _irbuf.getChannelData(ch);
+          for (var i = 0; i < len; i++)
+            d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.2);
+        }
+        return _irbuf;
+      }
+
+      function route(g, c, reverb) {
+        if (!reverb) { g.connect(c.destination); return; }
+        var conv = c.createConvolver(); conv.buffer = ir(c);
+        var dry = c.createGain(); dry.gain.value = 0.65;
+        var wet = c.createGain(); wet.gain.value = 0.55;
+        g.connect(dry); dry.connect(c.destination);
+        g.connect(conv); conv.connect(wet); wet.connect(c.destination);
+      }
+
+      // For user-triggered sounds: queues via .then() if context is resuming
+      function tone(freq, vol, dur, delay, freqEnd, reverb) {
+        var c = ac();
+        if (!c) return;
+        var play = function () {
+          var t0 = c.currentTime + (delay || 0);
+          var osc = c.createOscillator(), g = c.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, t0);
+          if (freqEnd) osc.frequency.exponentialRampToValueAtTime(freqEnd, t0 + dur);
+          g.gain.setValueAtTime(0, t0);
+          g.gain.linearRampToValueAtTime(vol, t0 + 0.012);
+          g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+          osc.connect(g); route(g, c, reverb);
+          osc.start(t0); osc.stop(t0 + dur + 0.02);
+        };
+        if (c.state === 'running') play(); else c.resume().then(play);
+      }
+
+      // For boot sounds: plays only if context is already running — never queues
+      function bootTone(freq, vol, dur, reverb) {
+        if (!_ctx || _ctx.state !== 'running') return;
+        var t0 = _ctx.currentTime;
+        var osc = _ctx.createOscillator(), g = _ctx.createGain();
+        osc.type = 'sine'; osc.frequency.value = freq;
+        g.gain.setValueAtTime(0, t0);
+        g.gain.linearRampToValueAtTime(vol, t0 + 0.012);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+        osc.connect(g); route(g, _ctx, reverb);
+        osc.start(t0); osc.stop(t0 + dur + 0.02);
+      }
+
+      // Pre-warm: create context + IR buffer at load time to avoid first-click lag
+      try {
+        _ctx = new (window.AudioContext || window.webkitAudioContext)();
+        ir(_ctx);
+      } catch (e) {}
+
+      return {
+        unlock: function () { ac(); },
+
+        click:     function () { tone(520, 0.08, 0.045, 0, 360); },
+        navSwitch: function () { tone(784, 0.07, 0.28,  0, null, true); },
+        menuOpen:  function () { tone(784, 0.065, 0.22, 0, null, true); tone(1047, 0.065, 0.22, 0.1, null, true); },
+        menuClose: function () { tone(1047, 0.055, 0.18, 0, null, true); tone(784, 0.055, 0.18, 0.1, null, true); },
+
+        decryptStart: function () {
+          var gen = ++_decGen;
+          var c = ac();
+          if (!c) return;
+          (function loop() {
+            if (_decGen !== gen) return;
+            if (c.state === 'running') {
+              var t0 = c.currentTime;
+              var osc = c.createOscillator(), g = c.createGain();
+              osc.type = 'sine';
+              osc.frequency.value = 180 + Math.random() * 520;
+              g.gain.setValueAtTime(0, t0);
+              g.gain.linearRampToValueAtTime(0.055, t0 + 0.01);
+              g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.07);
+              osc.connect(g); g.connect(c.destination);
+              osc.start(t0); osc.stop(t0 + 0.08);
+            }
+            setTimeout(loop, 70);
+          })();
+        },
+        decryptStop: function () { _decGen++; },
+
+        // Boot sounds skip silently if audio isn't unlocked yet — never queue
+        postBeep: function () { bootTone(880, 0.13, 0.22, true); },
+        bootTick: function () {
+          if (Math.random() > 0.3) return;
+          bootTone(320 + Math.random() * 160, 0.022, 0.018, false);
+        },
+        bootBar: function (step) {
+          var f = [294, 349, 392, 440, 523, 587];
+          bootTone(f[Math.min(step, f.length - 1)], 0.07, 0.14, true);
+        },
+        bootDone: function () {
+          var notes = [[349,0],[440,130],[523,260],[659,390],[784,520],[1047,650]];
+          notes.forEach(function (n) {
+            setTimeout(function () { bootTone(n[0], 0.085, 0.4, true); }, n[1]);
+          });
+        }
+      };
+    })();
+
+    // Unlock AudioContext on first pointer interaction
+    document.addEventListener('pointerdown', function () { SFX.unlock(); }, { once: true, capture: true });
+
     // ===== MATRIX DECRYPT ANIMATION =====
     var GLYPHS = '!@#$%&*+=[]<>?/\\0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$!?><';
 
@@ -1416,7 +1727,8 @@
     var _decryptCancelFns = [];
 
     function matrixDecrypt(container, duration) {
-      // Cancel every in-flight animation and restore its text immediately
+      // Stop decrypt sound once, here — before cancel() can be called multiple times
+      SFX.decryptStop();
       _decryptCancelFns.forEach(function(fn) { fn(); });
       _decryptCancelFns = [];
 
@@ -1426,7 +1738,7 @@
       // mutating text nodes \u2014 prevents any reflow from escaping the container
       var locked = [];
       container.querySelectorAll('*').forEach(function(el) {
-        if (el.tagName === 'BUTTON' || el.closest('button')) return;
+        if (el.tagName === 'BUTTON' || el.closest('button') || el.classList.contains('win-btn')) return;
         var d = window.getComputedStyle(el).display;
         if (d === 'block' || d === 'inline-block' || d === 'flex' ||
             d === 'inline-flex' || d === 'grid') {
@@ -1449,7 +1761,7 @@
       var node;
       while ((node = walker.nextNode())) {
         var text = node.textContent;
-        if (text.trim().length > 0 && !node.parentElement.closest('button')) {
+        if (text.trim().length > 0 && !node.parentElement.closest('button') && !node.parentElement.classList.contains('win-btn')) {
           textElements.push({ node: node, original: text });
         }
       }
@@ -1498,12 +1810,14 @@
         if (progress < 1) {
           requestAnimationFrame(tick);
         } else {
+          SFX.decryptStop();
           textElements.forEach(function(item) { item.node.textContent = item.original; });
           _decryptCancelFns = _decryptCancelFns.filter(function(f) { return f !== cancel; });
           unlock();
         }
       }
 
+      SFX.decryptStart();
       requestAnimationFrame(tick);
     }
 
@@ -1527,12 +1841,19 @@
     }
 
     document.querySelectorAll('.nav-bar .nav-btn').forEach(function(btn) {
-      btn.addEventListener('click', function() { switchPage(btn.dataset.page); });
+      btn.addEventListener('click', function() { SFX.navSwitch(); switchPage(btn.dataset.page); });
+    });
+
+    // Click sound for action buttons
+    document.querySelectorAll('.btn').forEach(function(btn) {
+      btn.addEventListener('click', function() { SFX.click(); });
     });
 
     // ===== HELP DROPDOWN =====
     function toggleHelpMenu() {
-      document.getElementById('helpDropdown').classList.toggle('open');
+      var dd = document.getElementById('helpDropdown');
+      if (dd.classList.contains('open')) { SFX.menuClose(); dd.classList.remove('open'); }
+      else { SFX.menuOpen(); dd.classList.add('open'); }
     }
     function closeHelpMenu() {
       document.getElementById('helpDropdown').classList.remove('open');
@@ -1801,103 +2122,139 @@
 
 
 
-    // ===== HYPERSPACE WARP STARFIELD =====
+    // ===== RAINBOW DITHERED STARFIELD (256-color DOS mode) =====
     (function() {
       var canvas = document.getElementById('starCanvas');
       var ctx    = canvas.getContext('2d');
-      var W, H, cx, cy, FOCAL;
-      var N     = 220;
-      var DEPTH = 900;
-      var SPEED = 5;
 
-      // Pre-allocated temp arrays — no GC pressure per frame
-      var pxA = new Float32Array(N);
-      var pyA = new Float32Array(N);
-      var sxA = new Float32Array(N);
-      var syA = new Float32Array(N);
-      var tA  = new Float32Array(N);
-      var cnt = 0;
+      // Fixed low-resolution render target — CSS stretches it pixelated
+      var RW = 320, RH = 200;
+      var CX = RW / 2, CY = RH / 2;
+      var FOCAL = Math.min(RW, RH) * 0.6;  // ~120
 
-      function mkStar(atDepth) {
-        var angle  = Math.random() * 6.2832;
-        var radius = Math.random() * 700;
-        var z      = atDepth ? DEPTH : Math.random() * DEPTH + 10;
-        return { x: Math.cos(angle) * radius, y: Math.sin(angle) * radius, z: z, pz: z };
+      var N = 70, DEPTH = 900, SPEED = 5;
+      var TRAIL = 18; // frames of streak history to project backward
+
+      // Bayer 4×4 ordered dithering matrix (values 0–15)
+      var BAYER = [
+        [ 0, 8, 2,10],
+        [12, 4,14, 6],
+        [ 3,11, 1, 9],
+        [15, 7,13, 5]
+      ];
+
+      // Quantize one channel to the nearest web-safe step (multiples of 51)
+      function ws(v) { return Math.max(0, Math.min(255, Math.round(v / 51) * 51)); }
+
+      // Apply Bayer dithering then snap to web-safe 216-color palette
+      function dither(r, g, b, px, py) {
+        var noise = (BAYER[py & 3][px & 3] / 16 - 0.5) * 48;
+        return [ws(r + noise), ws(g + noise), ws(b + noise)];
       }
 
-      function resize() {
-        W = canvas.width  = window.innerWidth;
-        H = canvas.height = window.innerHeight;
-        cx = W / 2;
-        cy = H / 2;
-        FOCAL = Math.min(W, H) * 0.55;
-        ctx.fillStyle = '#010008';
-        ctx.fillRect(0, 0, W, H);
+      function mkStar(atDepth) {
+        var angle = Math.random() * 6.2832;
+        var rad   = Math.random() * 500;
+        var z     = atDepth ? DEPTH : Math.random() * DEPTH + 10;
+        return { x: Math.cos(angle)*rad, y: Math.sin(angle)*rad, z: z, hue: Math.random()*360 };
       }
 
       var stars = [];
-      function init() {
-        resize();
-        for (var i = 0; i < N; i++) stars[i] = mkStar(false);
-      }
+      canvas.width  = RW;
+      canvas.height = RH;
+      ctx.imageSmoothingEnabled = false;
+      for (var i = 0; i < N; i++) stars[i] = mkStar(false);
 
-      // Throttle to ~30 fps — background effect doesn't need 60
       var lastT = 0;
       function tick(now) {
         requestAnimationFrame(tick);
         if (now - lastT < 33) return;
         lastT = now;
 
-        ctx.fillStyle = 'rgba(1, 0, 8, 0.82)';
-        ctx.fillRect(0, 0, W, H);
+        // Deep-space black background
+        ctx.fillStyle = '#000004';
+        ctx.fillRect(0, 0, RW, RH);
 
-        // Pass 1: update positions, collect visible stars
-        cnt = 0;
+        // Draw rainbow streak lines
         for (var i = 0; i < N; i++) {
           var s = stars[i];
-          s.pz = s.z;
           s.z -= SPEED;
-          if (s.z <= 1) { stars[i] = mkStar(true); continue; }
 
-          var sx = (s.x / s.z)  * FOCAL + cx;
-          var sy = (s.y / s.z)  * FOCAL + cy;
-          var px = (s.x / s.pz) * FOCAL + cx;
-          var py = (s.y / s.pz) * FOCAL + cy;
-          if (sx < -20 || sx > W + 20 || sy < -20 || sy > H + 20) {
-            stars[i] = mkStar(true); continue;
-          }
+          // Tail is TRAIL frames behind head — delete only when tail clears camera
+          var tailZ = Math.min(DEPTH - 1, s.z + SPEED * TRAIL);
+          if (tailZ <= 1) { stars[i] = mkStar(true); continue; }
 
-          pxA[cnt] = px; pyA[cnt] = py;
-          sxA[cnt] = sx; syA[cnt] = sy;
-          tA[cnt]  = 1 - s.z / DEPTH;
-          cnt++;
-        }
+          // Clamp head to camera plane so it projects toward screen edge rather than flipping
+          var headZ  = Math.max(1.5, s.z);
+          var sx     = (s.x / headZ) * FOCAL + CX;
+          var sy     = (s.y / headZ) * FOCAL + CY;
+          var tailSx = (s.x / tailZ) * FOCAL + CX;
+          var tailSy = (s.y / tailZ) * FOCAL + CY;
 
-        // Pass 2: draw in 3 batched tiers — only 3 ctx.stroke() calls total
-        ctx.lineCap = 'round';
-        var tiers = [
-          { min: 0,    max: 0.4,  style: 'rgba(170,195,255,0.20)', w: 0.4 },
-          { min: 0.4,  max: 0.72, style: 'rgba(200,218,255,0.55)', w: 1.1 },
-          { min: 0.72, max: 1.01, style: 'rgba(225,238,255,0.92)', w: 2.2 }
-        ];
-        for (var ti = 0; ti < 3; ti++) {
-          var lo = tiers[ti].min, hi = tiers[ti].max;
+          // Skip only if the whole line segment is off-screen
+          var bx0 = Math.min(sx, tailSx), bx1 = Math.max(sx, tailSx);
+          var by0 = Math.min(sy, tailSy), by1 = Math.max(sy, tailSy);
+          if (bx1 < -4 || bx0 > RW+4 || by1 < -4 || by0 > RH+4) continue;
+
+          var t    = 1 - headZ / DEPTH;
+          var lum  = 50 + t * 45;
+          var col  = 'hsl(' + s.hue + ',100%,' + lum + '%)';
+          var glow = 'hsl(' + s.hue + ',100%,88%)';
+
+          // Broad coloured bloom around streak
+          ctx.shadowColor = glow;
+          ctx.shadowBlur  = 14;
           ctx.beginPath();
-          for (var j = 0; j < cnt; j++) {
-            var t = tA[j];
-            if (t < lo || t >= hi) continue;
-            ctx.moveTo(pxA[j], pyA[j]);
-            ctx.lineTo(sxA[j], syA[j]);
-          }
-          ctx.strokeStyle = tiers[ti].style;
-          ctx.lineWidth   = tiers[ti].w;
+          ctx.moveTo(tailSx, tailSy);
+          ctx.lineTo(sx, sy);
+          ctx.strokeStyle = col;
+          ctx.lineWidth   = Math.max(0.6, t * 2.5);
           ctx.stroke();
+
+          // Bright white-hot core line on top
+          ctx.shadowColor = '#ffffff';
+          ctx.shadowBlur  = 7;
+          ctx.beginPath();
+          ctx.moveTo(tailSx, tailSy);
+          ctx.lineTo(sx, sy);
+          ctx.strokeStyle = 'rgba(255,255,255,0.55)';
+          ctx.lineWidth   = Math.max(0.3, t * 0.9);
+          ctx.stroke();
+
+          ctx.shadowBlur = 0;
         }
+
+        // Apply 256-colour Bayer dithering to every pixel
+        var img  = ctx.getImageData(0, 0, RW, RH);
+        var data = img.data;
+        for (var py = 0; py < RH; py++) {
+          for (var px = 0; px < RW; px++) {
+            var k = (py * RW + px) * 4;
+            var q = dither(data[k], data[k+1], data[k+2], px, py);
+            data[k] = q[0]; data[k+1] = q[1]; data[k+2] = q[2];
+          }
+        }
+        ctx.putImageData(img, 0, 0);
       }
 
-      init();
       requestAnimationFrame(tick);
-      window.addEventListener('resize', resize);
+    })();
+
+    // ===== WIN95 PIXEL TITLE-BAR BUTTONS =====
+    (function() {
+      var btns = [
+        { cls: 'win-btn-min',   label: '–' }, // en-dash = minimize bar
+        { cls: 'win-btn-max',   label: '□' }, // □ = maximize
+        { cls: 'win-btn-close', label: '×' }  // × = close
+      ];
+      document.querySelectorAll('.glass').forEach(function(el) {
+        btns.forEach(function(b) {
+          var span = document.createElement('span');
+          span.className = 'win-btn ' + b.cls;
+          span.textContent = b.label;
+          el.appendChild(span);
+        });
+      });
     })();
 
     // Run decrypt only after all fonts are ready to prevent FOUT-driven layout jitter
@@ -2141,6 +2498,168 @@
     console.log('%c> sean_jackson.exe loaded', 'color: #44ff44; font-size: 14px; font-weight: bold;');
     console.log('%c> "The right man in the wrong place can make all the difference."', 'color: #555; font-size: 10px; font-style: italic;');
     console.log('%c> Ctrl+K → / for keyboard shortcuts', 'color: #55aaff; font-size: 10px;');
+
+    // ===== DOS BOOT SEQUENCE =====
+    (function () {
+      var screen  = document.getElementById('bootScreen');
+      var lines   = document.getElementById('bootLines');
+      var cursor  = document.getElementById('bootCursor');
+      var veil    = document.getElementById('bootVeil');
+
+      // Each entry: { text, cls, delay (ms before this line), pause (ms after) }
+      // delay = wait before printing this line
+      // pause = extra wait after printing (for dramatic effect)
+      var BAR_FULL = 38;
+      function bar(pct, ch) {
+        ch = ch || '█';
+        var filled = Math.round(BAR_FULL * pct / 100);
+        var empty  = BAR_FULL - filled;
+        return '[' + ch.repeat(filled) + '░'.repeat(empty) + '] ' +
+               ('  ' + pct).slice(-3) + '%';
+      }
+
+      var SEQ = [
+        // BIOS POST
+        { text: 'SJACKSON/BIOS Version 2.09  Copyright (C) 1994  AMI BIOS Inc., All Rights Reserved', cls: 'boot-hi', delay: 0,   pause: 80  },
+        { text: '', delay: 0, pause: 20 },
+        { text: 'CPU: Intel 80486DX2-66       FPU: Internal', delay: 40, pause: 30 },
+        { text: 'BIOS Build Date: 09/14/94', delay: 30, pause: 20 },
+        { text: '', delay: 0, pause: 15 },
+        { text: 'Memory Test :     655360 OK', cls: 'boot-ok', delay: 60, pause: 10 },
+        { text: 'Extended Memory : 8388608 OK', cls: 'boot-ok', delay: 40, pause: 10 },
+        { text: '', delay: 0, pause: 15 },
+
+        // Hardware detection
+        { text: 'Detecting Primary IDE Master   . . .  QUANTUM FIREBALL TM3.2A (3.2GB)', delay: 70, pause: 10 },
+        { text: 'Detecting Primary IDE Slave    . . .  Not Detected', cls: 'boot-dim', delay: 50, pause: 10 },
+        { text: 'Detecting Secondary IDE Master . . .  MITSUMI CRMC-FX4830TE CD-ROM', delay: 50, pause: 10 },
+        { text: 'Detecting Secondary IDE Slave  . . .  Not Detected', cls: 'boot-dim', delay: 40, pause: 10 },
+        { text: '', delay: 0, pause: 10 },
+        { text: 'COM1 : 3F8h  IRQ4     COM2 : 2F8h  IRQ3', delay: 30, pause: 10 },
+        { text: 'LPT1 : 378h  IRQ7', delay: 20, pause: 10 },
+        { text: '', delay: 0, pause: 10 },
+        { text: 'Plug and Play BIOS Extension v1.0A  Copyright 1994  Microsoft Corp.', delay: 40, pause: 10 },
+        { text: '3 Plug and Play devices detected', delay: 30, pause: 20 },
+        { text: '', delay: 0, pause: 15 },
+
+        // AUTOEXEC / CONFIG
+        { text: 'Starting MS-DOS . . .', cls: 'boot-hi', delay: 120, pause: 180 },
+        { text: '', delay: 0, pause: 10 },
+        { text: 'HIMEM is testing extended memory . . . done.', delay: 60, pause: 20 },
+        { text: 'HIMEM.SYS Version 3.09 loaded', delay: 30, pause: 20 },
+        { text: 'EMM386 Expanded Memory Manager Version 4.48  (C) Microsoft Corp 1986-1992', delay: 30, pause: 20 },
+        { text: 'Expanded memory services unavailable.', cls: 'boot-dim', delay: 20, pause: 30 },
+        { text: '', delay: 0, pause: 10 },
+        { text: 'MSCDEX Version 2.25  Copyright (C) Microsoft Corp. 1986-1993', delay: 40, pause: 10 },
+        { text: 'Drive D: = Driver MSCD001 unit 0', delay: 20, pause: 20 },
+        { text: '', delay: 0, pause: 10 },
+        { text: 'C:\\AUTOEXEC.BAT', cls: 'boot-hi', delay: 50, pause: 20 },
+        { text: '  MOUSE.COM  . . . . Mouse driver installed (COM1)', delay: 30, pause: 10 },
+        { text: '  SMARTDRV.EXE  . . . Cache = 2048 KB', delay: 20, pause: 10 },
+        { text: '  DOSKEY installed.', delay: 20, pause: 30 },
+        { text: '', delay: 0, pause: 20 },
+
+        // Kernel load
+        { text: 'Loading kernel . . .', cls: 'boot-grn', delay: 100, pause: 60 },
+        { text: '  [kernel] Initialising memory management unit', delay: 50, pause: 20 },
+        { text: '  [kernel] Mounting root filesystem (FAT32) . . . OK', cls: 'boot-grn', delay: 60, pause: 20 },
+        { text: '  [kernel] Enumerating PCI bus . . . 7 devices found', delay: 50, pause: 20 },
+        { text: '  [kernel] Loading VGA driver (SVGA 640x480x256) . . . OK', cls: 'boot-grn', delay: 50, pause: 20 },
+        { text: '  [kernel] SoundBlaster 16 detected on port 0x220 IRQ5 DMA1', delay: 40, pause: 20 },
+        { text: '  [kernel] Network adapter: 3Com 3C509B Ethernet . . . OK', cls: 'boot-grn', delay: 50, pause: 20 },
+        { text: '  [kernel] TCP/IP stack initialised  IP: 192.168.1.42', delay: 40, pause: 20 },
+        { text: '', delay: 0, pause: 20 },
+
+        // OS boot
+        { text: 'Starting Windows 95 . . .', cls: 'boot-hi', delay: 120, pause: 30 },
+        { text: bar(0),   cls: 'boot-bar', delay: 80,  pause: 55, barTarget: 25  },
+        { text: bar(25),  cls: 'boot-bar', delay: 0,   pause: 55, barTarget: 50  },
+        { text: bar(50),  cls: 'boot-bar', delay: 0,   pause: 55, barTarget: 75  },
+        { text: bar(75),  cls: 'boot-bar', delay: 0,   pause: 55, barTarget: 100 },
+        { text: bar(100), cls: 'boot-bar', delay: 0,   pause: 100 },
+        { text: '', delay: 0, pause: 30 },
+
+        // Custom portfolio boot
+        { text: '┌' + '─'.repeat(60) + '┐', cls: 'boot-cyan', delay: 80, pause: 10 },
+        { text: '│   SJACKSON_LABS  v1.0   │  Personal OS  │  Build 2024.12  │   ', cls: 'boot-cyan', delay: 20, pause: 10 },
+        { text: '└' + '─'.repeat(60) + '┘', cls: 'boot-cyan', delay: 20, pause: 30 },
+        { text: '', delay: 0, pause: 10 },
+        { text: 'Initialising subsystems . . .', delay: 60, pause: 20 },
+        { text: '  [neural]    Loading personality matrix      . . . OK', cls: 'boot-grn', delay: 60, pause: 20 },
+        { text: '  [physics]   Importing quantum field models  . . . OK', cls: 'boot-grn', delay: 50, pause: 20 },
+        { text: '  [ml]        Calibrating inference engines   . . . OK', cls: 'boot-grn', delay: 50, pause: 20 },
+        { text: '  [portfolio] Mounting project archive        . . . OK', cls: 'boot-grn', delay: 50, pause: 20 },
+        { text: '  [ui]        Rendering starfield (256 color) . . . OK', cls: 'boot-grn', delay: 50, pause: 20 },
+        { text: '', delay: 0, pause: 20 },
+
+        // Final loading bar
+        { text: 'System load:  ' + bar(0, '█'), cls: 'boot-bar', delay: 80, pause: 50, isLoad: true, loadStep: 0 },
+        { text: 'System load:  ' + bar(20, '█'), cls: 'boot-bar', delay: 0, pause: 50, isLoad: true, loadStep: 1 },
+        { text: 'System load:  ' + bar(45, '█'), cls: 'boot-bar', delay: 0, pause: 45, isLoad: true, loadStep: 2 },
+        { text: 'System load:  ' + bar(70, '█'), cls: 'boot-bar', delay: 0, pause: 40, isLoad: true, loadStep: 3 },
+        { text: 'System load:  ' + bar(90, '█'), cls: 'boot-bar', delay: 0, pause: 35, isLoad: true, loadStep: 4 },
+        { text: 'System load:  ' + bar(100, '█'), cls: 'boot-bar', delay: 0, pause: 80, isLoad: true, loadStep: 5 },
+        { text: '', delay: 0, pause: 20 },
+        { text: 'All systems nominal.  Welcome, Sean.', cls: 'boot-hi', delay: 80, pause: 400 },
+        { text: '', delay: 0, pause: 20 },
+        { text: 'C:\\SJACKSON> _', cls: 'boot-grn', delay: 100, pause: 800 },
+      ];
+
+      // Running load-bar lines update the previous one instead of appending new
+      var loadLineEl = null;
+
+      // Unlock audio on any click during boot (browser autoplay policy)
+      screen.addEventListener('pointerdown', function () { SFX.unlock(); }, { once: true });
+
+      function appendLine(entry) {
+        // Load-bar lines overwrite the previous load-bar line
+        if (entry.isLoad && entry.loadStep > 0 && loadLineEl) {
+          loadLineEl.textContent = entry.text;
+          SFX.bootBar(entry.loadStep);
+          return;
+        }
+        var el = document.createElement('span');
+        el.className = 'boot-line ' + (entry.cls || 'boot-ok');
+        el.textContent = entry.text;
+        lines.appendChild(el);
+        if (entry.isLoad) { loadLineEl = el; SFX.bootBar(0); }
+        else { loadLineEl = null; if (entry.text.trim()) SFX.bootTick(); }
+        // Keep cursor visible at bottom
+        lines.appendChild(cursor);
+        screen.scrollTop = screen.scrollHeight;
+      }
+
+      var idx = 0;
+      function next() {
+        if (idx >= SEQ.length) {
+          bootComplete();
+          return;
+        }
+        var entry = SEQ[idx++];
+        setTimeout(function () {
+          appendLine(entry);
+          setTimeout(next, entry.pause || 20);
+        }, entry.delay || 0);
+      }
+
+      function bootComplete() {
+        cursor.style.display = 'none';
+        SFX.bootDone();
+        setTimeout(function () {
+          veil.classList.add('veil-on');
+          setTimeout(function () {
+            screen.classList.add('boot-hidden');
+            veil.style.transition = 'opacity 0.7s ease';
+            veil.style.opacity = '0';
+            setTimeout(function () { veil.style.display = 'none'; }, 800);
+          }, 300);
+        }, 700);
+      }
+
+      // Kick off — POST beep fires immediately, sequence starts after
+      setTimeout(function () { SFX.postBeep(); }, 80);
+      next();
+    })();
   </script>
 </body>
 </html>
