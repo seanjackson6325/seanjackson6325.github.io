@@ -227,10 +227,10 @@
     /* ===== TOP BAR / NEWSREEL ===== */
     .top-bar {
       height: 64px;
-      background: linear-gradient(180deg, #001d3d 0%, #000c1e 55%, #000814 100%);
-      border-top: 2px solid #c0c0c0;
-      border-bottom: 3px solid #000000;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.07), 0 3px 0 rgba(0,0,0,0.6);
+      background: #c0c0c0;
+      border-top: 2px solid #ffffff;
+      border-bottom: 3px solid #404040;
+      box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #dfdfdf;
       display: flex;
       align-items: center;
       padding: 0;
@@ -246,25 +246,26 @@
     .ticker-brand {
       font-family: var(--font-pixel);
       font-size: 0.42rem;
-      color: var(--green);
-      text-shadow: 0 0 8px var(--green-glow);
+      color: #000000;
+      text-shadow: none;
       letter-spacing: 0.05em;
-      text-transform: uppercase;
       white-space: nowrap;
       padding: 0 0.9rem;
       flex-shrink: 0;
-      border-right: 2px solid rgba(51,255,102,0.3);
+      border-right: 2px solid #808080;
+      border-left: 1px solid #ffffff;
       height: 100%;
       display: flex;
       align-items: center;
+      background: #c0c0c0;
     }
 
     .ticker-badge {
       font-family: var(--font-dos);
       font-size: 1.1rem;
-      color: var(--cyan);
-      background: rgba(0,238,255,0.06);
-      border-right: 2px solid rgba(0,238,255,0.25);
+      color: #000000;
+      background: #c0c0c0;
+      border-right: 2px solid #808080;
       padding: 0 0.65rem;
       height: 100%;
       display: flex;
@@ -289,30 +290,30 @@
       white-space: nowrap;
       font-family: var(--font-dos);
       font-size: 1.1rem;
-      color: var(--text-bright);
+      color: #000000;
       will-change: transform;
       padding-left: 2rem;
     }
 
     .ticker-track .t-sep {
-      color: rgba(68,255,68,0.4);
+      color: #808080;
       margin: 0 1.2em;
     }
 
     .ticker-track .t-src {
       font-size: 0.62rem;
-      color: var(--text-dim);
+      color: #555555;
       margin-right: 0.3em;
     }
 
     .ticker-track a.t-headline {
-      color: var(--text);
+      color: #000000;
       text-decoration: none;
       transition: color 0.15s;
     }
     .ticker-track a.t-headline:hover {
-      color: var(--green);
-      text-shadow: 0 0 6px var(--green-glow);
+      color: #000080;
+      text-shadow: none;
     }
 
     /* Pause ticker on hover so headlines are readable/clickable */
@@ -323,8 +324,9 @@
     /* ===== STOCK TICKER BAR ===== */
     .stock-bar {
       height: 36px;
-      background: #00060f;
-      border-bottom: 2px solid var(--bevel-dk);
+      background: #c0c0c0;
+      border-bottom: 2px solid #808080;
+      border-top: 1px solid #ffffff;
       display: flex;
       align-items: center;
       padding: 0;
@@ -340,9 +342,9 @@
     .stock-badge {
       font-family: var(--font-dos);
       font-size: 1rem;
-      color: var(--cyan);
-      background: rgba(0,238,255,0.05);
-      border-right: 1px solid rgba(0,238,255,0.2);
+      color: #000000;
+      background: #c0c0c0;
+      border-right: 2px solid #808080;
       padding: 0 0.6rem;
       height: 100%;
       display: flex;
@@ -365,16 +367,17 @@
       white-space: nowrap;
       font-family: var(--font-dos);
       font-size: 1rem;
+      color: #000000;
       will-change: transform;
       padding-left: 1.5rem;
     }
 
-    .stock-track .s-sep  { color: rgba(85,170,255,0.3); margin: 0 1em; }
-    .stock-track .s-sym  { color: var(--blue-bright); font-weight: bold; margin-right: 0.35em; }
-    .stock-track .s-px   { color: var(--text-bright); margin-right: 0.25em; }
-    .stock-track .s-up   { color: #44dd66; }
-    .stock-track .s-dn   { color: #ff5555; }
-    .stock-track .s-flat { color: var(--text-dim); }
+    .stock-track .s-sep  { color: #808080; margin: 0 1em; }
+    .stock-track .s-sym  { color: #000080; font-weight: bold; margin-right: 0.35em; }
+    .stock-track .s-px   { color: #000000; margin-right: 0.25em; }
+    .stock-track .s-up   { color: #006400; }
+    .stock-track .s-dn   { color: #aa0000; }
+    .stock-track .s-flat { color: #555555; }
 
     /* ===== HORIZONTAL NAV BAR ===== */
     .nav-bar {
@@ -383,10 +386,10 @@
       width: 100vw;
       max-width: 100%;
       box-sizing: border-box;
-      background: linear-gradient(180deg, #001832 0%, #000c1e 60%, #000814 100%);
-      border-top: 1px solid rgba(255,255,255,0.07);
-      border-bottom: 3px solid #000000;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 2px 0 #000;
+      background: #c0c0c0;
+      border-top: 2px solid #ffffff;
+      border-bottom: 3px solid #404040;
+      box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #dfdfdf;
       display: flex;
       align-items: center;
       padding: 3px 0.5rem;
@@ -412,7 +415,8 @@
 
     .nav-sep {
       width: 2px; height: 32px;
-      background: linear-gradient(180deg, var(--bevel-dk), var(--bevel-lt), var(--bevel-dk));
+      background: #808080;
+      border-left: 1px solid #ffffff;
       margin: 0 4px;
       flex-shrink: 0;
     }
@@ -425,36 +429,33 @@
       height: 38px;
       font-family: var(--font-dos);
       font-size: 1rem;
-      color: var(--text-bright);
-      text-transform: uppercase;
+      color: #000000;
       letter-spacing: 0.05em;
       border-style: solid;
       border-width: 2px;
-      border-top-color: var(--bevel-lt);
-      border-left-color: var(--bevel-lt);
-      border-right-color: var(--bevel-dk);
-      border-bottom-color: var(--bevel-dk);
-      background: #001428;
+      border-top-color: #ffffff;
+      border-left-color: #ffffff;
+      border-right-color: #808080;
+      border-bottom-color: #808080;
+      background: #c0c0c0;
       cursor: pointer;
-      transition: color 0.1s, box-shadow 0.05s;
+      transition: color 0.05s, box-shadow 0.05s;
       white-space: nowrap;
       flex-shrink: 0;
-      box-shadow: 2px 2px 0 #000000;
+      box-shadow: 1px 1px 0 #000000;
     }
     .nav-bar .nav-btn:hover {
-      color: var(--green);
-      text-shadow: 0 0 6px var(--green-glow);
-      box-shadow: 2px 2px 0 #000, 0 0 6px rgba(51,255,102,0.15);
+      color: #000080;
+      box-shadow: 1px 1px 0 #000000;
     }
     .nav-bar .nav-btn.active {
-      color: var(--green);
-      border-top-color: var(--bevel-dk);
-      border-left-color: var(--bevel-dk);
-      border-right-color: var(--bevel-lt);
-      border-bottom-color: var(--bevel-lt);
-      background: #000c1e;
-      text-shadow: 0 0 8px var(--green-glow);
-      box-shadow: none;
+      color: #000000;
+      border-top-color: #808080;
+      border-left-color: #808080;
+      border-right-color: #ffffff;
+      border-bottom-color: #ffffff;
+      background: #c0c0c0;
+      box-shadow: inset 1px 1px 0 #404040;
       transform: translate(1px, 1px);
     }
     .nav-bar .nav-btn .ico { display: none; }
@@ -467,23 +468,22 @@
       height: 38px;
       font-family: var(--font-dos);
       font-size: 1rem;
-      color: var(--cyan);
-      text-transform: uppercase;
+      color: #000000;
       letter-spacing: 0.05em;
       text-decoration: none;
       border-style: solid;
       border-width: 2px;
-      border-top-color: var(--bevel-lt);
-      border-left-color: var(--bevel-lt);
-      border-right-color: var(--bevel-dk);
-      border-bottom-color: var(--bevel-dk);
-      background: #001428;
-      transition: color 0.1s, box-shadow 0.05s;
+      border-top-color: #ffffff;
+      border-left-color: #ffffff;
+      border-right-color: #808080;
+      border-bottom-color: #808080;
+      background: #c0c0c0;
+      transition: color 0.05s;
       white-space: nowrap;
       flex-shrink: 0;
-      box-shadow: 2px 2px 0 #000000;
+      box-shadow: 1px 1px 0 #000000;
     }
-    .nav-bar .ext-link:hover { color: var(--green); box-shadow: 2px 2px 0 #000, 0 0 6px rgba(0,238,255,0.12); }
+    .nav-bar .ext-link:hover { color: #000080; }
     .nav-bar .ext-link .ico { display: none; }
 
     .nav-spacer { flex: 0; min-width: 0.5rem; }
@@ -499,54 +499,53 @@
       height: 38px;
       font-family: var(--font-dos);
       font-size: 1rem;
-      color: var(--cyan);
-      text-transform: uppercase;
+      color: #000000;
       letter-spacing: 0.08em;
       border-style: solid;
       border-width: 2px;
-      border-top-color: var(--bevel-lt);
-      border-left-color: var(--bevel-lt);
-      border-right-color: var(--bevel-dk);
-      border-bottom-color: var(--bevel-dk);
-      background: #001428;
+      border-top-color: #ffffff;
+      border-left-color: #ffffff;
+      border-right-color: #808080;
+      border-bottom-color: #808080;
+      background: #c0c0c0;
       cursor: pointer;
-      transition: color 0.1s, box-shadow 0.05s;
+      transition: color 0.05s;
       white-space: nowrap;
-      box-shadow: 2px 2px 0 #000000;
+      box-shadow: 1px 1px 0 #000000;
     }
-    .help-btn:hover { color: var(--white); box-shadow: 2px 2px 0 #000, 0 0 6px rgba(0,238,255,0.12); }
+    .help-btn:hover { color: #000080; }
 
     .help-dropdown {
       display: none;
       position: absolute;
       right: 0;
       top: calc(100% + 6px);
-      background: #000c1e;
+      background: #c0c0c0;
       border-style: solid;
       border-width: 2px;
-      border-top-color: var(--bevel-lt);
-      border-left-color: var(--bevel-lt);
-      border-right-color: var(--bevel-dk);
-      border-bottom-color: var(--bevel-dk);
+      border-top-color: #ffffff;
+      border-left-color: #ffffff;
+      border-right-color: #808080;
+      border-bottom-color: #808080;
       min-width: 290px;
       z-index: 2000;
-      box-shadow: 3px 3px 0 #000008;
+      box-shadow: 3px 3px 0 #000000;
     }
     .help-dropdown.open { display: block; }
 
     .help-dropdown .hd-title {
       font-family: var(--font-dos);
       font-size: 1.1rem;
-      color: var(--cyan);
+      color: #ffffff;
       padding: 0.5rem 1rem;
-      border-bottom: 1px solid rgba(0,238,255,0.18);
+      border-bottom: 1px solid #808080;
       letter-spacing: 0.08em;
-      background: linear-gradient(180deg, #a8a8a8 0%, #787878 100%);
+      background: linear-gradient(90deg, #000080 0%, #1084d0 100%);
     }
     .help-dropdown .hd-section {
       font-family: var(--font-dos);
       font-size: 1rem;
-      color: var(--cyan);
+      color: #000080;
       padding: 0.5rem 1rem 0.15rem;
       letter-spacing: 0.06em;
     }
@@ -557,31 +556,32 @@
       padding: 0.22rem 1rem;
       font-family: var(--font-dos);
       font-size: 0.95rem;
-      color: var(--text);
+      color: #000000;
       gap: 1rem;
     }
-    .help-dropdown .hd-row:hover { background: rgba(0,136,255,0.07); color: var(--green); }
+    .help-dropdown .hd-row:hover { background: #000080; color: #ffffff; }
     .help-dropdown .hd-key {
       font-family: var(--font-dos);
       font-size: 0.95rem;
-      color: var(--green);
-      background: rgba(51,255,102,0.05);
+      color: #000000;
+      background: #c0c0c0;
       border-style: solid;
       border-width: 1px;
-      border-top-color: var(--bevel-lt);
-      border-left-color: var(--bevel-lt);
-      border-right-color: var(--bevel-dk);
-      border-bottom-color: var(--bevel-dk);
+      border-top-color: #ffffff;
+      border-left-color: #ffffff;
+      border-right-color: #808080;
+      border-bottom-color: #808080;
       padding: 0.05rem 0.4rem;
       white-space: nowrap;
       flex-shrink: 0;
+      box-shadow: 1px 1px 0 #000000;
     }
     .help-dropdown .hd-footer {
       font-family: var(--font-dos);
       font-size: 0.9rem;
-      color: var(--text-dim);
+      color: #555555;
       padding: 0.5rem 1rem 0.55rem;
-      border-top: 1px solid rgba(0,136,255,0.1);
+      border-top: 1px solid #808080;
       margin-top: 0.3rem;
     }
 
@@ -592,18 +592,18 @@
       right: 1rem;
       font-family: var(--font-dos);
       font-size: 1.1rem;
-      color: var(--green);
-      background: #000c1e;
+      color: #000000;
+      background: #c0c0c0;
       border-style: solid;
       border-width: 2px;
-      border-top-color: var(--bevel-lt);
-      border-left-color: var(--bevel-lt);
-      border-right-color: var(--bevel-dk);
-      border-bottom-color: var(--bevel-dk);
+      border-top-color: #ffffff;
+      border-left-color: #ffffff;
+      border-right-color: #808080;
+      border-bottom-color: #808080;
       padding: 0.3rem 0.85rem;
       z-index: 9998;
       display: none;
-      text-shadow: 0 0 8px var(--green-glow);
+      box-shadow: 3px 3px 0 #000000;
     }
     .chord-indicator.visible { display: block; animation: blink 0.5s infinite; }
 
@@ -668,7 +668,6 @@
       font-family: var(--font-pixel);
       font-size: 0.7rem;
       color: var(--cyan);
-      text-transform: uppercase;
       letter-spacing: 0.06em;
       text-shadow: 0 0 10px var(--cyan), 0 0 28px var(--cyan-glow);
     }
@@ -695,7 +694,6 @@
       font-family: var(--font-pixel);
       font-size: clamp(1rem, 3vw, 1.6rem);
       color: var(--green);
-      text-transform: uppercase;
       text-shadow: 0 0 16px var(--green), 0 0 40px var(--green-glow);
       margin-bottom: 0.8rem;
       line-height: 1.6;
@@ -705,7 +703,6 @@
       font-family: var(--font-dos);
       font-size: clamp(1.1rem, 2vw, 1.4rem);
       color: var(--cyan);
-      text-transform: uppercase;
       letter-spacing: 0.15em;
       margin-bottom: 1.5rem;
       text-shadow: 0 0 8px var(--cyan-glow);
@@ -795,7 +792,6 @@
       font-family: var(--font-dos);
       font-size: 1rem;
       color: var(--blue-bright);
-      text-transform: uppercase;
       margin-bottom: 0.2rem;
     }
 
@@ -833,7 +829,6 @@
       font-family: var(--font-dos);
       font-size: 1.1rem;
       color: var(--cyan);
-      text-transform: uppercase;
       letter-spacing: 0.06em;
       margin-bottom: 0.9rem;
       padding-bottom: 0.5rem;
@@ -875,7 +870,6 @@
       font-family: var(--font-dos);
       font-size: 1rem;
       color: var(--cyan);
-      text-transform: uppercase;
       display: inline-block;
       background: rgba(0,8,24,0.85);
       border-top: 2px solid rgba(0,238,255,0.7);
@@ -892,7 +886,6 @@
       font-family: var(--font-dos);
       font-size: 1.3rem;
       color: var(--green);
-      text-transform: uppercase;
       letter-spacing: 0.06em;
       margin-bottom: 0.2rem;
       text-shadow: 0 0 8px var(--green-glow);
@@ -934,7 +927,7 @@
 
     .proj-card .top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
 
-    .proj-card h3 { font-family: var(--font-dos); font-size: 1.2rem; color: var(--green); text-transform: uppercase; letter-spacing: 0.05em; text-shadow: 0 0 6px var(--green-glow); }
+    .proj-card h3 { font-family: var(--font-dos); font-size: 1.2rem; color: var(--green); letter-spacing: 0.05em; text-shadow: 0 0 6px var(--green-glow); }
 
     .proj-card .links a {
       font-family: var(--font-dos);
@@ -971,7 +964,7 @@
     /* ===== PUBLICATIONS ===== */
     .pub-card { padding: 32px 1.4rem 1.4rem; border-left: 4px solid var(--green); transition: box-shadow 0.3s; }
     .pub-card:hover { box-shadow: inset 1px 1px 0 rgba(255,255,255,0.22), inset -1px -1px 0 rgba(0,0,0,0.45), 4px 4px 0 #000, -4px 0 12px rgba(51,255,102,0.12); }
-    .pub-card h3 { font-family: var(--font-dos); font-size: 1.1rem; color: var(--green); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.3rem; text-shadow: 0 0 6px var(--green-glow); }
+    .pub-card h3 { font-family: var(--font-dos); font-size: 1.1rem; color: var(--green); letter-spacing: 0.04em; margin-bottom: 0.3rem; text-shadow: 0 0 6px var(--green-glow); }
     .pub-card .meta { font-family: var(--font-dos); font-size: 0.95rem; color: var(--cyan); margin-bottom: 0.6rem; }
     .pub-card p { font-size: 0.95rem; color: var(--text); line-height: 1.75; }
 
@@ -981,7 +974,6 @@
       font-family: var(--font-dos);
       font-size: 1.1rem;
       color: var(--cyan);
-      text-transform: uppercase;
       letter-spacing: 0.1em;
       margin-bottom: 0.65rem;
       padding-bottom: 0.3rem;
@@ -1023,7 +1015,6 @@
       font-family: var(--font-dos);
       font-size: 1rem;
       color: var(--cyan);
-      text-transform: uppercase;
       letter-spacing: 0.04em;
       margin-bottom: 0.12rem;
     }
@@ -1043,7 +1034,6 @@
       padding: 0.08rem 0.45rem;
       display: inline-block;
       margin-bottom: 0.5rem;
-      text-transform: uppercase;
       letter-spacing: 0.08em;
     }
     .fun-tag.enjoy { color: var(--cyan); background: rgba(0,238,255,0.04); border-color: rgba(0,238,255,0.22); }
@@ -1052,7 +1042,6 @@
       font-family: var(--font-dos);
       font-size: 1.2rem;
       color: var(--cyan);
-      text-transform: uppercase;
       letter-spacing: 0.06em;
       margin-bottom: 0.5rem;
       text-shadow: 0 0 8px var(--cyan-glow);
@@ -1204,7 +1193,7 @@
   <div class="app-shell">
 
     <!-- TOP BAR — live tech news ticker -->
-    <div class="top-bar">
+    <div class="top-bar" style="opacity:0;transform:translateY(-16px);pointer-events:none">
       <div class="ticker-brand">Sean Jackson</div>
       <div class="ticker-badge">▶ Tech News</div>
       <div class="ticker-viewport">
@@ -1213,7 +1202,7 @@
     </div>
 
     <!-- STOCK TICKER BAR -->
-    <div class="stock-bar">
+    <div class="stock-bar" style="opacity:0;transform:translateY(-16px);pointer-events:none">
       <div class="stock-badge">▶ STOCKS</div>
       <div class="stock-viewport" id="stockViewport">
         <div class="stock-track" id="stockTrack">Fetching market data&hellip;</div>
@@ -1221,7 +1210,7 @@
     </div>
 
     <!-- HORIZONTAL NAV BAR -->
-    <nav class="nav-bar" id="navBar">
+    <nav class="nav-bar" id="navBar" style="opacity:0;transform:translateY(-16px);pointer-events:none">
       <!-- Scrollable section (overflow-x: auto here, not on nav-bar, so dropdown isn't clipped) -->
       <div class="nav-scroll">
         <div class="nav-group">
@@ -1274,7 +1263,7 @@
     <div class="chord-indicator" id="chordIndicator">CTRL+K —</div>
 
     <!-- CONTENT -->
-    <div class="content-area">
+    <div class="content-area" style="opacity:0;pointer-events:none">
 
         <!-- HOME -->
         <div class="page active" id="home">
@@ -1514,7 +1503,7 @@
           <div class="fun-grid">
 
             <div class="fun-card glass" data-title="Learning_vs_Doing.thought">
-              <div class="fun-tag thought">THOUGHT</div>
+              <div class="fun-tag thought">Thought</div>
               <h3>On Learning Physics vs. Doing Physics</h3>
               <p>There's a strange gap between understanding a derivation and having intuition for it. The harmonic oscillator makes perfect sense on paper — and yet every time a new system reduces to one, it still feels like a small miracle. I think that gap is where all the interesting stuff lives.</p>
               <div class="fun-date">// 2025</div>
@@ -1529,35 +1518,35 @@
           <div class="fun-grid">
 
             <div class="fun-card glass" data-title="Quantum_Physics.note">
-              <div class="fun-tag thought">SCIENCE</div>
+              <div class="fun-tag thought">Science</div>
               <h3>Quantum Mechanics</h3>
               <p>There's something uniquely compelling about a theory that forces you to abandon classical intuition entirely. I spend a lot of time with the formalism — Hilbert spaces, operators, measurement — and even more thinking about what it actually means. Quantum information is a particular fixation right now: the idea that information is physical, and that entanglement is a resource, still feels like it shouldn't be true.</p>
               <div class="fun-date">// ongoing</div>
             </div>
 
             <div class="fun-card glass" data-title="ML_Research.note">
-              <div class="fun-tag enjoy">RESEARCH</div>
+              <div class="fun-tag enjoy">Research</div>
               <h3>ML Research</h3>
               <p>Outside of work projects, I try to stay current with the ML literature — particularly computer vision, geometric deep learning, and physics-informed neural networks. The intersection of physical priors and learned representations is where I think a lot of the most interesting open problems live right now.</p>
               <div class="fun-date">// ongoing</div>
             </div>
 
             <div class="fun-card glass" data-title="Simulations.py">
-              <div class="fun-tag enjoy">HOBBY</div>
+              <div class="fun-tag enjoy">Hobby</div>
               <h3>Physics Simulations</h3>
               <p>Writing n-body gravity sims, wave equation solvers, and chaotic pendulum integrators in Python whenever I want to see something click visually. There's something uniquely satisfying about watching an algorithm produce the same orbit Kepler described 400 years ago.</p>
               <div class="fun-date">// ongoing</div>
             </div>
 
             <div class="fun-card glass" data-title="MathReading.note">
-              <div class="fun-tag thought">SCIENCE</div>
+              <div class="fun-tag thought">Science</div>
               <h3>Pure Mathematics</h3>
               <p>Taking a math minor changed how I think about everything. Real analysis, linear algebra, and abstract algebra have a kind of austere beauty that feels completely separate from their applications — even when those applications are everywhere. I read math textbooks recreationally, which I'm told is a personality flaw.</p>
               <div class="fun-date">// ongoing</div>
             </div>
 
             <div class="fun-card glass" data-title="MechKB.txt">
-              <div class="fun-tag enjoy">HOBBY</div>
+              <div class="fun-tag enjoy">Hobby</div>
               <h3>Mechanical Keyboards</h3>
               <p>Deep into the rabbit hole of custom boards. Currently daily-driving a 65% with lubed Boba U4Ts. The tactile bump hits differently when you're writing code at 2am.</p>
               <div class="fun-date">// ongoing</div>
@@ -1592,11 +1581,17 @@
   </div><!-- /app-shell -->
 
   <script>
-    // ===== SOUND ENGINE — Windows 7 style (warm sine + convolution reverb) =====
+    // ===== SOUND ENGINE =====
     var SFX = (function () {
       var _ctx   = null;
       var _irbuf = null;
       var _decGen = 0;
+
+      // MP3-backed sounds
+      var _clickAudio = new Audio('mouseclick.mp3');
+      _clickAudio.volume = 0.5;
+      var _themeAudio = new Audio('win98themesound.mp3');
+      _themeAudio.volume = 0.8;
 
       function ac() {
         if (!_ctx) {
@@ -1671,7 +1666,25 @@
         unlock: function () { ac(); },
 
         click:     function () { tone(520, 0.08, 0.045, 0, 360); },
-        navSwitch: function () { tone(784, 0.07, 0.28,  0, null, true); },
+        navSwitch: function () {
+          _clickAudio.currentTime = 0;
+          _clickAudio.play().catch(function () {});
+        },
+        deny: function () {
+          var c = ac(); if (!c) return;
+          var play = function () {
+            var t0 = c.currentTime;
+            var osc = c.createOscillator(), g = c.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(320, t0);
+            osc.frequency.exponentialRampToValueAtTime(180, t0 + 0.09);
+            g.gain.setValueAtTime(0.06, t0);
+            g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.09);
+            osc.connect(g); g.connect(c.destination);
+            osc.start(t0); osc.stop(t0 + 0.1);
+          };
+          if (c.state === 'running') play(); else c.resume().then(play);
+        },
         menuOpen:  function () { tone(784, 0.065, 0.22, 0, null, true); tone(1047, 0.065, 0.22, 0.1, null, true); },
         menuClose: function () { tone(1047, 0.055, 0.18, 0, null, true); tone(784, 0.055, 0.18, 0.1, null, true); },
 
@@ -1683,16 +1696,20 @@
             if (_decGen !== gen) return;
             if (c.state === 'running') {
               var t0 = c.currentTime;
-              var osc = c.createOscillator(), g = c.createGain();
-              osc.type = 'sine';
-              osc.frequency.value = 180 + Math.random() * 520;
-              g.gain.setValueAtTime(0, t0);
-              g.gain.linearRampToValueAtTime(0.055, t0 + 0.01);
-              g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.07);
-              osc.connect(g); g.connect(c.destination);
-              osc.start(t0); osc.stop(t0 + 0.08);
+              // Matrix-style: high-pitched square-wave beep-click, randomised pitch
+              var osc = c.createOscillator();
+              var hpf = c.createBiquadFilter();
+              var g   = c.createGain();
+              osc.type = 'square';
+              osc.frequency.value = 2000;
+              hpf.type = 'highpass';
+              hpf.frequency.value = 900;
+              g.gain.setValueAtTime(0.008, t0);
+              g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.020);
+              osc.connect(hpf); hpf.connect(g); g.connect(c.destination);
+              osc.start(t0); osc.stop(t0 + 0.025);
             }
-            setTimeout(loop, 70);
+            setTimeout(loop, 32 + Math.random() * 24);
           })();
         },
         decryptStop: function () { _decGen++; },
@@ -1707,11 +1724,9 @@
           var f = [294, 349, 392, 440, 523, 587];
           bootTone(f[Math.min(step, f.length - 1)], 0.07, 0.14, true);
         },
-        bootDone: function () {
-          var notes = [[349,0],[440,130],[523,260],[659,390],[784,520],[1047,650]];
-          notes.forEach(function (n) {
-            setTimeout(function () { bootTone(n[0], 0.085, 0.4, true); }, n[1]);
-          });
+        bootTheme: function () {
+          _themeAudio.currentTime = 0;
+          _themeAudio.play().catch(function () {});
         }
       };
     })();
@@ -1721,6 +1736,31 @@
 
     // ===== MATRIX DECRYPT ANIMATION =====
     var GLYPHS = '!@#$%&*+=[]<>?/\\0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$!?><';
+
+    // Real originals saved before pre-scrambling, so matrixDecrypt unscrambles to correct text
+    var _preScrambledOriginals = new Map();
+
+    function clearPreScramble() {
+      _preScrambledOriginals.forEach(function(orig, node) { node.textContent = orig; });
+      _preScrambledOriginals.clear();
+    }
+
+    function preScramblePage(container) {
+      var walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null, false);
+      var node;
+      while ((node = walker.nextNode())) {
+        var text = node.textContent;
+        if (text.trim().length > 0 && !node.parentElement.closest('button') && !node.parentElement.classList.contains('win-btn')) {
+          _preScrambledOriginals.set(node, text);
+          var s = '';
+          for (var i = 0; i < text.length; i++) {
+            var ch = text[i];
+            s += (ch === ' ' || ch === '\n' || ch === '\t' || ch === ' ') ? ch : GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+          }
+          node.textContent = s;
+        }
+      }
+    }
 
     // Global cancel mechanism — each new decrypt invalidates all prior ones
     var _decryptSeq = 0;
@@ -1760,11 +1800,13 @@
       var walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null, false);
       var node;
       while ((node = walker.nextNode())) {
-        var text = node.textContent;
+        // Use pre-scramble stored original if available, otherwise current content
+        var text = _preScrambledOriginals.get(node) || node.textContent;
         if (text.trim().length > 0 && !node.parentElement.closest('button') && !node.parentElement.classList.contains('win-btn')) {
           textElements.push({ node: node, original: text });
         }
       }
+      _preScrambledOriginals.clear();
       if (textElements.length === 0) { unlock(); return; }
 
       var mySeq = ++_decryptSeq;
@@ -1828,20 +1870,26 @@
 
     // ===== PAGE SWITCHING =====
     function switchPage(pageId) {
+      clearPreScramble();
       var oldBtn = document.querySelector('.nav-bar .nav-btn.active');
       document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
-      document.getElementById(pageId).classList.add('active');
-      var newBtn = document.querySelector('.nav-bar .nav-btn[data-page="' + pageId + '"]');
+      var newPage = document.getElementById(pageId);
+      newPage.classList.add('active');
       document.querySelectorAll('.nav-bar .nav-btn').forEach(function(btn) {
         btn.classList.toggle('active', btn.dataset.page === pageId);
       });
       document.querySelector('.content-area').scrollTop = 0;
       closeHelpMenu();
-      runDecryptOnActivePage();
+      preScramblePage(newPage);
+      setTimeout(runDecryptOnActivePage, 280);
     }
 
     document.querySelectorAll('.nav-bar .nav-btn').forEach(function(btn) {
-      btn.addEventListener('click', function() { SFX.navSwitch(); switchPage(btn.dataset.page); });
+      btn.addEventListener('click', function() {
+        if (btn.classList.contains('active')) { SFX.deny(); return; }
+        SFX.navSwitch();
+        switchPage(btn.dataset.page);
+      });
     });
 
     // Click sound for action buttons
@@ -2257,8 +2305,13 @@
       });
     })();
 
-    // Run decrypt only after all fonts are ready to prevent FOUT-driven layout jitter
-    document.fonts.ready.then(function() { runDecryptOnActivePage(); });
+    // Decrypt runs only after BOTH fonts are ready AND the UI bars have been revealed
+    var _uiRevealed = false;
+    var _fontsReady  = false;
+    function maybeStartDecrypt() {
+      if (_uiRevealed && _fontsReady) runDecryptOnActivePage();
+    }
+    document.fonts.ready.then(function() { _fontsReady = true; maybeStartDecrypt(); });
 
     // ===== WINDOWS 95 PIXEL CURSORS =====
     // SVG data URLs are not supported for CSS cursors; use canvas PNG data URLs instead.
@@ -2642,16 +2695,41 @@
         }, entry.delay || 0);
       }
 
+      function revealEl(el) {
+        el.style.transition = 'none';
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+        el.style.pointerEvents = '';
+      }
+
       function bootComplete() {
         cursor.style.display = 'none';
-        SFX.bootDone();
+        // Fade to black
         setTimeout(function () {
           veil.classList.add('veil-on');
           setTimeout(function () {
             screen.classList.add('boot-hidden');
             veil.style.transition = 'opacity 0.7s ease';
             veil.style.opacity = '0';
-            setTimeout(function () { veil.style.display = 'none'; }, 800);
+            // After veil clears — star background visible, all UI bars still hidden
+            setTimeout(function () {
+              veil.style.display = 'none';
+              SFX.bootTheme();
+
+              var topBar      = document.querySelector('.top-bar');
+              var stockBar    = document.querySelector('.stock-bar');
+              var navBar      = document.getElementById('navBar');
+              var contentArea = document.querySelector('.content-area');
+
+              setTimeout(function () { revealEl(topBar);    }, 350);
+              setTimeout(function () { revealEl(stockBar); }, 700);
+              setTimeout(function () { revealEl(navBar);   }, 1050);
+              setTimeout(function () {
+                revealEl(contentArea);
+                _uiRevealed = true;
+                maybeStartDecrypt();
+              }, 1450);
+            }, 800);
           }, 300);
         }, 700);
       }
