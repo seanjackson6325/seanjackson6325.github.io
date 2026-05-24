@@ -739,7 +739,8 @@
     /* ===== HOME PAGE ===== */
     .home-panel {
       padding: 44px 2rem 2rem;
-      max-width: 52%;
+      width: 100%;
+      text-align: center;
     }
 
     .home-name {
@@ -771,12 +772,12 @@
     .home-desc {
       font-size: 1rem;
       color: var(--text);
-      max-width: 520px;
-      margin-bottom: 1.5rem;
+      max-width: 680px;
+      margin: 0 auto 1.5rem;
       line-height: 1.8;
     }
 
-    .home-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+    .home-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; justify-content: center; margin: 0 auto; }
 
     /* ===== BUTTONS — Win95 raised style ===== */
     .btn {
@@ -1284,6 +1285,191 @@
     #bootVeil.veil-on  { opacity: 1; pointer-events: all; }
 
 
+
+    /* ===== MOBILE VIEW ===== */
+    #mobile-view { display: none; }
+
+    @media (max-width: 768px) {
+      html { font-size: 16px; }
+      body { overflow: auto; cursor: auto !important; }
+      * { cursor: auto !important; }
+
+      .app-shell,
+      #fake-cursor,
+      .crt-scanlines, .crt-refresh, .crt-phosphor,
+      .crt-rgb, .crt-flicker, .crt-curvature { display: none !important; }
+
+      #mobile-view { display: block; min-height: 100vh; background: var(--bg); color: var(--text); font-family: var(--font-dos); }
+
+      .mob-header {
+        background: linear-gradient(180deg, #06194f 0%, #0d2a7a 100%);
+        padding: 2rem 1.2rem 1.4rem;
+        text-align: center;
+        border-bottom: 3px solid #000;
+      }
+      .mob-name {
+        font-family: var(--font-dos);
+        font-size: 2.4rem;
+        color: var(--green);
+        text-shadow: 0 0 14px var(--green), 0 0 30px var(--green-glow);
+        margin-bottom: 0.4rem;
+      }
+      .mob-subtitle {
+        font-family: var(--font-dos);
+        font-size: 1rem;
+        color: var(--cyan);
+        letter-spacing: 0.1em;
+        margin-bottom: 0.25rem;
+      }
+      .mob-tagline {
+        font-family: var(--font-dos);
+        font-size: 0.8rem;
+        color: rgba(255,255,255,0.55);
+      }
+
+      .mob-nav {
+        display: flex;
+        overflow-x: auto;
+        background: #c0c0c0;
+        border-bottom: 3px solid #404040;
+        scrollbar-width: none;
+        position: sticky;
+        top: 0;
+        z-index: 999;
+      }
+      .mob-nav::-webkit-scrollbar { display: none; }
+      .mob-tab {
+        font-family: var(--font-dos);
+        font-size: 0.9rem;
+        padding: 0.55rem 0.9rem;
+        background: #c0c0c0;
+        border: none;
+        border-right: 1px solid #808080;
+        color: #000;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      .mob-tab.active {
+        background: var(--bg);
+        color: var(--green);
+        box-shadow: inset 0 -2px 0 var(--green);
+      }
+
+      .mob-content { padding: 1rem; }
+      .mob-section { display: none; }
+      .mob-section.active { display: block; }
+
+      .mob-card {
+        background: var(--panel-bg);
+        border: 2px solid #2a2a2a;
+        border-left: 4px solid var(--blue-dim);
+        padding: 1rem;
+        margin-bottom: 1rem;
+      }
+      .mob-card-title {
+        font-family: var(--font-dos);
+        font-size: 1.15rem;
+        color: var(--green);
+        text-shadow: 0 0 6px var(--green-glow);
+        margin-bottom: 0.2rem;
+      }
+      .mob-card-org {
+        font-family: var(--font-dos);
+        font-size: 0.9rem;
+        color: var(--cyan);
+        margin-bottom: 0.15rem;
+      }
+      .mob-card-date {
+        font-family: var(--font-dos);
+        font-size: 0.82rem;
+        color: var(--text-dim);
+        margin-bottom: 0.7rem;
+      }
+      .mob-card p {
+        font-family: var(--font-dos);
+        font-size: 0.9rem;
+        line-height: 1.75;
+        color: var(--text);
+        margin-bottom: 0.5rem;
+      }
+      .mob-card p strong { color: var(--cyan); }
+      .mob-card-logos {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-bottom: 0.8rem;
+      }
+      .mob-card-logos img { height: 48px; width: auto; }
+      .mob-status {
+        display: inline-block;
+        font-family: var(--font-dos);
+        font-size: 0.8rem;
+        padding: 2px 8px;
+        margin-top: 0.4rem;
+        border: 1px solid;
+      }
+      .mob-status.done { color: #00bb00; border-color: #00bb00; }
+      .mob-status.wip  { color: #ffaa00; border-color: #ffaa00; }
+
+      .mob-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 0.6rem; }
+      .mob-tag {
+        font-family: var(--font-dos);
+        font-size: 0.78rem;
+        color: var(--text-dim);
+        border: 1px solid #333;
+        padding: 1px 6px;
+      }
+
+      .mob-link-btn {
+        display: inline-block;
+        font-family: var(--font-dos);
+        font-size: 0.88rem;
+        color: #000;
+        background: silver;
+        box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff,
+                    inset -2px -2px grey, inset 2px 2px #dfdfdf;
+        padding: 2px 10px;
+        text-decoration: none;
+        margin-top: 0.5rem;
+        margin-right: 0.4rem;
+      }
+
+      .mob-contact-row {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 0.55rem 0;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        font-family: var(--font-dos);
+        font-size: 0.95rem;
+      }
+      .mob-contact-row .ch-ico { color: var(--cyan); min-width: 1.5rem; }
+      .mob-contact-row a { color: var(--text-bright); text-decoration: none; }
+
+      .mob-section-title {
+        font-family: var(--font-dos);
+        font-size: 1rem;
+        color: var(--text-dim);
+        border-bottom: 1px solid #333;
+        padding-bottom: 0.3rem;
+        margin-bottom: 0.8rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .mob-home-btns { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 1rem; }
+      .mob-home-btn {
+        font-family: var(--font-dos);
+        font-size: 1rem;
+        padding: 0.5rem 1.2rem;
+        background: silver;
+        border: none;
+        box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff,
+                    inset -2px -2px grey, inset 2px 2px #dfdfdf;
+        color: #000;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1425,7 +1611,7 @@
           <div class="home-panel glass" data-title="SeanML.exe">
             <div class="home-lines">
               <strong><u>University of Toronto</u></strong> &nbsp;&middot;&nbsp; BSc Physics, Minors in CS &amp; Mathematics<br>
-              Lawrence Livermore National Laboratory &nbsp;&middot;&nbsp; Machine Learning Engineer<br>
+              <strong><u>Lawrence Livermore National Laboratory</u></strong> &nbsp;&middot;&nbsp; Machine Learning Engineer<br>
               First-author published researcher in Computer Vision &amp; Deep Learning
             </div>
             <div class="home-name">Sean Jackson</div>
@@ -1433,14 +1619,11 @@
             <p class="home-desc">
               Physics graduate from the <strong><u>University of Toronto</u></strong>, proficient in deep learning,
               quantum computing, and robotics. I currently build systems that automate
-              materials discovery for advanced manufacturing at Lawrence Livermore National Laboratory.
+              materials discovery for advanced manufacturing at <strong><u>Lawrence Livermore National Laboratory</u></strong>.
             </p>
             <div class="home-actions">
               <button class="btn btn-green" onclick="switchPage('projects')">View Projects</button>
               <button class="btn btn-blue" onclick="switchPage('contact')">Get in Touch</button>
-            </div>
-            <div class="gif-row" style="margin-top:0.6rem;">
-              <img class="gif90" src="https://blob.gifcities.org/gifcities/TIQDBB4JHT4FML632XXHEYUDZRZFTNRD.gif" alt="">
             </div>
           </div>
         </div>
@@ -1732,11 +1915,12 @@
         <!-- CONTACT -->
         <div class="page" id="contact">
           <div class="page-header"><span class="bracket">[</span><h2>Contact</h2><div class="line"></div><span class="bracket">]</span></div>
-          <div class="text-panel glass" data-title="Contact" style="margin-bottom:1.2rem; max-width:440px; padding-right:110px;">
+          <div style="display:flex; gap:1rem; align-items:flex-start; flex-wrap:wrap;">
+          <div class="text-panel glass" data-title="Contact" style="flex:1; min-width:260px; padding-right:110px;">
             <img class="gif90" src="https://blob.gifcities.org/gifcities/77WFEBP66I4ARTA5T3UEKCZO3WDUQPAU.gif" alt="" style="position:absolute; top:48px; right:14px; width:90px;">
             <p class="text-block" style="margin-bottom:0;">I'm always open to discussing research collaborations, engineering roles, or interesting problems. Feel free to reach out through any of the channels below.</p>
           </div>
-          <div class="contact-card glass" data-title="Contact.vcf">
+          <div class="contact-card glass" data-title="Contact.vcf" style="flex:1; min-width:260px;">
             <div class="ch-label">Get in Touch</div>
             <div class="gif-row">
               <img class="gif90" src="https://blob.gifcities.org/gifcities/AIMVDJYWPSI7HXEABRN256QLGBFKLPB7.gif" alt="">
@@ -1749,6 +1933,7 @@
             <div class="ch-row"><span class="ch-ico">gh</span><a href="https://github.com/" target="_blank">GitHub</a></div>
             <div class="ch-row"><span class="ch-ico">☎</span><span style="color:var(--text)">201-937-9681</span></div>
           </div>
+          </div><!-- /contact flex row -->
         </div>
 
     </div><!-- /content-area -->
@@ -1764,6 +1949,145 @@
 
     </div><!-- /scroll-wrapper -->
   </div><!-- /app-shell -->
+
+  <!-- ===== MOBILE VIEW ===== -->
+  <div id="mobile-view">
+    <div class="mob-header">
+      <div class="mob-name">Sean Jackson</div>
+      <div class="mob-subtitle">Machine Learning Engineer &amp; Physicist</div>
+      <div class="mob-tagline">LLNL &nbsp;&middot;&nbsp; University of Toronto &nbsp;&middot;&nbsp; CV &amp; Deep Learning</div>
+    </div>
+
+    <nav class="mob-nav">
+      <button class="mob-tab active" data-mob="mob-home">Home</button>
+      <button class="mob-tab" data-mob="mob-about">About</button>
+      <button class="mob-tab" data-mob="mob-experience">Experience</button>
+      <button class="mob-tab" data-mob="mob-projects">Projects</button>
+      <button class="mob-tab" data-mob="mob-pubs">Publications</button>
+      <button class="mob-tab" data-mob="mob-contact">Contact</button>
+    </nav>
+
+    <div class="mob-content">
+
+      <!-- HOME -->
+      <section id="mob-home" class="mob-section active">
+        <div class="mob-card" style="text-align:center; border-left-color:var(--green);">
+          <div class="mob-card-title" style="font-size:1.4rem; margin-bottom:0.6rem;">Sean Jackson</div>
+          <div style="font-family:var(--font-dos); color:var(--cyan); font-size:0.95rem; margin-bottom:1rem; letter-spacing:0.1em;">Machine Learning Engineer &amp; Physicist</div>
+          <p>Physics graduate from <strong><u>University of Toronto</u></strong>, proficient in deep learning, quantum computing, and robotics. Building systems that automate materials discovery at <strong><u>Lawrence Livermore National Laboratory</u></strong>.</p>
+          <div class="mob-home-btns" style="justify-content:center;">
+            <button class="mob-home-btn" onclick="document.querySelector('[data-mob=mob-projects]').click()">View Projects</button>
+            <button class="mob-home-btn" onclick="document.querySelector('[data-mob=mob-contact]').click()">Get in Touch</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section id="mob-about" class="mob-section">
+        <div class="mob-section-title">About</div>
+        <div class="mob-card">
+          <div class="mob-card-title">Education</div>
+          <div class="mob-card-logos"><img src="uoft.png" alt="UofT"></div>
+          <div class="mob-card-org"><strong><u>University of Toronto</u></strong></div>
+          <div class="mob-card-date">September 2022 &mdash; May 2026</div>
+          <p>Honours BSc. Physics. Minors in Computer Science and Mathematics. Focus on Quantum Information &amp; Condensed Matter Physics.</p>
+        </div>
+        <div class="mob-card">
+          <div class="mob-card-title">Citizenship</div>
+          <p>US &nbsp;/&nbsp; UK &nbsp;/&nbsp; CA &mdash; Triple Citizenship</p>
+          <div style="display:flex;gap:8px;margin-top:0.5rem;">
+            <img src="usa.gif" alt="US" style="height:40px;">
+            <img src="uk.gif" alt="UK" style="height:40px;">
+            <img src="ca.gif" alt="CA" style="height:40px;">
+          </div>
+        </div>
+        <div class="mob-card">
+          <div class="mob-card-title">About Me</div>
+          <p>I work at the intersection of deep learning, computer vision, and scientific computing. My recent work includes deploying production vision models at <strong>Lawrence Livermore National Laboratory</strong>, designing robotics software for self-driving laboratories, and publishing first-author research on automated materials characterization.</p>
+        </div>
+      </section>
+
+      <!-- EXPERIENCE -->
+      <section id="mob-experience" class="mob-section">
+        <div class="mob-section-title">Experience</div>
+        <div class="mob-card">
+          <div class="mob-card-logos"><img src="llnl.png" alt="LLNL"><img src="eng_llnl.png" alt="Eng LLNL"></div>
+          <div class="mob-card-title">Machine Learning Engineer</div>
+          <div class="mob-card-org">Lawrence Livermore National Laboratory &mdash; Materials Engineering Division</div>
+          <div class="mob-card-date">Livermore, CA &mdash; May 2026 &ndash; Present</div>
+          <p>Working within the Materials Engineering Division (MED). Details to follow.</p>
+          <span class="mob-status wip">In Progress</span>
+        </div>
+        <div class="mob-card">
+          <div class="mob-card-logos"><img src="llnl.png" alt="LLNL"><img src="dssi.png" alt="DSSI"><img src="eng_llnl.png" alt="Eng LLNL"></div>
+          <div class="mob-card-title">Machine Learning Engineer</div>
+          <div class="mob-card-org">Lawrence Livermore National Laboratory</div>
+          <div class="mob-card-date">Livermore, CA &mdash; May 2025 &ndash; September 2025</div>
+          <p><strong>Project APEX:</strong> Self-driving laboratory for automated alloy discovery. Deployed deep CV models for high-throughput materials characterization.</p>
+          <p><strong>Systems Design:</strong> Low-level robotics software frameworks for closed-loop automation. Details restricted under U.S. DOE regulations.</p>
+          <p><strong>CV Design Challenge:</strong> Designed generative decoding models for tracking occluded objects through walls using temporal features.</p>
+          <span class="mob-status done">Completed</span>
+        </div>
+        <div class="mob-card">
+          <div class="mob-card-logos"><img src="uoft.png" alt="UofT"></div>
+          <div class="mob-card-title">Honours BSc. Physics</div>
+          <div class="mob-card-org"><strong><u>University of Toronto</u></strong></div>
+          <div class="mob-card-date">Toronto, ON &mdash; September 2022 &ndash; May 2026</div>
+          <p>Minors in Computer Science and Mathematics. Quantum Information &amp; Key Encryption. Strong foundation in physics, ML, and applied mathematics.</p>
+          <span class="mob-status wip">In Progress</span>
+        </div>
+        <div class="mob-card">
+          <div class="mob-card-logos"><img src="pascack.png" alt="Pascack"><img src="first.png" alt="FIRST"></div>
+          <div class="mob-card-title">Team Leader &mdash; Mechanical Division</div>
+          <div class="mob-card-org">Pascack Pi-oneers &mdash; FIRST Robotics (Grades 6&ndash;12)</div>
+          <div class="mob-card-date">New Jersey &mdash; 2019 &ndash; 2022</div>
+          <p>Elected Mechanical Division Team Leader. Build seasons run 6 days/week. Led off-season subgroup building an assistive robot with <strong>West Virginia University</strong> for non-ambulatory students.</p>
+          <p><strong>2019:</strong> FIRST World Championship Detroit (undefeated in qualifications, Semi-Finalist); FMA Bridgewater-Raritan (Finalist); FMA Montgomery (Semi-Finalist).</p>
+          <span class="mob-status done">Completed</span>
+        </div>
+      </section>
+
+      <!-- PROJECTS -->
+      <section id="mob-projects" class="mob-section">
+        <div class="mob-section-title">Projects</div>
+        <div class="mob-card">
+          <div class="mob-card-title">Time Management Manager (TMM)</div>
+          <div class="mob-card-date">Python &middot; Scheduling &middot; Multi-user</div>
+          <p>Group-oriented time management system for streamlined task scheduling. Accounts for dynamic availability across multiple users.</p>
+          <a href="#" class="mob-link-btn">GitHub</a>
+        </div>
+        <div class="mob-card">
+          <div class="mob-card-title">Material Quality Classification</div>
+          <div class="mob-card-date">PyTorch &middot; Computer Vision &middot; First Author</div>
+          <p>End-to-end CV framework for automated materials surface quality assessment in self-driving laboratory environments. Custom architectures, training pipelines, and uncertainty analysis.</p>
+          <a href="#" class="mob-link-btn">Paper</a>
+        </div>
+      </section>
+
+      <!-- PUBLICATIONS -->
+      <section id="mob-pubs" class="mob-section">
+        <div class="mob-section-title">Publications</div>
+        <div class="mob-card">
+          <div class="mob-card-title">Material Quality Classification Algorithms</div>
+          <div class="mob-card-org" style="color:var(--cyan);">First Author &mdash; Under Review (2025)</div>
+          <p>Novel end-to-end computer-vision framework for automated materials surface quality assessment in self-driving laboratory environments. Custom vision architectures, dataset preprocessing, training pipelines, statistical benchmarking, and uncertainty analysis. Imaging data from Cornell University; scientific validation with LLNL collaborators.</p>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section id="mob-contact" class="mob-section">
+        <div class="mob-section-title">Contact</div>
+        <div class="mob-card">
+          <p>I'm always open to discussing research collaborations, engineering roles, or interesting problems.</p>
+          <div class="mob-contact-row"><span class="ch-ico">✉</span><a href="mailto:sjackson6325@gmail.com">sjackson6325@gmail.com</a></div>
+          <div class="mob-contact-row"><span class="ch-ico">in</span><a href="http://www.linkedin.com/in/sean-jackson-b4b965278" target="_blank">LinkedIn</a></div>
+          <div class="mob-contact-row"><span class="ch-ico">gh</span><a href="https://github.com/" target="_blank">GitHub</a></div>
+          <div class="mob-contact-row"><span class="ch-ico">☎</span><span>201-937-9681</span></div>
+        </div>
+      </section>
+
+    </div><!-- /mob-content -->
+  </div><!-- /mobile-view -->
 
   <script>
     // ===== SOUND ENGINE =====
@@ -3260,6 +3584,23 @@
       }
       document.addEventListener('keydown', startBoot,   { once: true });
       screen.addEventListener('pointerdown', startBoot, { once: true });
+    })();
+  </script>
+
+  <script>
+    // ===== MOBILE TAB SWITCHING =====
+    (function() {
+      var tabs = document.querySelectorAll('.mob-tab');
+      tabs.forEach(function(tab) {
+        tab.addEventListener('click', function() {
+          tabs.forEach(function(t) { t.classList.remove('active'); });
+          document.querySelectorAll('.mob-section').forEach(function(s) { s.classList.remove('active'); });
+          tab.classList.add('active');
+          var target = document.getElementById(tab.dataset.mob);
+          if (target) target.classList.add('active');
+          window.scrollTo(0, 0);
+        });
+      });
     })();
   </script>
 </body>
