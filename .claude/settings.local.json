@@ -2,7 +2,30 @@
   "permissions": {
     "allow": [
       "WebSearch",
-      "WebFetch(domain:gifcities.org)"
+      "WebFetch(domain:gifcities.org)",
+      "Bash(gh api *)",
+      "WebFetch(domain:alexbsoft.github.io)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl -L -o win95-track.bmp \"https://alexbsoft.github.io/win95.css/assets/background.bmp\")",
+      "Bash(curl -L -o win95-arrow-dn.png \"https://alexbsoft.github.io/win95.css/assets/combo.png\")",
+      "Bash(curl -L -o win95-arrow-up.png \"https://alexbsoft.github.io/win95.css/assets/comboup.png\")",
+      "Bash(curl -s https://api.github.com/repos/AlexBSoft/win95.css/contents)",
+      "Bash(python -c \"import sys,json; [print\\(x['name']\\) for x in json.load\\(sys.stdin\\)]\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/AlexBSoft/win95.css/master/personal_page.html\")",
+      "Bash(python -c ' *)",
+      "Bash(curl -s \"https://raw.githubusercontent.com/AlexBSoft/win95.css/master/assets/win95.css\")",
+      "Bash(curl -s \"https://alexbsoft.github.io/win95.css/win95.css\")",
+      "Bash(curl -sL \"https://unpkg.com/98.css\")",
+      "WebFetch(domain:media.tenor.com)",
+      "WebFetch(domain:archive.org)",
+      "Bash(curl -s \"https://gifcities.org/\")",
+      "Bash(curl -sL \"https://gifcities.org/\")",
+      "Bash(curl -sL \"https://gifcities.org/search?q=smoke&offset=0&page_size=200\")",
+      "Bash(curl -sL \"https://gifcities.org/search?q=poof&offset=0&page_size=200\")",
+      "Bash(curl -sL \"https://gifcities.org/search?q=smoke+cloud&offset=0&page_size=200\")",
+      "Bash(curl -sL \"https://gifcities.org/search?q=explosion+cloud&offset=0&page_size=200\")",
+      "Bash(ls \"c:\\\\Users\\\\shank\\\\Desktop\\\\Website\\\\\" | grep -i \"\\\\.mp3\\\\|\\\\.wav\\\\|\\\\.ogg\")",
+      "Read(//c/Users/shank/Desktop/**)"
     ]
   }
 }

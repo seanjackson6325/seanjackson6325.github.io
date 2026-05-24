@@ -36,14 +36,14 @@
       --font-dos: 'VT323', monospace;
     }
 
-    html { font-size: 22px; }
+    html { font-size: 34px; }
     html, body { width: 100%; height: 100%; overflow: hidden; margin: 0; padding: 0; }
 
     body {
-      font-family: var(--font-terminal);
+      font-family: var(--font-dos);
       color: var(--text);
       line-height: 1.7;
-      background: #000814;
+      background: #050505;
     }
 
     ::selection { background: var(--green); color: #000; }
@@ -78,25 +78,116 @@
       100% { opacity: 1.0; }
     }
 
-    /* CRT scanlines — scrolling downward like camera recording */
-    .scanlines {
+    /* ===== CRT MONITOR EFFECT STACK ===== */
+
+    /* 1 — Scanlines */
+    .crt-scanlines {
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
+      inset: 0;
       pointer-events: none;
-      z-index: 9999;
+      z-index: 100007;
       background: repeating-linear-gradient(
-        180deg,
-        rgba(0,0,0,0.10) 0px,
-        rgba(0,0,0,0.10) 1px,
-        transparent 1px,
-        transparent 4px
+        to bottom,
+        rgba(0,0,0,0.45) 0px,
+        rgba(0,0,0,0.45) 1px,
+        transparent       1px,
+        transparent       3px
       );
-      animation: scanscroll 10s linear infinite;
     }
 
-    @keyframes scanscroll {
-      from { background-position-y: 0px; }
-      to   { background-position-y: 200px; }
+    /* 2 — Slow horizontal refresh band (camera-on-CRT look) */
+    .crt-refresh {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 100002;
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(255,255,255,0.018) 50%,
+        transparent 100%
+      );
+      background-size: 100% 200%;
+      animation: crt-refresh-scroll 8s linear infinite;
+    }
+    @keyframes crt-refresh-scroll {
+      from { background-position-y: -100%; }
+      to   { background-position-y:  200%; }
+    }
+
+    /* 4 — Phosphor green bloom in centre */
+    .crt-phosphor {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 100000;
+      background: radial-gradient(
+        ellipse at 50% 48%,
+        rgba(0, 255, 80, 0.028) 0%,
+        rgba(0, 180, 50, 0.015) 45%,
+        transparent 70%
+      );
+    }
+
+    /* 5 — Subtle RGB subpixel shimmer */
+    .crt-rgb {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 100004;
+      background: repeating-linear-gradient(
+        90deg,
+        rgba(255,0,0,0.012)   0px, rgba(255,0,0,0.012)   1px,
+        rgba(0,255,0,0.012)   1px, rgba(0,255,0,0.012)   2px,
+        rgba(0,0,255,0.012)   2px, rgba(0,0,255,0.012)   3px,
+        transparent           3px, transparent            4px
+      );
+    }
+
+    /* 6 — Flicker: occasional brief brightness dip */
+    .crt-flicker {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 100005;
+      background: rgba(0,0,0,0);
+      animation: crt-flicker 12s steps(1, end) infinite;
+    }
+    @keyframes crt-flicker {
+      0%,9%,11%,49%,51%,100% { background: rgba(0,0,0,0); }
+      10%                     { background: rgba(0,0,0,0.06); }
+      50%                     { background: rgba(0,0,0,0.04); }
+    }
+
+    /* 7 — Curvature inner shadow (simulates screen convexity) */
+    .crt-curvature {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 100006;
+      border-radius: 8px;
+      box-shadow:
+        inset 0 0   80px rgba(0,0,0,0.55),
+        inset 0 0   20px rgba(0,0,0,0.40),
+        inset 4px  4px 16px rgba(0,0,0,0.35),
+        inset -4px 4px 16px rgba(0,0,0,0.35);
+    }
+
+    /* App-shell gets rounded corners so the curvature shadow clips properly */
+    /* (moved here so the rounded screen edge is visible against the body bg) */
+
+    /* legacy alias — keep .scanlines in HTML working */
+    .scanlines { display: none; }
+
+    /* Fake cursor — rendered below CRT layers */
+    #fake-cursor {
+      position: fixed;
+      top: 0; left: 0;
+      width: 36px; height: 36px;
+      pointer-events: none;
+      z-index: 9999;
+      background-repeat: no-repeat;
+      image-rendering: pixelated;
     }
 
     /* Rolling camera "hot band" sweep */
@@ -144,18 +235,18 @@
       content: attr(data-title);
       position: absolute;
       top: 0; left: 0; right: 0;
-      height: 28px;
-      background: linear-gradient(90deg, #000080 0%, #1084d0 100%);
-      border-bottom: 1px solid #000040;
+      height: 40px;
+      background: linear-gradient(to right, #08216b, #a5cef7);
+      border-bottom: 1px solid #06194f;
       z-index: 1;
       pointer-events: none;
       font-family: 'VT323', monospace;
-      font-size: 1rem;
+      font-size: 1.4rem;
       color: #ffffff;
       text-shadow: 1px 1px 0 #000040;
-      line-height: 28px;
-      padding-left: 22px;
-      padding-right: 58px;
+      line-height: 40px;
+      padding-left: 28px;
+      padding-right: 100px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -164,47 +255,52 @@
     /* Win95 pixel-art title bar buttons (injected by JS) */
     .win-btn {
       position: absolute;
-      top: 4px;
-      width: 17px;
-      height: 18px;
-      background: #c0c0c0;
-      border-top: 1px solid #ffffff;
-      border-left: 1px solid #ffffff;
-      border-right: 1px solid #000000;
-      border-bottom: 1px solid #000000;
-      box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080;
-      font-family: 'Marlett', 'Arial', sans-serif;
-      font-size: 10px;
-      font-weight: 700;
-      line-height: 16px;
-      text-align: center;
-      color: #000000;
+      top: 8px;
+      width: 24px;
+      height: 24px;
+      background-color: silver;
+      background-repeat: no-repeat;
+      border: none;
+      box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px grey, inset 2px 2px #dfdfdf;
       cursor: default;
       pointer-events: none;
       z-index: 2;
-      image-rendering: pixelated;
-      -ms-interpolation-mode: nearest-neighbor;
     }
     .win-btn-close {
-      right: 4px; font-size: 13px; line-height: 14px;
-      background: #aa0000;
-      border-top-color: #ff6666; border-left-color: #ff6666;
-      border-right-color: #550000; border-bottom-color: #550000;
-      box-shadow: inset 1px 1px 0 #dd3333, inset -1px -1px 0 #660000;
-      color: #ffffff;
+      right: 6px;
+      background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='8' height='7' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0 0h2v1h1v1h2V1h1V0h2v1H7v1H6v1H5v1h1v1h1v1h1v1H6V6H5V5H3v1H2v1H0V6h1V5h1V4h1V3H2V2H1V1H0V0z' fill='%23000'/%3E%3C/svg%3E");
+      background-size: 16px 14px;
+      background-position: top 5px left 4px;
     }
     .win-btn-max {
-      right: 23px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0;
+      right: 32px;
+      background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='9' height='9' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M9 0H0v9h9V0zM8 2H1v6h7V2z' fill='%23000'/%3E%3C/svg%3E");
+      background-size: 18px 18px;
+      background-position: top 3px left 3px;
     }
-    .win-btn-max::before {
-      content: '';
-      width: 9px; height: 8px;
-      border: 1.5px solid #000000;
-      border-top-width: 3px;
+    .win-btn-min {
+      right: 58px;
+      background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='6' height='2' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23000' d='M0 0h6v2H0z'/%3E%3C/svg%3E");
+      background-size: 12px 4px;
+      background-position: bottom 6px left 6px;
     }
-    .win-btn-min { right: 42px; font-size: 16px; line-height: 12px; }
+
+    /* ===== WINDOW RECONSTRUCT EFFECT ===== */
+    @keyframes reconstruct {
+      0%   { transform: scale(0.04); filter: brightness(8) hue-rotate(200deg) saturate(5); }
+      12%  { transform: scale(0.10); filter: brightness(6) hue-rotate(160deg) saturate(4); }
+      25%  { transform: scale(0.22); filter: brightness(5) hue-rotate(120deg) saturate(3); }
+      37%  { transform: scale(0.40); filter: brightness(3.5) hue-rotate(80deg) saturate(2.5); }
+      50%  { transform: scale(0.58); filter: brightness(2.5) hue-rotate(45deg) saturate(2); }
+      62%  { transform: scale(0.74); filter: brightness(2) hue-rotate(20deg) saturate(1.5); }
+      75%  { transform: scale(0.87); filter: brightness(1.5) hue-rotate(8deg) saturate(1.2); }
+      87%  { transform: scale(0.96); filter: brightness(1.15) hue-rotate(2deg) saturate(1.05); }
+      100% { transform: scale(1);    filter: brightness(1) hue-rotate(0deg) saturate(1); }
+    }
+    .glass.reconstructing {
+      animation: reconstruct 0.55s steps(8, end) forwards;
+      transform-origin: center center;
+    }
 
     /* ===== 90s GIF DECORATIONS ===== */
     .gif90 { image-rendering: pixelated; display: inline-block; vertical-align: middle; flex-shrink: 0; }
@@ -222,162 +318,95 @@
       flex-direction: column;
       align-items: stretch;
       overflow: hidden;
+      border-radius: 8px;
     }
-
-    /* ===== TOP BAR / NEWSREEL ===== */
-    .top-bar {
-      height: 64px;
-      background: #c0c0c0;
-      border-top: 2px solid #ffffff;
-      border-bottom: 3px solid #404040;
-      box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #dfdfdf;
-      display: flex;
-      align-items: center;
-      padding: 0;
-      flex-shrink: 0;
-      overflow: hidden;
-      position: relative;
-      z-index: 101;
-      width: 100vw;
-      max-width: 100%;
-      box-sizing: border-box;
-    }
-
-    .ticker-brand {
-      font-family: var(--font-pixel);
-      font-size: 0.42rem;
-      color: #000000;
-      text-shadow: none;
-      letter-spacing: 0.05em;
-      white-space: nowrap;
-      padding: 0 0.9rem;
-      flex-shrink: 0;
-      border-right: 2px solid #808080;
-      border-left: 1px solid #ffffff;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      background: #c0c0c0;
-    }
-
-    .ticker-badge {
-      font-family: var(--font-dos);
-      font-size: 1.1rem;
-      color: #000000;
-      background: #c0c0c0;
-      border-right: 2px solid #808080;
-      padding: 0 0.65rem;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      white-space: nowrap;
-      flex-shrink: 0;
-      letter-spacing: 0.08em;
-    }
-
-    .ticker-viewport {
-      flex: 1;
-      overflow: hidden;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      min-width: 0;
-      cursor: default;
-    }
-
-    .ticker-track {
-      display: inline-block;
-      white-space: nowrap;
-      font-family: var(--font-dos);
-      font-size: 1.1rem;
-      color: #000000;
-      will-change: transform;
-      padding-left: 2rem;
-    }
-
-    .ticker-track .t-sep {
-      color: #808080;
-      margin: 0 1.2em;
-    }
-
-    .ticker-track .t-src {
-      font-size: 0.62rem;
-      color: #555555;
-      margin-right: 0.3em;
-    }
-
-    .ticker-track a.t-headline {
-      color: #000000;
-      text-decoration: none;
-      transition: color 0.15s;
-    }
-    .ticker-track a.t-headline:hover {
-      color: #000080;
-      text-shadow: none;
-    }
-
-    /* Pause ticker on hover so headlines are readable/clickable */
-    .ticker-viewport:hover .ticker-track { animation-play-state: paused; }
 
     @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
 
-    /* ===== STOCK TICKER BAR ===== */
-    .stock-bar {
-      height: 36px;
+    /* ===== FEED DROPDOWNS (News + Markets) ===== */
+    .feed-menu { position: relative; flex-shrink: 0; }
+
+    .feed-dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: calc(100% + 6px);
+      width: 560px;
+      max-width: calc(100vw - 1rem);
       background: #c0c0c0;
-      border-bottom: 2px solid #808080;
-      border-top: 1px solid #ffffff;
+      border-style: solid;
+      border-width: 2px;
+      border-top-color: #ffffff;
+      border-left-color: #ffffff;
+      border-right-color: #808080;
+      border-bottom-color: #808080;
+      z-index: 2000;
+      box-shadow: 3px 3px 0 #000000;
+    }
+    .feed-dropdown-sm { width: 420px; }
+    .feed-dropdown.open { display: block; }
+
+    .feed-vp-wrap {
       display: flex;
-      align-items: center;
-      padding: 0;
-      flex-shrink: 0;
+      flex-direction: row;
       overflow: hidden;
-      width: 100vw;
-      max-width: 100%;
-      box-sizing: border-box;
-      position: relative;
-      z-index: 101;
     }
 
-    .stock-badge {
-      font-family: var(--font-dos);
-      font-size: 1rem;
-      color: #000000;
-      background: #c0c0c0;
-      border-right: 2px solid #808080;
-      padding: 0 0.6rem;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      white-space: nowrap;
-      flex-shrink: 0;
-      letter-spacing: 0.1em;
-    }
-
-    .stock-viewport {
+    .feed-viewport {
+      height: min(420px, 70vh);
+      overflow-y: scroll;
+      overflow-x: hidden;
       flex: 1;
-      overflow: hidden;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      min-width: 0;
+      position: relative;
+      background: #c0c0c0;
+      border-top: 1px solid #808080;
+      border-bottom: 1px solid #808080;
+      cursor: default;
+      scrollbar-width: none;
     }
-    .stock-track {
-      display: inline-block;
-      white-space: nowrap;
-      font-family: var(--font-dos);
-      font-size: 1rem;
-      color: #000000;
+    .feed-viewport::-webkit-scrollbar { display: none; }
+
+    .feed-track {
+      position: relative;
       will-change: transform;
-      padding-left: 1.5rem;
     }
 
-    .stock-track .s-sep  { color: #808080; margin: 0 1em; }
-    .stock-track .s-sym  { color: #000080; font-weight: bold; margin-right: 0.35em; }
-    .stock-track .s-px   { color: #000000; margin-right: 0.25em; }
-    .stock-track .s-up   { color: #006400; }
-    .stock-track .s-dn   { color: #aa0000; }
-    .stock-track .s-flat { color: #555555; }
+    .feed-item {
+      font-family: var(--font-dos);
+      font-size: 0.95rem;
+      color: #000000;
+      padding: 0.32rem 0.85rem;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      line-height: 1.4;
+    }
+    .feed-item:hover { background: #000080; color: #ffffff; }
+    .feed-item:hover a { color: #ffffff; }
+    .feed-item a { color: #000080; text-decoration: none; }
+    .feed-item a:hover { color: #ffffff; }
+    .feed-src { color: #555555; font-size: 0.82rem; margin-right: 0.4em; }
+
+    /* Markets rows */
+    .mkts-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-dos);
+      font-size: 0.95rem;
+      color: #000000;
+      padding: 0.28rem 0.85rem;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      gap: 0.6rem;
+    }
+    .mkts-row:hover { background: #000080; color: #ffffff; }
+    .mkts-sym  { color: #000080; font-weight: bold; min-width: 52px; }
+    .mkts-px   { color: #000000; min-width: 72px; text-align: right; }
+    .mkts-up   { color: #006400; min-width: 90px; text-align: right; }
+    .mkts-dn   { color: #cc0000; min-width: 90px; text-align: right; }
+    .mkts-flat { color: #555555; min-width: 90px; text-align: right; }
+    @keyframes flash-up { 0%,100%{background:transparent} 50%{background:rgba(68,221,102,0.18)} }
+    @keyframes flash-dn { 0%,100%{background:transparent} 50%{background:rgba(255,85,85,0.18)} }
+    .mkts-row.flash-up { animation: flash-up 0.6s ease; }
+    .mkts-row.flash-dn { animation: flash-dn 0.6s ease; }
 
     /* ===== HORIZONTAL NAV BAR ===== */
     .nav-bar {
@@ -392,12 +421,31 @@
       box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #dfdfdf;
       display: flex;
       align-items: center;
-      padding: 3px 0.5rem;
+      padding: 5px 0.5rem;
       flex-shrink: 0;
-      height: 50px;
+      height: 62px;
       transition: height 0.25s ease, opacity 0.25s ease;
     }
     .nav-bar.collapsed { height: 0; opacity: 0; overflow: hidden; pointer-events: none; border: none; }
+
+    .sub-bar {
+      position: relative;
+      z-index: 99;
+      width: 100vw;
+      max-width: 100%;
+      box-sizing: border-box;
+      background: #c0c0c0;
+      border-bottom: 3px solid #404040;
+      box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #dfdfdf;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 3px 0.5rem;
+      gap: 4px;
+      flex-shrink: 0;
+      transition: height 0.25s ease, opacity 0.25s ease;
+    }
+    .sub-bar.collapsed { height: 0; opacity: 0; overflow: hidden; pointer-events: none; border: none; }
 
     /* Scrollable portion */
     .nav-scroll {
@@ -431,32 +479,17 @@
       font-size: 1rem;
       color: #000000;
       letter-spacing: 0.05em;
-      border-style: solid;
-      border-width: 2px;
-      border-top-color: #ffffff;
-      border-left-color: #ffffff;
-      border-right-color: #808080;
-      border-bottom-color: #808080;
-      background: #c0c0c0;
+      border: 2px outset #c0c0c0;
+      background: silver;
       cursor: pointer;
-      transition: color 0.05s, box-shadow 0.05s;
       white-space: nowrap;
       flex-shrink: 0;
-      box-shadow: 1px 1px 0 #000000;
     }
-    .nav-bar .nav-btn:hover {
-      color: #000080;
-      box-shadow: 1px 1px 0 #000000;
-    }
+    .nav-bar .nav-btn:hover { color: #000080; }
     .nav-bar .nav-btn.active {
+      border: 2px inset #c0c0c0;
+      background: silver;
       color: #000000;
-      border-top-color: #808080;
-      border-left-color: #808080;
-      border-right-color: #ffffff;
-      border-bottom-color: #ffffff;
-      background: #c0c0c0;
-      box-shadow: inset 1px 1px 0 #404040;
-      transform: translate(1px, 1px);
     }
     .nav-bar .nav-btn .ico { display: none; }
 
@@ -471,19 +504,12 @@
       color: #000000;
       letter-spacing: 0.05em;
       text-decoration: none;
-      border-style: solid;
-      border-width: 2px;
-      border-top-color: #ffffff;
-      border-left-color: #ffffff;
-      border-right-color: #808080;
-      border-bottom-color: #808080;
-      background: #c0c0c0;
-      transition: color 0.05s;
+      border: 2px outset #c0c0c0;
+      background: silver;
       white-space: nowrap;
       flex-shrink: 0;
-      box-shadow: 1px 1px 0 #000000;
     }
-    .nav-bar .ext-link:hover { color: #000080; }
+    .nav-bar .ext-link:hover { color: #000080; text-decoration: none; }
     .nav-bar .ext-link .ico { display: none; }
 
     .nav-spacer { flex: 0; min-width: 0.5rem; }
@@ -501,17 +527,10 @@
       font-size: 1rem;
       color: #000000;
       letter-spacing: 0.08em;
-      border-style: solid;
-      border-width: 2px;
-      border-top-color: #ffffff;
-      border-left-color: #ffffff;
-      border-right-color: #808080;
-      border-bottom-color: #808080;
-      background: #c0c0c0;
+      border: 2px outset #c0c0c0;
+      background: silver;
       cursor: pointer;
-      transition: color 0.05s;
       white-space: nowrap;
-      box-shadow: 1px 1px 0 #000000;
     }
     .help-btn:hover { color: #000080; }
 
@@ -527,20 +546,36 @@
       border-left-color: #ffffff;
       border-right-color: #808080;
       border-bottom-color: #808080;
-      min-width: 290px;
+      min-width: 420px;
+      max-width: calc(100vw - 1rem);
       z-index: 2000;
       box-shadow: 3px 3px 0 #000000;
+      overflow: hidden;
     }
     .help-dropdown.open { display: block; }
 
-    .help-dropdown .hd-title {
+    .help-body-wrap {
+      display: flex;
+      flex-direction: row;
+      max-height: 70vh;
+      overflow: hidden;
+    }
+    .help-body {
+      flex: 1;
+      overflow-y: scroll;
+      scrollbar-width: none;
+    }
+    .help-body::-webkit-scrollbar { display: none; }
+
+    .help-dropdown .hd-title,
+    .feed-dropdown .hd-title {
       font-family: var(--font-dos);
       font-size: 1.1rem;
       color: #ffffff;
       padding: 0.5rem 1rem;
       border-bottom: 1px solid #808080;
       letter-spacing: 0.08em;
-      background: linear-gradient(90deg, #000080 0%, #1084d0 100%);
+      background: linear-gradient(to right, #08216b, #a5cef7);
     }
     .help-dropdown .hd-section {
       font-family: var(--font-dos);
@@ -611,33 +646,82 @@
     .content-area {
       flex: 1;
       overflow-y: scroll;
-      scrollbar-gutter: stable;
       padding: 1.4rem 2rem;
-      scrollbar-width: auto;
-      scrollbar-color: #c0c0c0 #808080;
+      scrollbar-width: none;
+    }
+    .content-area::-webkit-scrollbar { display: none; }
+
+    /* ===== CUSTOM WIN95 SCROLLBAR (cross-browser) ===== */
+    .scroll-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+      overflow: hidden;
+      min-height: 0;
     }
 
-    .content-area::-webkit-scrollbar { width: 18px; }
-    .content-area::-webkit-scrollbar-track {
-      background: #808080;
-      box-shadow: inset 1px 1px 0 #606060, inset -1px -1px 0 #a0a0a0;
+    .w95sb {
+      width: 17px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      background-image: url('win95-track.bmp');
+      background-repeat: repeat;
+      -webkit-user-select: none;
+      user-select: none;
     }
-    .content-area::-webkit-scrollbar-thumb {
+
+    .w95sb-btn {
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
       background: #c0c0c0;
-      border-top: 2px solid #ffffff;
-      border-left: 2px solid #ffffff;
-      border-right: 2px solid #404040;
-      border-bottom: 2px solid #404040;
-      box-shadow: inset 1px 1px 0 #e0e0e0, inset -1px -1px 0 #808080;
+      border: 2px solid;
+      border-top-color: #ffffff;
+      border-left-color: #ffffff;
+      border-right-color: #424242;
+      border-bottom-color: #424242;
+      font-size: 7px;
+      line-height: 1;
+      color: #000000;
+      cursor: default;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      -webkit-user-select: none;
+      user-select: none;
+      outline: none;
     }
-    .content-area::-webkit-scrollbar-button {
+    .w95sb-btn:active {
+      border-top-color: #424242;
+      border-left-color: #424242;
+      border-right-color: #ffffff;
+      border-bottom-color: #ffffff;
+    }
+
+    .w95sb-track {
+      flex: 1;
+      position: relative;
+      background-image: url('win95-track.bmp');
+      background-repeat: repeat;
+      cursor: default;
+      overflow: hidden;
+    }
+
+    .w95sb-thumb {
+      position: absolute;
+      left: 0;
+      width: 100%;
       background: #c0c0c0;
-      border-top: 2px solid #ffffff;
-      border-left: 2px solid #ffffff;
-      border-right: 2px solid #404040;
-      border-bottom: 2px solid #404040;
-      box-shadow: inset 1px 1px 0 #e0e0e0, inset -1px -1px 0 #808080;
-      height: 18px;
+      border: 2px solid;
+      border-top-color: #ffffff;
+      border-left-color: #ffffff;
+      border-right-color: #424242;
+      border-bottom-color: #424242;
+      box-sizing: border-box;
+      cursor: default;
+      min-height: 18px;
     }
 
     @media (max-width: 800px) {
@@ -647,51 +731,19 @@
     }
 
     /* ===== PAGE PANELS ===== */
-    .page { display: none; animation: page-in 0.35s ease; }
+    .page { display: none; }
     .page.active { display: block; }
 
-    @keyframes page-in {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .page-header {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      margin-bottom: 1rem;
-    }
-
-    .page-header .bracket { display: none; }
-
-    .page-header h2 {
-      font-family: var(--font-pixel);
-      font-size: 0.7rem;
-      color: var(--cyan);
-      letter-spacing: 0.06em;
-      text-shadow: 0 0 10px var(--cyan), 0 0 28px var(--cyan-glow);
-    }
-    .page-header h2::before {
-      content: '> ';
-      color: var(--green);
-      text-shadow: 0 0 8px var(--green-glow);
-    }
-
-    .page-header .line {
-      flex: 1;
-      height: 3px;
-      background: linear-gradient(90deg, var(--cyan) 0%, rgba(0,238,255,0.5) 15%, rgba(0,238,255,0.1) 65%, transparent);
-      box-shadow: 0 2px 0 rgba(0,0,0,0.5), 0 0 8px rgba(0,238,255,0.08);
-    }
+    .page-header { display: none; }
 
     /* ===== HOME PAGE ===== */
     .home-panel {
-      padding: 32px 2rem 2rem;
+      padding: 44px 2rem 2rem;
       max-width: 52%;
     }
 
     .home-name {
-      font-family: var(--font-pixel);
+      font-family: var(--font-dos);
       font-size: clamp(1rem, 3vw, 1.6rem);
       color: var(--green);
       text-shadow: 0 0 16px var(--green), 0 0 40px var(--green-glow);
@@ -732,51 +784,20 @@
       font-size: 1.1rem;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      padding: 6px 20px;
+      padding: 4px 20px;
       cursor: pointer;
-      transition: color 0.1s, box-shadow 0.05s, transform 0.05s;
-      border-style: solid;
-      border-width: 2px;
-      box-shadow: 3px 3px 0 #000000;
+      border: 2px outset #c0c0c0;
+      background: silver;
+      color: #000000;
     }
-
-    .btn-green {
-      border-top-color: #66ffaa;
-      border-left-color: #66ffaa;
-      border-right-color: #006622;
-      border-bottom-color: #006622;
-      background: #002a10;
-      color: var(--green);
+    .btn:hover { color: #000080; background: silver; }
+    .btn:active {
+      border: 2px inset #c0c0c0;
+      background: silver;
+      color: #424242;
     }
-    .btn-green:hover { color: #ffffff; background: #003c18; box-shadow: 3px 3px 0 #000, 0 0 10px rgba(51,255,102,0.2); }
-    .btn-green:active {
-      border-top-color: #006622;
-      border-left-color: #006622;
-      border-right-color: #66ffaa;
-      border-bottom-color: #66ffaa;
-      background: #001a0a;
-      box-shadow: 1px 1px 0 #000;
-      transform: translate(2px, 2px);
-    }
-
-    .btn-blue {
-      border-top-color: #66aaff;
-      border-left-color: #66aaff;
-      border-right-color: #002266;
-      border-bottom-color: #002266;
-      background: #001030;
-      color: var(--blue-bright);
-    }
-    .btn-blue:hover { color: #ffffff; background: #001844; box-shadow: 3px 3px 0 #000, 0 0 10px rgba(0,136,255,0.2); }
-    .btn-blue:active {
-      border-top-color: #002266;
-      border-left-color: #002266;
-      border-right-color: #66aaff;
-      border-bottom-color: #66aaff;
-      background: #000c22;
-      box-shadow: 1px 1px 0 #000;
-      transform: translate(2px, 2px);
-    }
+    .btn-green { color: #000000; }
+    .btn-blue  { color: #000000; }
 
     /* ===== CARD COMPONENTS ===== */
     .card-grid {
@@ -786,7 +807,7 @@
       margin-bottom: 1.5rem;
     }
 
-    .stat-card { padding: 32px 1rem 1rem; }
+    .stat-card { padding: 44px 1rem 1rem; }
 
     .stat-card .label {
       font-family: var(--font-dos);
@@ -805,7 +826,7 @@
     .stat-card .sub { font-family: var(--font-dos); font-size: 0.9rem; color: var(--text-dim); margin-top: 0.1rem; }
 
     .text-panel {
-      padding: 32px 1.5rem 1.3rem;
+      padding: 44px 1.5rem 1.3rem;
       margin-bottom: 1.2rem;
     }
 
@@ -823,7 +844,7 @@
       gap: 0.8rem;
     }
 
-    .skill-card { padding: 32px 1.3rem 1.3rem; }
+    .skill-card { padding: 44px 1.3rem 1.3rem; }
 
     .skill-card h4 {
       font-family: var(--font-dos);
@@ -863,23 +884,31 @@
     /* ===== EXPERIENCE ===== */
     .exp-list { display: flex; flex-direction: column; gap: 1rem; }
 
-    .exp-card { padding: 32px 1.4rem 1.4rem; border-left: 4px solid var(--blue-dim); transition: border-color 0.3s, box-shadow 0.3s; }
+    .exp-card { padding: 44px 1.4rem 1.4rem; border-left: 4px solid var(--blue-dim); transition: border-color 0.3s, box-shadow 0.3s; }
     .exp-card:hover { border-left-color: var(--cyan); box-shadow: inset 1px 1px 0 rgba(255,255,255,0.22), inset -1px -1px 0 rgba(0,0,0,0.45), 4px 4px 0 #000, -4px 0 12px rgba(0,238,255,0.12); }
 
+    /* Win98 folder icon before badge text */
     .exp-card .badge {
       font-family: var(--font-dos);
-      font-size: 1rem;
-      color: var(--cyan);
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: none;
+      border: none;
+      padding: 0;
+      margin-bottom: 0.45rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .exp-card .badge::before {
+      content: '';
       display: inline-block;
-      background: rgba(0,8,24,0.85);
-      border-top: 2px solid rgba(0,238,255,0.7);
-      border-left: 2px solid rgba(0,238,255,0.7);
-      border-right: 2px solid rgba(0,238,255,0.12);
-      border-bottom: 2px solid rgba(0,238,255,0.12);
-      padding: 0.1rem 0.55rem;
-      margin-bottom: 0.5rem;
-      box-shadow: 2px 2px 0 rgba(0,0,0,0.75);
-      letter-spacing: 0.08em;
+      width: 16px; height: 14px;
+      flex-shrink: 0;
+      background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='16' height='14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 3h5l2-2h9v11H0z' fill='%23FFD700'/%3E%3Cpath d='M0 5h16v8H0z' fill='%23FFCC00'/%3E%3Cpath d='M0 3h6l1-2H0z' fill='%23CC9900'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
     }
 
     .exp-card h3 {
@@ -897,22 +926,60 @@
     .exp-card p + p { margin-top: 0.5rem; }
     .exp-card p strong { color: var(--cyan); }
 
+    .exp-card .exp-logos {
+      position: absolute;
+      top: 50px;
+      right: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .exp-card .exp-logos img {
+      width: 280px;
+      height: auto;
+      image-rendering: pixelated;
+      display: block;
+      border: 2px solid var(--bevel-dk);
+      box-shadow: inset 1px 1px 0 rgba(255,255,255,0.15);
+    }
+    .exp-card.has-logos { padding-right: 306px; }
+
+    /* Win98 Device Manager LED indicator */
     .status-pill {
       font-family: var(--font-dos);
-      font-size: 1rem;
+      font-size: 0.95rem;
       margin-top: 0.7rem;
-      padding: 0.1rem 0.6rem;
-      display: inline-block;
-      border: 1px solid;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: none;
+      border: none;
+      padding: 0;
     }
-
-    .status-pill.done { color: var(--green); border-color: rgba(51,255,102,0.5); background: rgba(0,8,0,0.8); text-shadow: 0 0 6px var(--green-glow); box-shadow: 0 0 6px rgba(51,255,102,0.12); }
-    .status-pill.wip { color: var(--cyan); border-color: rgba(0,238,255,0.5); background: rgba(0,8,16,0.8); animation: blink 2s infinite; text-shadow: 0 0 6px var(--cyan-glow); box-shadow: 0 0 6px rgba(0,238,255,0.12); }
+    .status-pill::before {
+      content: '';
+      display: inline-block;
+      width: 11px; height: 11px;
+      flex-shrink: 0;
+    }
+    .status-pill.done { color: var(--green); }
+    .status-pill.done::before {
+      background: #00bb00;
+      box-shadow: inset -1px -1px #005500, inset 1px 1px #88ff88,
+                  inset -2px -2px #008800, inset 2px 2px #ccffcc;
+    }
+    .status-pill.wip  { color: var(--cyan); animation: blink 2s infinite; }
+    .status-pill.wip::before {
+      background: #cc9900;
+      box-shadow: inset -1px -1px #775500, inset 1px 1px #ffdd44,
+                  inset -2px -2px #aa7700, inset 2px 2px #ffeeaa;
+    }
 
     /* ===== PROJECTS ===== */
     .proj-grid { display: grid; gap: 1rem; }
 
-    .proj-card { padding: 32px 1.4rem 1.4rem; overflow: hidden; position: relative; transition: all 0.3s; }
+    .proj-card { padding: 44px 1.4rem 1.4rem; overflow: hidden; position: relative; transition: all 0.3s; }
 
     .proj-card::after {
       content: '';
@@ -932,37 +999,55 @@
     .proj-card .links a {
       font-family: var(--font-dos);
       font-size: 0.95rem;
-      color: var(--text-dim);
-      padding: 0.1rem 0.5rem;
-      border-style: solid;
-      border-width: 1px;
-      border-top-color: var(--bevel-lt);
-      border-left-color: var(--bevel-lt);
-      border-right-color: var(--bevel-dk);
-      border-bottom-color: var(--bevel-dk);
+      color: #000000;
+      padding: 2px 10px;
       margin-left: 0.4rem;
-      background: #000c1e;
+      display: inline-block;
+      background: silver;
+      border: none;
+      box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff,
+                  inset -2px -2px grey,    inset 2px 2px #dfdfdf;
+      text-decoration: none;
+      min-width: 60px;
+      text-align: center;
     }
-    .proj-card .links a:hover { color: var(--cyan); }
+    .proj-card .links a:hover { color: #000080; background: silver; }
+    .proj-card .links a:active {
+      box-shadow: inset -1px -1px #fff,    inset 1px 1px #0a0a0a,
+                  inset -2px -2px #dfdfdf, inset 2px 2px grey;
+      padding: 3px 9px 1px 11px;
+    }
 
     .proj-card p { font-size: 0.95rem; color: var(--text); margin-bottom: 0.8rem; line-height: 1.75; }
 
-    .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    /* Win98 checked checkbox list items */
+    .tags { display: flex; flex-wrap: wrap; gap: 0.2rem 1.3rem; }
     .tags span {
       font-family: var(--font-dos);
       font-size: 0.9rem;
-      color: var(--cyan);
-      background: rgba(0,8,24,0.85);
-      border-top: 2px solid rgba(0,238,255,0.65);
-      border-left: 2px solid rgba(0,238,255,0.65);
-      border-right: 2px solid rgba(0,238,255,0.12);
-      border-bottom: 2px solid rgba(0,238,255,0.12);
-      padding: 0.1rem 0.55rem;
-      box-shadow: 2px 2px 0 rgba(0,0,0,0.75);
+      color: var(--text-bright);
+      background: none;
+      border: none;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .tags span::before {
+      content: '';
+      display: inline-block;
+      width: 13px; height: 13px;
+      flex-shrink: 0;
+      background-color: #ffffff;
+      background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='7' height='7' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M7 0H6v1H5v1H4v1H3v1H2V3H1V2H0v3h1v1h1v1h1V6h1V5h1V4h1V3h1V0z' fill='%23000'/%3E%3C/svg%3E");
+      background-position: center 2px;
+      background-repeat: no-repeat;
+      box-shadow: inset -1px -1px #fff, inset 1px 1px grey,
+                  inset -2px -2px #dfdfdf, inset 2px 2px #0a0a0a;
     }
 
     /* ===== PUBLICATIONS ===== */
-    .pub-card { padding: 32px 1.4rem 1.4rem; border-left: 4px solid var(--green); transition: box-shadow 0.3s; }
+    .pub-card { padding: 44px 1.4rem 1.4rem; border-left: 4px solid var(--green); transition: box-shadow 0.3s; }
     .pub-card:hover { box-shadow: inset 1px 1px 0 rgba(255,255,255,0.22), inset -1px -1px 0 rgba(0,0,0,0.45), 4px 4px 0 #000, -4px 0 12px rgba(51,255,102,0.12); }
     .pub-card h3 { font-family: var(--font-dos); font-size: 1.1rem; color: var(--green); letter-spacing: 0.04em; margin-bottom: 0.3rem; text-shadow: 0 0 6px var(--green-glow); }
     .pub-card .meta { font-family: var(--font-dos); font-size: 0.95rem; color: var(--cyan); margin-bottom: 0.6rem; }
@@ -988,7 +1073,7 @@
       display: flex;
       align-items: center;
       gap: 0.8rem;
-      padding: 32px 1rem 0.85rem;
+      padding: 44px 1rem 0.85rem;
       text-decoration: none;
       color: inherit;
       transition: all 0.2s;
@@ -1023,21 +1108,31 @@
     /* ===== FUN / BLOG ===== */
     .fun-intro { margin-bottom: 1.6rem; }
     .fun-grid { display: flex; flex-direction: column; gap: 1rem; }
-    .fun-card { padding: 32px 1.4rem 1.4rem; position: relative; transition: border-color 0.2s; }
+    .fun-card { padding: 44px 1.4rem 1.4rem; position: relative; transition: border-color 0.2s; }
     .fun-card:hover { border-color: rgba(85,170,255,0.35); }
+    /* Win98 document icon before category label */
     .fun-tag {
       font-family: var(--font-dos);
-      font-size: 0.95rem;
-      color: var(--blue-bright);
-      background: rgba(0,136,255,0.06);
-      border: 1px solid rgba(0,136,255,0.25);
-      padding: 0.08rem 0.45rem;
-      display: inline-block;
+      font-size: 0.9rem;
+      background: none;
+      border: none;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
       margin-bottom: 0.5rem;
       letter-spacing: 0.08em;
     }
-    .fun-tag.enjoy { color: var(--cyan); background: rgba(0,238,255,0.04); border-color: rgba(0,238,255,0.22); }
-    .fun-tag.thought { color: var(--green); background: rgba(51,255,102,0.04); border-color: rgba(51,255,102,0.22); }
+    .fun-tag::before {
+      content: '';
+      display: inline-block;
+      width: 12px; height: 15px;
+      flex-shrink: 0;
+      background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='12' height='15' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h8v4h4v11H0z' fill='%23fff'/%3E%3Cpath d='M8 0l4 4H8z' fill='%23ccc'/%3E%3Crect x='2' y='6' width='8' height='1' fill='%23999'/%3E%3Crect x='2' y='8' width='8' height='1' fill='%23999'/%3E%3Crect x='2' y='10' width='5' height='1' fill='%23999'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+    }
+    .fun-tag.enjoy   { color: var(--cyan); }
+    .fun-tag.thought { color: var(--green); }
     .fun-card h3 {
       font-family: var(--font-dos);
       font-size: 1.2rem;
@@ -1067,7 +1162,7 @@
 
 
     /* ===== CONTACT ===== */
-    .contact-card { padding: 32px 1.5rem 1.5rem; max-width: 440px; }
+    .contact-card { padding: 44px 1.5rem 1.5rem; max-width: 440px; }
     .contact-card .ch-label { font-family: var(--font-dos); font-size: 1.1rem; color: var(--cyan); margin-bottom: 0.7rem; }
 
     .ch-row {
@@ -1110,6 +1205,20 @@
       cursor: none;
     }
     #bootScreen.boot-hidden { display: none; }
+
+    #bootPrompt {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'VT323', monospace;
+      font-size: 1.2rem;
+      color: #aaaaaa;
+      letter-spacing: 0.12em;
+      white-space: nowrap;
+    }
+    #bootPromptCursor { animation: blinkCursor 0.7s step-end infinite; }
+    #bootPrompt.hidden { display: none; }
 
     /* CRT scanline overlay on boot screen */
     #bootScreen::after {
@@ -1174,6 +1283,7 @@
     }
     #bootVeil.veil-on  { opacity: 1; pointer-events: all; }
 
+
   </style>
 </head>
 <body>
@@ -1181,7 +1291,8 @@
   <!-- DOS BOOT SCREEN -->
   <div id="bootVeil"></div>
   <div id="bootScreen">
-    <div id="bootLines"><span id="bootCursor"></span></div>
+    <div id="bootPrompt">PRESS ANY KEY TO BOOT<span id="bootPromptCursor">_</span></div>
+    <div id="bootLines" style="display:none"><span id="bootCursor"></span></div>
   </div>
 
   <!-- SPACE BACKGROUND -->
@@ -1189,25 +1300,17 @@
   <div class="nebula-overlay"></div>
   <div class="scanlines"></div>
 
+  <!-- CRT EFFECT STACK -->
+  <div class="crt-phosphor"></div>
+  <div class="crt-scanlines"></div>
+  <div class="crt-refresh"></div>
+  <div class="crt-rgb"></div>
+  <div class="crt-flicker"></div>
+  <div class="crt-curvature"></div>
+
   <!-- APP SHELL -->
   <div class="app-shell">
 
-    <!-- TOP BAR — live tech news ticker -->
-    <div class="top-bar" style="opacity:0;transform:translateY(-16px);pointer-events:none">
-      <div class="ticker-brand">Sean Jackson</div>
-      <div class="ticker-badge">▶ Tech News</div>
-      <div class="ticker-viewport">
-        <div class="ticker-track" id="tickerTrack">Connecting to feed&hellip;</div>
-      </div>
-    </div>
-
-    <!-- STOCK TICKER BAR -->
-    <div class="stock-bar" style="opacity:0;transform:translateY(-16px);pointer-events:none">
-      <div class="stock-badge">▶ STOCKS</div>
-      <div class="stock-viewport" id="stockViewport">
-        <div class="stock-track" id="stockTrack">Fetching market data&hellip;</div>
-      </div>
-    </div>
 
     <!-- HORIZONTAL NAV BAR -->
     <nav class="nav-bar" id="navBar" style="opacity:0;transform:translateY(-16px);pointer-events:none">
@@ -1221,7 +1324,6 @@
           <button class="nav-btn" data-page="projects"><span class="ico">></span> Projects</button>
           <button class="nav-btn" data-page="publications"><span class="ico">></span> Publications</button>
           <button class="nav-btn" data-page="notes"><span class="ico">></span> Notes</button>
-          <button class="nav-btn" data-page="journal"><span class="ico">></span> Journal</button>
           <button class="nav-btn" data-page="interests"><span class="ico">></span> Interests</button>
           <button class="nav-btn" data-page="contact"><span class="ico">></span> Contact</button>
         </div>
@@ -1231,52 +1333,105 @@
           <a class="ext-link" href="http://www.linkedin.com/in/sean-jackson-b4b965278" target="_blank"><span class="ico">#</span> LinkedIn</a>
         </div>
       </div>
-      <div class="nav-spacer"></div>
-      <div class="help-menu">
-        <button class="help-btn" id="helpBtn">? Keys ▾</button>
-        <div class="help-dropdown" id="helpDropdown">
-          <div class="hd-title">// Keyboard Shortcuts</div>
-          <div class="hd-section">// Navigation — Ctrl+K, then...</div>
-          <div class="hd-row"><span>Home</span><span class="hd-key">Ctrl+K → H</span></div>
-          <div class="hd-row"><span>About</span><span class="hd-key">Ctrl+K → A</span></div>
-          <div class="hd-row"><span>Skills</span><span class="hd-key">Ctrl+K → S</span></div>
-          <div class="hd-row"><span>Experience</span><span class="hd-key">Ctrl+K → E</span></div>
-          <div class="hd-row"><span>Projects</span><span class="hd-key">Ctrl+K → P</span></div>
-          <div class="hd-row"><span>Publications</span><span class="hd-key">Ctrl+K → U</span></div>
-          <div class="hd-row"><span>Notes</span><span class="hd-key">Ctrl+K → N</span></div>
-          <div class="hd-row"><span>Journal</span><span class="hd-key">Ctrl+K → F</span></div>
-          <div class="hd-row"><span>Interests</span><span class="hd-key">Ctrl+K → I</span></div>
-          <div class="hd-row"><span>Contact</span><span class="hd-key">Ctrl+K → C</span></div>
-          <div class="hd-section">// Interface</div>
-          <div class="hd-row"><span>Toggle menu bar</span><span class="hd-key">Ctrl+K → M</span></div>
-          <div class="hd-row"><span>Toggle this panel</span><span class="hd-key">Ctrl+K → /</span></div>
-          <div class="hd-section">// External</div>
-          <div class="hd-row"><span>Open GitHub</span><span class="hd-key">Ctrl+K → G</span></div>
-          <div class="hd-row"><span>Open LinkedIn</span><span class="hd-key">Ctrl+K → L</span></div>
-          <div class="hd-footer">Press Ctrl+K to enter chord mode, then a key.</div>
+    </nav>
+
+    <!-- SUB-BAR: News, Markets, Keys -->
+    <div class="sub-bar" id="subBar" style="opacity:0;transform:translateY(-8px);pointer-events:none">
+      <!-- News dropdown -->
+      <div class="feed-menu" id="newsMenu">
+        <button class="help-btn" id="newsBtn">[+] News</button>
+        <div class="feed-dropdown" id="newsDropdown">
+          <div class="hd-title">Science/Tech News</div>
+          <div class="feed-vp-wrap">
+            <div class="feed-viewport" id="newsViewport">
+              <div class="feed-track" id="newsTrack">
+                <div class="feed-item"><span class="feed-src">[HN]</span> Connecting to feed&hellip;</div>
+              </div>
+            </div>
+            <div class="w95sb" id="newsSb">
+              <button class="w95sb-btn" id="newsSb-up">&#9650;</button>
+              <div class="w95sb-track" id="newsSb-track"><div class="w95sb-thumb" id="newsSb-thumb"></div></div>
+              <button class="w95sb-btn" id="newsSb-dn">&#9660;</button>
+            </div>
+          </div>
         </div>
       </div>
-    </nav>
+
+      <!-- Markets dropdown -->
+      <div class="feed-menu" id="mktsMenu">
+        <button class="help-btn" id="mktsBtn">[+] Markets</button>
+        <div class="feed-dropdown feed-dropdown-sm" id="mktsDropdown">
+          <div class="hd-title">Markets</div>
+          <div class="feed-vp-wrap">
+            <div class="feed-viewport" id="mktsViewport">
+              <div class="feed-track" id="mktsTrack">
+                <div class="feed-item">Fetching data&hellip;</div>
+              </div>
+            </div>
+            <div class="w95sb" id="mktsSb">
+              <button class="w95sb-btn" id="mktsSb-up">&#9650;</button>
+              <div class="w95sb-track" id="mktsSb-track"><div class="w95sb-thumb" id="mktsSb-thumb"></div></div>
+              <button class="w95sb-btn" id="mktsSb-dn">&#9660;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="help-menu">
+        <button class="help-btn" id="helpBtn">[?] Keys</button>
+        <div class="help-dropdown" id="helpDropdown">
+          <div class="hd-title">Keyboard Shortcuts</div>
+          <div class="help-body-wrap">
+            <div class="help-body" id="helpBody">
+              <div class="hd-section">Navigation — Ctrl+K, then...</div>
+              <div class="hd-row"><span>Home</span><span class="hd-key">Ctrl+K → H</span></div>
+              <div class="hd-row"><span>About</span><span class="hd-key">Ctrl+K → A</span></div>
+              <div class="hd-row"><span>Skills</span><span class="hd-key">Ctrl+K → S</span></div>
+              <div class="hd-row"><span>Experience</span><span class="hd-key">Ctrl+K → E</span></div>
+              <div class="hd-row"><span>Projects</span><span class="hd-key">Ctrl+K → P</span></div>
+              <div class="hd-row"><span>Publications</span><span class="hd-key">Ctrl+K → U</span></div>
+              <div class="hd-row"><span>Notes</span><span class="hd-key">Ctrl+K → N</span></div>
+              <div class="hd-row"><span>Journal</span><span class="hd-key">Ctrl+K → F</span></div>
+              <div class="hd-row"><span>Interests</span><span class="hd-key">Ctrl+K → I</span></div>
+              <div class="hd-row"><span>Contact</span><span class="hd-key">Ctrl+K → C</span></div>
+              <div class="hd-section">Interface</div>
+              <div class="hd-row"><span>Toggle menu bar</span><span class="hd-key">Ctrl+K → M</span></div>
+              <div class="hd-row"><span>Toggle this panel</span><span class="hd-key">Ctrl+K → /</span></div>
+              <div class="hd-section">External</div>
+              <div class="hd-row"><span>Open GitHub</span><span class="hd-key">Ctrl+K → G</span></div>
+              <div class="hd-row"><span>Open LinkedIn</span><span class="hd-key">Ctrl+K → L</span></div>
+              <div class="hd-footer">Press Ctrl+K to enter chord mode, then a key.</div>
+            </div>
+            <div class="w95sb" id="helpSb">
+              <button class="w95sb-btn" id="helpSb-up">&#9650;</button>
+              <div class="w95sb-track" id="helpSb-track"><div class="w95sb-thumb" id="helpSb-thumb"></div></div>
+              <button class="w95sb-btn" id="helpSb-dn">&#9660;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
     <!-- CHORD MODE INDICATOR -->
     <div class="chord-indicator" id="chordIndicator">CTRL+K —</div>
 
     <!-- CONTENT -->
-    <div class="content-area" style="opacity:0;pointer-events:none">
+    <div class="scroll-wrapper" id="scrollWrapper" style="opacity:0;pointer-events:none">
+    <div class="content-area" id="contentArea">
 
         <!-- HOME -->
         <div class="page active" id="home">
           <div class="home-panel glass" data-title="SeanML.exe">
             <div class="home-lines">
-              > University of Toronto Grad. // Physics Major , Minors CS & Mathematics<br>
-              > Lawrence Livermore National Laboratory // Machine Learning Engineer<br>
-              > First-author research // Computer Vision & Deep Learning
+              <strong><u>University of Toronto</u></strong> &nbsp;&middot;&nbsp; BSc Physics, Minors in CS &amp; Mathematics<br>
+              Lawrence Livermore National Laboratory &nbsp;&middot;&nbsp; Machine Learning Engineer<br>
+              First-author published researcher in Computer Vision &amp; Deep Learning
             </div>
             <div class="home-name">Sean Jackson</div>
             <div class="home-title">Machine Learning Engineer & Physicist</div>
             <p class="home-desc">
-              Physics graduate from the University of Toronto, proficient in deep learning,
+              Physics graduate from the <strong><u>University of Toronto</u></strong>, proficient in deep learning,
               quantum computing, and robotics. I currently build systems that automate
               materials discovery for advanced manufacturing at Lawrence Livermore National Laboratory.
             </p>
@@ -1294,16 +1449,16 @@
         <div class="page" id="about">
           <div class="page-header"><span class="bracket">[</span><h2>About</h2><div class="line"></div><span class="bracket">]</span></div>
           <div class="card-grid">
-            <div class="stat-card glass" data-title="Education.inf"><img src="https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Utoronto_coa.svg/60px-Utoronto_coa.svg.png" alt="UofT" style="width:120px; float:right; margin:0 0 6px 10px; image-rendering:auto;"><div class="label">Education</div><div class="title">University of Toronto</div><div class="text-block">Honours BSc. Physics; Duel Minors in Computer Science and Mathematics<br>Focus on Quantum Information &amp; Condensed Matter Physics</div></div>
+            <div class="stat-card glass" data-title="Education.inf" style="padding-right:140px;"><img src="uoft.png" alt="UofT" style="width:110px; position:absolute; top:48px; right:14px; image-rendering:pixelated;"><div class="label">Education</div><div class="title"><strong><u>University of Toronto</u></strong></div><div class="text-block">Honours BSc. Physics; Duel Minors in Computer Science and Mathematics<br>Focus on Quantum Information &amp; Condensed Matter Physics</div></div>
             <div class="stat-card glass" data-title="Citizenship.inf"><div class="label">Citizenship</div><div class="value">US / UK / CA</div><div class="sub">Triple Citizenship</div>
               <div class="gif-row" style="margin-top:0.3rem;">
-                <img class="gif90" src="https://blob.gifcities.org/gifcities/3OTLQ5OQZJDQD6QXXE4W77XYFZJ5W4CS.gif" alt="US" style="width:120px;">
-                <img class="gif90" src="https://blob.gifcities.org/gifcities/2TJTLK3NPCUQBRTK3PCAN3REKNEOV6GT.gif" alt="UK">
-                <img class="gif90" src="https://blob.gifcities.org/gifcities/2CHXNPAJ2FOJ43ZOS7Z2TZXVRIG7SC34.gif" alt="CA">
+                <img class="gif90" src="usa.gif" alt="US" style="width:120px;">
+                <img class="gif90" src="uk.gif" alt="UK">
+                <img class="gif90" src="ca.gif" alt="CA">
               </div>
             </div>
           </div>
-          <div class="text-panel glass" data-title="Bio.txt">
+          <div class="text-panel glass" data-title="About Me">
             <p class="text-block">
               I work at the intersection of deep learning, computer vision, and scientific
               computing. My recent work includes deploying production vision models at
@@ -1353,7 +1508,24 @@
         <div class="page" id="experience">
           <div class="page-header"><span class="bracket">[</span><h2>Experience</h2><div class="line"></div><span class="bracket">]</span></div>
           <div class="exp-list">
-            <div class="exp-card glass" data-title="LLNL_MLE.job">
+            <div class="exp-card glass has-logos" data-title="LLNL_MED.job">
+              <div class="exp-logos">
+                <img src="llnl.png" alt="LLNL">
+                <img src="eng_llnl.png" alt="Engineering LLNL">
+              </div>
+              <div class="badge">Internship</div>
+              <h3>Machine Learning Engineer</h3>
+              <div class="org">Lawrence Livermore National Laboratory &mdash; Materials Engineering Division</div>
+              <div class="date">Livermore, CA &mdash; May 2026 - Present</div>
+              <p>Working within the Materials Engineering Division (MED). Details to follow.</p>
+              <span class="status-pill wip">In Progress</span>
+            </div>
+            <div class="exp-card glass has-logos" data-title="LLNL_MLE.job">
+              <div class="exp-logos">
+                <img src="llnl.png" alt="LLNL">
+                <img src="dssi.png" alt="DSSI">
+                <img src="eng_llnl.png" alt="Engineering LLNL">
+              </div>
               <div class="badge">Internship</div>
               <h3>Machine Learning Engineer</h3>
               <div class="org">Lawrence Livermore National Laboratory</div>
@@ -1363,13 +1535,30 @@
               <p><strong>CV Design Challenge:</strong> Competed in a two-week computer vision challenge, designing generative decoding models capable of tracking occluded objects through walls using temporal feature representations.</p>
               <span class="status-pill done">Completed</span>
             </div>
-            <div class="exp-card glass" data-title="UofT_Physics.edu">
+            <div class="exp-card glass has-logos" data-title="UofT_Physics.edu">
+              <div class="exp-logos">
+                <img src="uoft.png" alt="UofT">
+              </div>
               <div class="badge">Education</div>
               <h3>Honours BSc. Physics</h3>
-              <div class="org">University of Toronto</div>
+              <div class="org"><strong><u>University of Toronto</u></strong></div>
               <div class="date">Toronto, ON &mdash; September 2022 - May 2026</div>
               <p>Minors in Computer Science and Mathematics. Coursework includes Quantum Information & Key Encryption. Developing a strong theoretical and computational foundation spanning physics, machine learning, and applied mathematics.</p>
               <span class="status-pill wip">In Progress</span>
+            </div>
+            <div class="exp-card glass has-logos" data-title="Pascack_Pioneers.club">
+              <div class="exp-logos">
+                <img src="pascack.png" alt="Pascack Pi-oneers">
+                <img src="first.png" alt="FIRST Robotics">
+              </div>
+              <div class="badge">Extracurricular</div>
+              <h3>Team Leader &mdash; Mechanical Division</h3>
+              <div class="org">Pascack Pi-oneers &mdash; FIRST Robotics Team (Grades 6&ndash;12)</div>
+              <div class="date">New Jersey &mdash; 2019 - 2022</div>
+              <p>Elected Mechanical Division Team Leader of a multi-school robotics club. During build season the team operates 6 days/week for months at a time. Off-season, led a subgroup building an assistive robot with <strong>West Virginia University</strong> enabling non-ambulatory students to kick a soccer ball.</p>
+              <p><strong>Competitions:</strong> Freshman year (2019) &mdash; FIRST World Championship Detroit Darwin Sub-Division (undefeated in qualifications, Semi-Finalist); FMA Bridgewater-Raritan District (Finalist); FMA Montgomery District (Semi-Finalist); FIRST Mid-Atlantic District Championship (Quarter-Finalist). Led build team designing and machining the full robot assembly in Autodesk Inventor CAD.</p>
+              <p><strong>Community:</strong> During Covid, individually 3D-printed mask straps for local frontline workers, distributed club-wide. Mentors middle schoolers, hosts STEM events, and helps establish international FIRST clubs.</p>
+              <span class="status-pill done">Completed</span>
             </div>
           </div>
         </div>
@@ -1410,13 +1599,13 @@
         <!-- NOTES -->
         <div class="page" id="notes">
           <div class="page-header"><span class="bracket">[</span><h2>Notes</h2><div class="line"></div><span class="bracket">]</span></div>
-          <div class="text-panel glass" data-title="Notes_Index.txt" style="margin-bottom:1.6rem;">
+          <div class="text-panel glass" data-title="Notes Index" style="margin-bottom:1.6rem;">
             <img class="gif90 gif-r" src="https://blob.gifcities.org/gifcities/G5KXEPEMTL4FWQL3ZZFFW3ZTBKLNOGWP.gif" alt="">
             <p class="text-block">Notes, derivations, and write-ups I've put together for various courses and topics. Click any entry to open the PDF.</p>
           </div>
 
           <div class="notes-subject">
-            <div class="notes-subject-title">// Quantum Mechanics</div>
+            <div class="notes-subject-title">Quantum Mechanics</div>
             <div class="gif-row" style="margin-bottom:0.4rem;">
               <img class="gif90" src="https://blob.gifcities.org/gifcities/4POQMBYDCU5ANQKVIUACZQSNHOGQ4QBL.gif" alt="">
               <img class="gif90" src="https://blob.gifcities.org/gifcities/AETOJO542NSXFY7S2HQDPPBQ2LLT7NGO.gif" alt="">
@@ -1439,7 +1628,7 @@
           </div>
 
           <div class="notes-subject">
-            <div class="notes-subject-title">// Classical Mechanics</div>
+            <div class="notes-subject-title">Classical Mechanics</div>
             <div class="gif-row" style="margin-bottom:0.4rem;">
               <img class="gif90" src="https://blob.gifcities.org/gifcities/ASN7YSB5VYVOWBDT3WTDGTMN7QAGJDGI.gif" alt="">
               <img class="gif90" src="https://blob.gifcities.org/gifcities/E47ZJBID57WBH5ZXYB7SL2OCE22C5HH7.gif" alt="">
@@ -1458,7 +1647,7 @@
           </div>
 
           <div class="notes-subject">
-            <div class="notes-subject-title">// Electromagnetism</div>
+            <div class="notes-subject-title">Electromagnetism</div>
             <div class="gif-row" style="margin-bottom:0.4rem;">
               <img class="gif90" src="https://blob.gifcities.org/gifcities/3BRQCUJYYW2BZTHNT5NCVMX7GBP3AKFT.gif" alt="">
               <img class="gif90" src="https://blob.gifcities.org/gifcities/5SAYDEDXUAM7XUK5PSV4HZSGDHVNXS6R.gif" alt="">
@@ -1477,7 +1666,7 @@
           </div>
 
           <div class="notes-subject">
-            <div class="notes-subject-title">// Machine Learning</div>
+            <div class="notes-subject-title">Machine Learning</div>
             <div class="gif-row" style="margin-bottom:0.4rem;">
               <img class="gif90" src="https://blob.gifcities.org/gifcities/EHPOIL7BZOJE6THR2QCECU3VOYXUAH4R.gif" alt="">
               <img class="gif90" src="https://blob.gifcities.org/gifcities/74K4QOJ4HQNNDONNV6KIHAJIV5IATLJV.gif" alt="">
@@ -1497,21 +1686,6 @@
         </div>
 
         <!-- JOURNAL -->
-        <div class="page" id="journal">
-          <div class="page-header"><span class="bracket">[</span><h2>Journal</h2><div class="line"></div><span class="bracket">]</span></div>
-
-          <div class="fun-grid">
-
-            <div class="fun-card glass" data-title="Learning_vs_Doing.thought">
-              <div class="fun-tag thought">Thought</div>
-              <h3>On Learning Physics vs. Doing Physics</h3>
-              <p>There's a strange gap between understanding a derivation and having intuition for it. The harmonic oscillator makes perfect sense on paper — and yet every time a new system reduces to one, it still feels like a small miracle. I think that gap is where all the interesting stuff lives.</p>
-              <div class="fun-date">// 2025</div>
-            </div>
-
-          </div>
-        </div>
-
         <!-- INTERESTS -->
         <div class="page" id="interests">
           <div class="page-header"><span class="bracket">[</span><h2>Interests</h2><div class="line"></div><span class="bracket">]</span></div>
@@ -1521,35 +1695,35 @@
               <div class="fun-tag thought">Science</div>
               <h3>Quantum Mechanics</h3>
               <p>There's something uniquely compelling about a theory that forces you to abandon classical intuition entirely. I spend a lot of time with the formalism — Hilbert spaces, operators, measurement — and even more thinking about what it actually means. Quantum information is a particular fixation right now: the idea that information is physical, and that entanglement is a resource, still feels like it shouldn't be true.</p>
-              <div class="fun-date">// ongoing</div>
+              <div class="fun-date">Ongoing</div>
             </div>
 
             <div class="fun-card glass" data-title="ML_Research.note">
               <div class="fun-tag enjoy">Research</div>
               <h3>ML Research</h3>
               <p>Outside of work projects, I try to stay current with the ML literature — particularly computer vision, geometric deep learning, and physics-informed neural networks. The intersection of physical priors and learned representations is where I think a lot of the most interesting open problems live right now.</p>
-              <div class="fun-date">// ongoing</div>
+              <div class="fun-date">Ongoing</div>
             </div>
 
             <div class="fun-card glass" data-title="Simulations.py">
               <div class="fun-tag enjoy">Hobby</div>
               <h3>Physics Simulations</h3>
               <p>Writing n-body gravity sims, wave equation solvers, and chaotic pendulum integrators in Python whenever I want to see something click visually. There's something uniquely satisfying about watching an algorithm produce the same orbit Kepler described 400 years ago.</p>
-              <div class="fun-date">// ongoing</div>
+              <div class="fun-date">Ongoing</div>
             </div>
 
             <div class="fun-card glass" data-title="MathReading.note">
               <div class="fun-tag thought">Science</div>
               <h3>Pure Mathematics</h3>
               <p>Taking a math minor changed how I think about everything. Real analysis, linear algebra, and abstract algebra have a kind of austere beauty that feels completely separate from their applications — even when those applications are everywhere. I read math textbooks recreationally, which I'm told is a personality flaw.</p>
-              <div class="fun-date">// ongoing</div>
+              <div class="fun-date">Ongoing</div>
             </div>
 
             <div class="fun-card glass" data-title="MechKB.txt">
               <div class="fun-tag enjoy">Hobby</div>
               <h3>Mechanical Keyboards</h3>
               <p>Deep into the rabbit hole of custom boards. Currently daily-driving a 65% with lubed Boba U4Ts. The tactile bump hits differently when you're writing code at 2am.</p>
-              <div class="fun-date">// ongoing</div>
+              <div class="fun-date">Ongoing</div>
             </div>
 
           </div>
@@ -1558,26 +1732,37 @@
         <!-- CONTACT -->
         <div class="page" id="contact">
           <div class="page-header"><span class="bracket">[</span><h2>Contact</h2><div class="line"></div><span class="bracket">]</span></div>
-          <div class="text-panel glass" data-title="Contact_Intro.txt" style="margin-bottom:1.2rem; max-width:440px;">
-            <img class="gif90 gif-r" src="https://blob.gifcities.org/gifcities/77WFEBP66I4ARTA5T3UEKCZO3WDUQPAU.gif" alt="">
+          <div class="text-panel glass" data-title="Contact" style="margin-bottom:1.2rem; max-width:440px; padding-right:110px;">
+            <img class="gif90" src="https://blob.gifcities.org/gifcities/77WFEBP66I4ARTA5T3UEKCZO3WDUQPAU.gif" alt="" style="position:absolute; top:48px; right:14px; width:90px;">
             <p class="text-block" style="margin-bottom:0;">I'm always open to discussing research collaborations, engineering roles, or interesting problems. Feel free to reach out through any of the channels below.</p>
           </div>
           <div class="contact-card glass" data-title="Contact.vcf">
-            <div class="ch-label">// Get in Touch</div>
+            <div class="ch-label">Get in Touch</div>
             <div class="gif-row">
               <img class="gif90" src="https://blob.gifcities.org/gifcities/AIMVDJYWPSI7HXEABRN256QLGBFKLPB7.gif" alt="">
               <img class="gif90" src="https://blob.gifcities.org/gifcities/BXODCCH4IPIJWZETL4NOJQ6CZI5RMFED.gif" alt="">
               <img class="gif90" src="https://blob.gifcities.org/gifcities/ENS44DPGCNOA6IF2WGOFOZDRKCSFLKJ7.gif" alt="">
               <img class="gif90" src="https://blob.gifcities.org/gifcities/NXKB5AHZ4VN3IE6OE42UPNUONWE2AV3V.gif" alt="">
             </div>
-            <div class="ch-row"><span class="ch-ico">@</span><a href="mailto:sjackson6325@gmail.com">sjackson6325@gmail.com</a></div>
-            <div class="ch-row"><span class="ch-ico">#</span><a href="http://www.linkedin.com/in/sean-jackson-b4b965278" target="_blank">LinkedIn</a></div>
-            <div class="ch-row"><span class="ch-ico">></span><a href="https://github.com/" target="_blank">GitHub</a></div>
-            <div class="ch-row"><span class="ch-ico">~</span><span style="color:var(--text)">201-937-9681</span></div>
+            <div class="ch-row"><span class="ch-ico">✉</span><a href="mailto:sjackson6325@gmail.com">sjackson6325@gmail.com</a></div>
+            <div class="ch-row"><span class="ch-ico">in</span><a href="http://www.linkedin.com/in/sean-jackson-b4b965278" target="_blank">LinkedIn</a></div>
+            <div class="ch-row"><span class="ch-ico">gh</span><a href="https://github.com/" target="_blank">GitHub</a></div>
+            <div class="ch-row"><span class="ch-ico">☎</span><span style="color:var(--text)">201-937-9681</span></div>
           </div>
         </div>
 
     </div><!-- /content-area -->
+
+      <!-- WIN95 CUSTOM SCROLLBAR -->
+      <div class="w95sb" id="w95sb">
+        <button class="w95sb-btn" id="w95sb-up">&#9650;</button>
+        <div class="w95sb-track" id="w95sb-track">
+          <div class="w95sb-thumb" id="w95sb-thumb"></div>
+        </div>
+        <button class="w95sb-btn" id="w95sb-dn">&#9660;</button>
+      </div>
+
+    </div><!-- /scroll-wrapper -->
   </div><!-- /app-shell -->
 
   <script>
@@ -1592,7 +1777,12 @@
       _clickAudio.volume = 0.5;
       var _themeAudio = new Audio('win98themesound.mp3');
       _themeAudio.volume = 0.18;
-      _themeAudio.playbackRate = 1.35;
+      _themeAudio.playbackRate = 1.75;
+      var _bootAudio = new Audio('boot.mp3');
+      _bootAudio.volume = 0.6;
+      _bootAudio.loop = true;
+      var _appearAudio = new Audio('appear.mp3');
+      _appearAudio.volume = 0.7;
 
       function ac() {
         if (!_ctx) {
@@ -1664,7 +1854,14 @@
       } catch (e) {}
 
       return {
-        unlock: function () { ac(); },
+        unlock: function () {
+          ac();
+          // Prime Audio elements so they can play without gesture later
+          [_themeAudio].forEach(function (a) {
+            var p = a.play();
+            if (p) p.then(function () { a.pause(); a.currentTime = 0; }).catch(function () {});
+          });
+        },
 
         click:     function () { tone(520, 0.08, 0.045, 0, 360); },
         navSwitch: function () {
@@ -1715,19 +1912,64 @@
         },
         decryptStop: function () { _decGen++; },
 
-        // Boot sounds skip silently if audio isn't unlocked yet — never queue
-        postBeep: function () { bootTone(880, 0.13, 0.22, true); },
-        bootTick: function () {
-          if (Math.random() > 0.3) return;
-          bootTone(320 + Math.random() * 160, 0.022, 0.018, false);
+        bootBgStart: function () {
+          _bootAudio.currentTime = 0;
+          _bootAudio.play().catch(function () {});
         },
-        bootBar: function (step) {
-          var f = [294, 349, 392, 440, 523, 587];
-          bootTone(f[Math.min(step, f.length - 1)], 0.07, 0.14, true);
+        bootBgStop: function () {
+          var startVol = _bootAudio.volume;
+          var steps = 120;
+          var step = 0;
+          var fade = setInterval(function () {
+            step++;
+            _bootAudio.volume = Math.max(0, startVol * (1 - step / steps));
+            if (step >= steps) {
+              clearInterval(fade);
+              _bootAudio.pause();
+              _bootAudio.currentTime = 0;
+              _bootAudio.volume = startVol;
+            }
+          }, 50);
         },
         bootTheme: function () {
           _themeAudio.currentTime = 0;
           _themeAudio.play().catch(function () {});
+        },
+        appear: function () {
+          _appearAudio.currentTime = 0;
+          _appearAudio.play().catch(function () {});
+        },
+        poof: function () {
+          var c = ac(); if (!c) return;
+          var play = function () {
+            var t0 = c.currentTime;
+            // Low thud
+            var osc = c.createOscillator();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(130, t0);
+            osc.frequency.exponentialRampToValueAtTime(45, t0 + 0.18);
+            var g1 = c.createGain();
+            g1.gain.setValueAtTime(0.22, t0);
+            g1.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.18);
+            osc.connect(g1); route(g1, c, false);
+            osc.start(t0); osc.stop(t0 + 0.2);
+            // Noise whoosh
+            var bufLen = Math.floor(c.sampleRate * 0.35);
+            var buf = c.createBuffer(1, bufLen, c.sampleRate);
+            var d = buf.getChannelData(0);
+            for (var i = 0; i < bufLen; i++) d[i] = Math.random() * 2 - 1;
+            var src = c.createBufferSource(); src.buffer = buf;
+            var lp = c.createBiquadFilter(); lp.type = 'lowpass';
+            lp.frequency.setValueAtTime(900, t0);
+            lp.frequency.exponentialRampToValueAtTime(180, t0 + 0.25);
+            var g2 = c.createGain();
+            g2.gain.setValueAtTime(0.0001, t0);
+            g2.gain.linearRampToValueAtTime(0.28, t0 + 0.018);
+            g2.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.35);
+            src.connect(lp); lp.connect(g2); route(g2, c, true);
+            src.start(t0); src.stop(t0 + 0.38);
+          };
+          if (c.state === 'running') play(); else c.resume().then(play);
         }
       };
     })();
@@ -1872,15 +2114,22 @@
     // ===== PAGE SWITCHING =====
     function switchPage(pageId) {
       clearPreScramble();
-      var oldBtn = document.querySelector('.nav-bar .nav-btn.active');
       document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
       var newPage = document.getElementById(pageId);
       newPage.classList.add('active');
       document.querySelectorAll('.nav-bar .nav-btn').forEach(function(btn) {
         btn.classList.toggle('active', btn.dataset.page === pageId);
       });
-      document.querySelector('.content-area').scrollTop = 0;
+      document.getElementById('contentArea').scrollTop = 0;
+      if (window._sbUpdate) window._sbUpdate();
       closeHelpMenu();
+      // Reset all window positions on page switch
+      document.querySelectorAll('.glass').forEach(function(win) {
+        win.style.transform = '';
+        win.style.zIndex = '';
+        win._dragTx = 0;
+        win._dragTy = 0;
+      });
       preScramblePage(newPage);
       setTimeout(runDecryptOnActivePage, 280);
     }
@@ -1893,33 +2142,167 @@
       });
     });
 
+    // ===== WIN95 CUSTOM SCROLLBAR =====
+    (function() {
+      var ca    = document.getElementById('contentArea');
+      var track = document.getElementById('w95sb-track');
+      var thumb = document.getElementById('w95sb-thumb');
+      var btnUp = document.getElementById('w95sb-up');
+      var btnDn = document.getElementById('w95sb-dn');
+
+      function updateThumb() {
+        var trackH   = track.clientHeight;
+        var contentH = ca.scrollHeight;
+        var viewH    = ca.clientHeight;
+        if (contentH <= viewH) { thumb.style.height = '0'; return; }
+        var thumbH = Math.max(18, Math.floor(trackH * viewH / contentH));
+        var maxTop = trackH - thumbH;
+        var top    = Math.round(maxTop * ca.scrollTop / (contentH - viewH));
+        thumb.style.height = thumbH + 'px';
+        thumb.style.top    = top + 'px';
+      }
+
+      ca.addEventListener('scroll', updateThumb);
+      window.addEventListener('resize', updateThumb);
+
+      // Expose for page-switch resets
+      window._sbUpdate = updateThumb;
+
+      // Arrow buttons — hold to repeat
+      var _repeatTimer = null;
+      function startRepeat(delta) {
+        ca.scrollTop += delta;
+        _repeatTimer = setInterval(function() { ca.scrollTop += delta; }, 50);
+      }
+      function stopRepeat() { clearInterval(_repeatTimer); }
+      btnUp.addEventListener('mousedown', function(e) { e.preventDefault(); startRepeat(-40); });
+      btnDn.addEventListener('mousedown', function(e) { e.preventDefault(); startRepeat(40); });
+      document.addEventListener('mouseup', stopRepeat);
+
+      // Click on track = page up/down
+      track.addEventListener('mousedown', function(e) {
+        if (e.target === thumb) return;
+        var rect   = track.getBoundingClientRect();
+        var clickY = e.clientY - rect.top;
+        var thumbTop = parseFloat(thumb.style.top) || 0;
+        if (clickY < thumbTop) ca.scrollTop -= ca.clientHeight;
+        else                   ca.scrollTop += ca.clientHeight;
+      });
+
+      // Drag thumb
+      var _drag = false, _dragY0 = 0, _dragScroll0 = 0;
+      thumb.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        _drag = true;
+        _dragY0      = e.clientY;
+        _dragScroll0 = ca.scrollTop;
+      });
+      document.addEventListener('mousemove', function(e) {
+        if (!_drag) return;
+        var trackH = track.clientHeight;
+        var thumbH = parseFloat(thumb.style.height) || 18;
+        var maxTop = trackH - thumbH;
+        var maxScroll = ca.scrollHeight - ca.clientHeight;
+        ca.scrollTop = _dragScroll0 + (e.clientY - _dragY0) / maxTop * maxScroll;
+      });
+      document.addEventListener('mouseup', function() { _drag = false; });
+
+      // Update after fonts/content load
+      document.fonts.ready.then(updateThumb);
+      setTimeout(updateThumb, 500);
+    })();
+
+    // ===== WIN95 SCROLLBAR FACTORY (for dropdowns) =====
+    function makeW95sb(viewport, trackEl, thumbEl, upEl, dnEl) {
+      function updateThumb() {
+        var trackH   = trackEl.clientHeight;
+        var contentH = viewport.scrollHeight;
+        var viewH    = viewport.clientHeight;
+        if (contentH <= viewH) { thumbEl.style.height = '0'; return; }
+        var thumbH = Math.max(18, Math.floor(trackH * viewH / contentH));
+        var maxTop = trackH - thumbH;
+        var top    = Math.round(maxTop * viewport.scrollTop / (contentH - viewH));
+        thumbEl.style.height = thumbH + 'px';
+        thumbEl.style.top    = top + 'px';
+      }
+      (function tick() { updateThumb(); requestAnimationFrame(tick); })();
+
+      var _rep = null;
+      function startRep(d) { viewport.scrollTop += d; _rep = setInterval(function() { viewport.scrollTop += d; }, 50); }
+      function stopRep() { clearInterval(_rep); }
+      upEl.addEventListener('mousedown', function(e) { e.preventDefault(); startRep(-40); });
+      dnEl.addEventListener('mousedown', function(e) { e.preventDefault(); startRep(40); });
+      document.addEventListener('mouseup', stopRep);
+
+      trackEl.addEventListener('mousedown', function(e) {
+        if (e.target === thumbEl) return;
+        var rect = trackEl.getBoundingClientRect();
+        var clickY = e.clientY - rect.top;
+        var tTop = parseFloat(thumbEl.style.top) || 0;
+        if (clickY < tTop) viewport.scrollTop -= viewport.clientHeight;
+        else               viewport.scrollTop += viewport.clientHeight;
+      });
+
+      var _drag = false, _dy0 = 0, _ds0 = 0;
+      thumbEl.addEventListener('mousedown', function(e) {
+        e.preventDefault(); _drag = true; _dy0 = e.clientY; _ds0 = viewport.scrollTop;
+      });
+      document.addEventListener('mousemove', function(e) {
+        if (!_drag) return;
+        var trackH = trackEl.clientHeight;
+        var thumbH = parseFloat(thumbEl.style.height) || 18;
+        var maxTop = trackH - thumbH;
+        var maxScroll = viewport.scrollHeight - viewport.clientHeight;
+        if (maxTop <= 0) return;
+        viewport.scrollTop = _ds0 + (e.clientY - _dy0) / maxTop * maxScroll;
+      });
+      document.addEventListener('mouseup', function() { _drag = false; });
+    }
+
+    // Wire up all three dropdown scrollbars
+    makeW95sb(
+      document.getElementById('newsViewport'),
+      document.getElementById('newsSb-track'),
+      document.getElementById('newsSb-thumb'),
+      document.getElementById('newsSb-up'),
+      document.getElementById('newsSb-dn')
+    );
+    makeW95sb(
+      document.getElementById('mktsViewport'),
+      document.getElementById('mktsSb-track'),
+      document.getElementById('mktsSb-thumb'),
+      document.getElementById('mktsSb-up'),
+      document.getElementById('mktsSb-dn')
+    );
+    makeW95sb(
+      document.getElementById('helpBody'),
+      document.getElementById('helpSb-track'),
+      document.getElementById('helpSb-thumb'),
+      document.getElementById('helpSb-up'),
+      document.getElementById('helpSb-dn')
+    );
+
     // Click sound for action buttons
     document.querySelectorAll('.btn').forEach(function(btn) {
       btn.addEventListener('click', function() { SFX.click(); });
     });
 
     // ===== HELP DROPDOWN =====
+    function closeHelpMenu() {
+      if (window._closeAllDropdowns) window._closeAllDropdowns();
+    }
     function toggleHelpMenu() {
       var dd = document.getElementById('helpDropdown');
-      if (dd.classList.contains('open')) { SFX.menuClose(); dd.classList.remove('open'); }
-      else { SFX.menuOpen(); dd.classList.add('open'); }
+      var wasOpen = dd.classList.contains('open');
+      if (window._closeAllDropdowns) window._closeAllDropdowns();
+      if (!wasOpen) { SFX.menuOpen(); dd.classList.add('open'); }
+      else { SFX.menuClose(); }
     }
-    function closeHelpMenu() {
-      document.getElementById('helpDropdown').classList.remove('open');
-    }
-    // Close on outside click, but stop propagation on the button itself
-    document.getElementById('helpBtn').addEventListener('click', function(e) {
-      e.stopPropagation();
-      toggleHelpMenu();
-    });
-    document.addEventListener('click', function(e) {
-      var dd = document.getElementById('helpDropdown');
-      if (dd && !dd.contains(e.target)) closeHelpMenu();
-    });
 
     // ===== NAV BAR TOGGLE =====
     function toggleNavBar() {
       document.getElementById('navBar').classList.toggle('collapsed');
+      document.getElementById('subBar').classList.toggle('collapsed');
     }
 
     // ===== KEYBOARD CHORD SHORTCUTS =====
@@ -1954,7 +2337,6 @@
           case 'p': switchPage('projects');     break;
           case 'u': switchPage('publications'); break;
           case 'n': switchPage('notes');        break;
-          case 'f': switchPage('journal');      break;
           case 'i': switchPage('interests');    break;
           case 'c': switchPage('contact');      break;
           case 'm': toggleNavBar();             break;
@@ -1966,154 +2348,152 @@
     });
 
 
-    // ===== LIVE TECH NEWS TICKER (Hacker News top stories) =====
+    // ===== FEED DROPDOWN OPEN/CLOSE =====
     (function() {
-      var track    = document.getElementById('tickerTrack');
-      var viewport = track.parentElement;
-      var pos      = 0;
-      var speed    = 0.55; // px per frame at ~60fps
-      var rafId    = null;
-      var running  = false;
-      var paused   = false;
+      var newsBtn  = document.getElementById('newsBtn');
+      var newsDd   = document.getElementById('newsDropdown');
+      var mktsBtn  = document.getElementById('mktsBtn');
+      var mktsDd   = document.getElementById('mktsDropdown');
+      var helpDd   = document.getElementById('helpDropdown');
 
-      function sep() { return '<span class="t-sep"> ◆ </span>'; }
-      function src()  { return '<span class="t-src">[HN]</span>'; }
+      function closeAll() {
+        newsDd.classList.remove('open');
+        mktsDd.classList.remove('open');
+        helpDd.classList.remove('open');
+      }
+
+      newsBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var wasOpen = newsDd.classList.contains('open');
+        closeAll();
+        if (!wasOpen) { SFX.menuOpen(); newsDd.classList.add('open'); }
+        else { SFX.menuClose(); }
+      });
+
+      mktsBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var wasOpen = mktsDd.classList.contains('open');
+        closeAll();
+        if (!wasOpen) { SFX.menuOpen(); mktsDd.classList.add('open'); }
+        else { SFX.menuClose(); }
+      });
+
+      document.getElementById('helpBtn').addEventListener('click', function(e) {
+        e.stopPropagation();
+        var wasOpen = helpDd.classList.contains('open');
+        closeAll();
+        if (!wasOpen) { SFX.menuOpen(); helpDd.classList.add('open'); }
+        else { SFX.menuClose(); }
+      });
+
+      newsDd.addEventListener('click', function(e) { e.stopPropagation(); });
+      mktsDd.addEventListener('click', function(e) { e.stopPropagation(); });
+      helpDd.addEventListener('click', function(e) { e.stopPropagation(); });
+
+      document.addEventListener('click', function() { closeAll(); });
+
+      // Patch closeHelpMenu to also close feeds
+      window._closeAllDropdowns = closeAll;
+    })();
+
+    // ===== NEWS DROPDOWN — Hacker News feed =====
+    (function() {
+      var track    = document.getElementById('newsTrack');
+      var viewport = document.getElementById('newsViewport');
 
       function escHtml(s) {
         return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
       }
 
-      function storyItem(title, url) {
-        return src() + ' <a class="t-headline" href="' + escHtml(url) + '" target="_blank" rel="noopener">' + escHtml(title) + '</a>';
-      }
-
-      function startScroll() {
-        if (running) return;
-        running = true;
-        function frame() {
-          if (!paused) {
-            pos -= speed;
-            var half = track.scrollWidth / 2;
-            if (-pos >= half) pos = 0;
-            track.style.transform = 'translateX(' + pos + 'px)';
-          }
-          rafId = requestAnimationFrame(frame);
-        }
-        rafId = requestAnimationFrame(frame);
-      }
-
-      // Pause on hover so links are clickable
-      viewport.addEventListener('mouseenter', function() { paused = true; });
-      viewport.addEventListener('mouseleave', function() { paused = false; });
-
-      function buildTicker(items) {
+      function buildFeed(items) {
         if (!items.length) return;
-        var inner = items.map(function(it) {
-          return storyItem(it.title, it.url);
-        }).join(sep());
-        var full = inner + sep() + inner + sep(); // two copies for seamless loop
-        track.innerHTML = full;
-        pos = 0;
-        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
-        running = false;
-        startScroll();
+        var html = '';
+        for (var i = 0; i < items.length; i++) {
+          html += '<div class="feed-item"><span class="feed-src">[HN]</span> '
+                + '<a href="' + escHtml(items[i].url) + '" target="_blank" rel="noopener">'
+                + escHtml(items[i].title) + '</a></div>';
+        }
+        track.innerHTML = html;
+        viewport.scrollTop = 0;
       }
 
-      function fallbackTicker() {
-        buildTicker([
-          { title: 'Hacker News feed unavailable — check your connection', url: 'https://news.ycombinator.com' },
-        ]);
-      }
-
-      // Fetch HN top story IDs, then all items in parallel
-      var N = 14;
+      var N = 20;
       fetch('https://hacker-news.firebaseio.com/v0/topstories.json')
         .then(function(r) { return r.json(); })
         .then(function(ids) {
-          var promises = ids.slice(0, N).map(function(id) {
+          return Promise.all(ids.slice(0, N).map(function(id) {
             return fetch('https://hacker-news.firebaseio.com/v0/item/' + id + '.json')
               .then(function(r) { return r.json(); })
               .catch(function() { return null; });
-          });
-          return Promise.all(promises);
+          }));
         })
         .then(function(stories) {
           var items = stories
             .filter(function(s) { return s && s.title; })
-            .map(function(s) {
-              // External stories have s.url; Ask/Show HN link to the discussion
-              return {
-                title: s.title,
-                url: s.url || ('https://news.ycombinator.com/item?id=' + s.id),
-              };
-            });
-          if (items.length) buildTicker(items);
-          else fallbackTicker();
+            .map(function(s) { return { title: s.title, url: s.url || ('https://news.ycombinator.com/item?id=' + s.id) }; });
+          if (items.length) buildFeed(items);
+          else buildFeed([{ title: 'Hacker News feed unavailable', url: 'https://news.ycombinator.com' }]);
         })
-        .catch(fallbackTicker);
-
-      // Scroll the "Connecting…" text while we wait for the fetch
-      startScroll();
+        .catch(function() {
+          buildFeed([{ title: 'Hacker News feed unavailable', url: 'https://news.ycombinator.com' }]);
+        });
     })();
 
-    // ===== LIVE STOCK TICKER =====
+    // ===== MARKETS DROPDOWN — live quotes =====
     (function() {
-      var track    = document.getElementById('stockTrack');
-      var viewport = document.getElementById('stockViewport');
-      var pos      = 0;
-      var speed    = 0.8;
-      var rafId    = null;
-      var running  = false;
-      var paused   = false;
+      var track    = document.getElementById('mktsTrack');
+      var viewport = document.getElementById('mktsViewport');
+      var _firstLoad = true;
 
       function fmt(n, dec) { return n.toFixed(dec !== undefined ? dec : 2); }
-
       function arrow(chg) { return chg > 0 ? '▲' : chg < 0 ? '▼' : '—'; }
-      function cls(chg)   { return chg > 0 ? 's-up' : chg < 0 ? 's-dn' : 's-flat'; }
 
-      function renderItem(q) {
+      function makeRow(q) {
         var chg  = q.regularMarketChange        || 0;
         var pct  = q.regularMarketChangePercent || 0;
         var px   = q.regularMarketPrice         || 0;
         var sym  = q.symbol;
         var sign = chg >= 0 ? '+' : '';
-        var c    = cls(chg);
-        return '<span class="s-sym">' + sym + '</span>'
-             + '<span class="s-px">$' + fmt(px) + '</span>'
-             + '<span class="' + c + '">' + arrow(chg) + ' ' + sign + fmt(chg) + ' (' + sign + fmt(pct, 2) + '%)</span>';
+        var cls  = chg > 0 ? 'mkts-up' : chg < 0 ? 'mkts-dn' : 'mkts-flat';
+        var row  = document.createElement('div');
+        row.className = 'mkts-row';
+        row.dataset.sym = sym;
+        row.innerHTML = '<span class="mkts-sym">' + sym + '</span>'
+                      + '<span class="mkts-px">$' + fmt(px) + '</span>'
+                      + '<span class="' + cls + '">' + arrow(chg) + ' ' + sign + fmt(chg) + ' (' + sign + fmt(pct,2) + '%)</span>';
+        return row;
       }
 
-      function sep() { return '<span class="s-sep"> | </span>'; }
-
-      function buildStock(quotes) {
-        var inner = quotes.map(renderItem).join(sep());
-        var full  = inner + sep() + inner + sep();
-        track.innerHTML = full;
-        pos = 0;
-        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
-        running = false;
-        startScroll();
+      function buildMkts(quotes) {
+        track.innerHTML = '';
+        var frag = document.createDocumentFragment();
+        quotes.forEach(function(q) { frag.appendChild(makeRow(q)); });
+        track.appendChild(frag);
+        viewport.scrollTop = 0;
       }
 
-      function startScroll() {
-        if (running) return;
-        running = true;
-        function frame() {
-          if (!paused) {
-            pos -= speed;
-            var half = track.scrollWidth / 2;
-            if (-pos >= half) pos = 0;
-            track.style.transform = 'translateX(' + pos + 'px)';
-          }
-          rafId = requestAnimationFrame(frame);
-        }
-        rafId = requestAnimationFrame(frame);
+      function updateMkts(quotes) {
+        var rows = track.querySelectorAll('.mkts-row');
+        quotes.forEach(function(q, idx) {
+          var row = rows[idx];
+          if (!row) return;
+          var pxEl  = row.querySelector('.mkts-px');
+          var chgEl = row.querySelector('.mkts-up, .mkts-dn, .mkts-flat');
+          var oldPx = parseFloat(pxEl.textContent.replace('$','')) || 0;
+          var newPx = q.regularMarketPrice || 0;
+          var chg   = q.regularMarketChange || 0;
+          var pct   = q.regularMarketChangePercent || 0;
+          var sign  = chg >= 0 ? '+' : '';
+          var cls   = chg > 0 ? 'mkts-up' : chg < 0 ? 'mkts-dn' : 'mkts-flat';
+          pxEl.textContent = '$' + fmt(newPx);
+          chgEl.className  = cls;
+          chgEl.textContent = arrow(chg) + ' ' + sign + fmt(chg) + ' (' + sign + fmt(pct,2) + '%)';
+          row.classList.remove('flash-up', 'flash-dn');
+          if (newPx > oldPx + 0.001) { void row.offsetWidth; row.classList.add('flash-up'); }
+          else if (newPx < oldPx - 0.001) { void row.offsetWidth; row.classList.add('flash-dn'); }
+        });
       }
 
-      viewport.addEventListener('mouseenter', function() { paused = true; });
-      viewport.addEventListener('mouseleave', function() { paused = false; });
-
-      // Stocks via corsproxy.io -> Yahoo Finance
       function fetchStocks() {
         var yf = 'https://query1.finance.yahoo.com/v7/finance/quote?symbols='
                + 'AAPL,MSFT,NVDA,TSLA,AMZN,META,GOOGL,SPY,QQQ,DIA,IWM'
@@ -2133,39 +2513,34 @@
           .catch(function(e) { console.warn('[stocks] fetch failed:', e); return []; });
       }
 
-      // Crypto via CoinGecko (free, no key, native CORS support)
       function fetchCrypto() {
         return fetch('https://api.coingecko.com/api/v3/simple/price'
           + '?ids=bitcoin,ethereum,solana,cardano,dogecoin,ripple,polkadot,chainlink,avalanche-2,shiba-inu&vs_currencies=usd&include_24hr_change=true')
           .then(function(r) { return r.json(); })
           .then(function(d) {
-            var map = { bitcoin: 'BTC', ethereum: 'ETH', solana: 'SOL', cardano: 'ADA', dogecoin: 'DOGE', ripple: 'XRP', polkadot: 'DOT', chainlink: 'LINK', 'avalanche-2': 'AVAX', 'shiba-inu': 'SHIB' };
+            var map = { bitcoin:'BTC', ethereum:'ETH', solana:'SOL', cardano:'ADA',
+                        dogecoin:'DOGE', ripple:'XRP', polkadot:'DOT', chainlink:'LINK',
+                        'avalanche-2':'AVAX', 'shiba-inu':'SHIB' };
             return Object.keys(map).map(function(id) {
               var coin = d[id]; if (!coin) return null;
               var pct = coin.usd_24h_change || 0;
-              return {
-                symbol: map[id],
-                regularMarketPrice: coin.usd,
-                regularMarketChange: coin.usd * pct / 100,
-                regularMarketChangePercent: pct
-              };
+              return { symbol: map[id], regularMarketPrice: coin.usd,
+                       regularMarketChange: coin.usd * pct / 100, regularMarketChangePercent: pct };
             }).filter(Boolean);
           })
           .catch(function(e) { console.warn('[crypto] fetch failed:', e); return []; });
       }
 
       function fetchQuotes() {
-        Promise.all([fetchStocks(), fetchCrypto()])
-          .then(function(results) {
-            var all = results[0].concat(results[1]);
-            if (all.length) buildStock(all);
-            else track.innerHTML = '<span class="s-flat">Market data unavailable</span>';
-          });
+        Promise.all([fetchStocks(), fetchCrypto()]).then(function(results) {
+          var all = results[0].concat(results[1]);
+          if (!all.length) return;
+          if (_firstLoad) { buildMkts(all); _firstLoad = false; }
+          else updateMkts(all);
+        });
       }
 
-      startScroll();
       fetchQuotes();
-      // Refresh every 60 seconds
       setInterval(fetchQuotes, 60000);
     })();
 
@@ -2289,19 +2664,122 @@
       requestAnimationFrame(tick);
     })();
 
+    // ===== AUTO-EXTRACT WINDOW TITLES FROM INNER HEADINGS =====
+    (function() {
+      document.querySelectorAll('.glass').forEach(function(el) {
+        var heading = el.querySelector('h3')
+                   || el.querySelector('h4')
+                   || el.querySelector('.home-name')
+                   || el.querySelector('.label')
+                   || el.querySelector('.note-title')
+                   || el.querySelector('.ch-label');
+        if (heading) {
+          var text = heading.textContent.trim().replace(/^\/\/\s*/, '');
+          el.setAttribute('data-title', text);
+          heading.style.display = 'none';
+        }
+      });
+    })();
+
     // ===== WIN95 PIXEL TITLE-BAR BUTTONS =====
     (function() {
-      var btns = [
-        { cls: 'win-btn-min',   label: '–' }, // en-dash = minimize bar
-        { cls: 'win-btn-max',   label: '□' }, // □ = maximize
-        { cls: 'win-btn-close', label: '×' }  // × = close
-      ];
+      var btns = ['win-btn-min', 'win-btn-max', 'win-btn-close'];
       document.querySelectorAll('.glass').forEach(function(el) {
-        btns.forEach(function(b) {
+        btns.forEach(function(cls) {
           var span = document.createElement('span');
-          span.className = 'win-btn ' + b.cls;
-          span.textContent = b.label;
+          span.className = 'win-btn ' + cls;
           el.appendChild(span);
+        });
+      });
+    })();
+
+    function poofWindow(win) {
+      if (win._poofing) return;
+      win._poofing = true;
+
+      // Instant disappear + click sound
+      SFX.navSwitch();
+      win.style.visibility = 'hidden';
+
+      // 1 second later: appear sound + pixelated reconstruction at origin
+      setTimeout(function() {
+        win._dragTx = 0;
+        win._dragTy = 0;
+        win.style.transform = '';
+        win.style.zIndex = '';
+        SFX.appear();
+        win.style.visibility = '';
+        win.classList.add('reconstructing');
+        setTimeout(function() {
+          win.classList.remove('reconstructing');
+          win._poofing = false;
+        }, 600);
+      }, 1000);
+    }
+
+    // ===== DRAGGABLE WINDOWS =====
+    (function() {
+      var zCounter = 20;
+
+      document.querySelectorAll('.glass').forEach(function(win) {
+        win._dragTx = 0;
+        win._dragTy = 0;
+
+        function inTitleBar(e) {
+          var rect = win.getBoundingClientRect();
+          return (e.clientY - rect.top) <= 40;
+        }
+
+        win.addEventListener('mousemove', function(e) {
+          if (window.setFakeCursor) window.setFakeCursor(inTitleBar(e) ? 'move' : 'arrow');
+        });
+
+        win.addEventListener('mouseleave', function() {
+          if (window.setFakeCursor) window.setFakeCursor('arrow');
+        });
+
+        // Win-btn clicks: close = poof, others = deny
+        win.querySelectorAll('.win-btn').forEach(function(btn) {
+          btn.style.pointerEvents = 'auto';
+          btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (btn.classList.contains('win-btn-close')) {
+              poofWindow(win);
+            } else {
+              SFX.deny();
+            }
+          });
+        });
+
+        win.addEventListener('mousedown', function(e) {
+          zCounter++;
+          win.style.zIndex = Math.min(zCounter, 90);
+
+          if (!inTitleBar(e)) return;
+          if (e.target.classList.contains('win-btn')) return;
+          if (e.target.tagName === 'A' || e.target.closest('a')) return;
+
+          e.preventDefault();
+
+          var ox = e.clientX - win._dragTx;
+          var oy = e.clientY - win._dragTy;
+
+          document.body.style.userSelect = 'none';
+
+          function onMove(e) {
+            win._dragTx = e.clientX - ox;
+            win._dragTy = e.clientY - oy;
+            win.style.transform = 'translate(' + win._dragTx + 'px, ' + win._dragTy + 'px)';
+          }
+
+          function onUp() {
+            document.body.style.userSelect = '';
+            document.removeEventListener('mousemove', onMove);
+            document.removeEventListener('mouseup', onUp);
+          }
+
+          document.addEventListener('mousemove', onMove);
+          document.addEventListener('mouseup', onUp);
         });
       });
     })();
@@ -2529,23 +3007,61 @@
       };
       var C = window._cursors;
 
-      // Use !important to override any static CSS cursor rules
-      function cur(val, fb) { return 'cursor: ' + val + ', ' + fb + ' !important;'; }
+      // Hide the OS cursor everywhere — fake div cursor renders below CRT layers
       var st = document.createElement('style');
-      st.textContent = [
-        '* { ' + cur(C.arrow, 'default') + ' }',
-        'a, button, .nav-btn, .help-btn, .btn, .ext-link, .note-card, .fun-links a, select,'
-          + ' .news-item, .ticker-item'
-          + ' { ' + cur(C.pointer, 'pointer') + ' }',
-        '.note-card.soon { ' + cur(C.notallowed, 'not-allowed') + ' }',
-        'input[type="text"], input[type="search"], input[type="email"],'
-          + ' textarea, [contenteditable] { ' + cur(C.ibeam, 'text') + ' }',
-'input[type="range"] { ' + cur(C.ew_resize, 'ew-resize') + ' }',
-        '.cursor-crosshair { ' + cur(C.crosshair, 'crosshair') + ' }',
-        '.cursor-wait, .loading { ' + cur(C.wait, 'wait') + ' }',
-        '.cursor-move { ' + cur(C.move, 'move') + ' }',
-      ].join('\n');
+      st.textContent = '* { cursor: none !important; }';
       document.head.appendChild(st);
+
+      // ---- Fake cursor div (z-index below CRT scanlines) ----
+      var _fc = document.createElement('div');
+      _fc.id = 'fake-cursor';
+      document.body.appendChild(_fc);
+
+      var _fcX = -200, _fcY = -200, _fcHX = 0, _fcHY = 0;
+
+      function _parseCur(v) {
+        var m = v.match(/url\("([^"]+)"\)\s+(\d+)\s+(\d+)/);
+        return m ? { url: m[1], hx: +m[2], hy: +m[3] } : { url: '', hx: 0, hy: 0 };
+      }
+
+      window.setFakeCursor = function(key) {
+        var p = _parseCur(C[key] || C.arrow);
+        _fc.style.backgroundImage = 'url("' + p.url + '")';
+        _fcHX = p.hx; _fcHY = p.hy;
+        _fc.style.left = (_fcX - _fcHX) + 'px';
+        _fc.style.top  = (_fcY - _fcHY) + 'px';
+      };
+
+      document.addEventListener('mousemove', function(e) {
+        _fcX = e.clientX; _fcY = e.clientY;
+        _fc.style.left = (_fcX - _fcHX) + 'px';
+        _fc.style.top  = (_fcY - _fcHY) + 'px';
+      });
+
+      document.addEventListener('mouseleave', function() {
+        _fc.style.left = '-200px'; _fc.style.top = '-200px';
+      });
+
+      var _curMap = [
+        ['a, button, .nav-btn, .help-btn, .btn, .ext-link, .note-card:not(.soon), .fun-links a, .news-item, .ticker-item', 'pointer'],
+        ['.note-card.soon', 'notallowed'],
+        ['input[type="text"], input[type="search"], input[type="email"], textarea, [contenteditable]', 'ibeam'],
+        ['input[type="range"]', 'ew_resize'],
+      ];
+
+      document.addEventListener('mouseover', function(e) {
+        var t = e.target;
+        for (var i = 0; i < _curMap.length; i++) {
+          try {
+            if (t.matches && (t.matches(_curMap[i][0]) || t.closest(_curMap[i][0]))) {
+              window.setFakeCursor(_curMap[i][1]); return;
+            }
+          } catch(ex) {}
+        }
+        window.setFakeCursor('arrow');
+      });
+
+      window.setFakeCursor('arrow');
     })();
 
     // Console easter egg
@@ -2661,23 +3177,20 @@
 
       // Running load-bar lines update the previous one instead of appending new
       var loadLineEl = null;
-
-      // Unlock audio on any click during boot (browser autoplay policy)
-      screen.addEventListener('pointerdown', function () { SFX.unlock(); }, { once: true });
+      var prompt = document.getElementById('bootPrompt');
 
       function appendLine(entry) {
         // Load-bar lines overwrite the previous load-bar line
         if (entry.isLoad && entry.loadStep > 0 && loadLineEl) {
           loadLineEl.textContent = entry.text;
-          SFX.bootBar(entry.loadStep);
           return;
         }
         var el = document.createElement('span');
         el.className = 'boot-line ' + (entry.cls || 'boot-ok');
         el.textContent = entry.text;
         lines.appendChild(el);
-        if (entry.isLoad) { loadLineEl = el; SFX.bootBar(0); }
-        else { loadLineEl = null; if (entry.text.trim()) SFX.bootTick(); }
+        if (entry.isLoad) { loadLineEl = el; }
+        else { loadLineEl = null; }
         // Keep cursor visible at bottom
         lines.appendChild(cursor);
         screen.scrollTop = screen.scrollHeight;
@@ -2705,6 +3218,7 @@
 
       function bootComplete() {
         cursor.style.display = 'none';
+        SFX.bootBgStop();
         // Fade to black
         setTimeout(function () {
           veil.classList.add('veil-on');
@@ -2712,32 +3226,40 @@
             screen.classList.add('boot-hidden');
             veil.style.transition = 'opacity 0.7s ease';
             veil.style.opacity = '0';
-            // After veil clears — star background visible, all UI bars still hidden
+            // After veil clears — star background visible, UI bars still hidden
             setTimeout(function () {
               veil.style.display = 'none';
               SFX.bootTheme();
 
-              var topBar      = document.querySelector('.top-bar');
-              var stockBar    = document.querySelector('.stock-bar');
               var navBar      = document.getElementById('navBar');
-              var contentArea = document.querySelector('.content-area');
+              var subBar      = document.getElementById('subBar');
+              var contentArea = document.getElementById('scrollWrapper');
 
-              setTimeout(function () { revealEl(topBar);    }, 350);
-              setTimeout(function () { revealEl(stockBar); }, 700);
-              setTimeout(function () { revealEl(navBar);   }, 1050);
+              setTimeout(function () { revealEl(navBar); revealEl(subBar); }, 350);
               setTimeout(function () {
                 revealEl(contentArea);
                 _uiRevealed = true;
                 maybeStartDecrypt();
-              }, 1450);
+              }, 700);
             }, 800);
           }, 300);
         }, 700);
       }
 
-      // Kick off — POST beep fires immediately, sequence starts after
-      setTimeout(function () { SFX.postBeep(); }, 80);
-      next();
+      // Wait for user gesture — unlocks all audio, then starts boot
+      var _bootStarted = false;
+      function startBoot() {
+        if (_bootStarted) return;
+        _bootStarted = true;
+        SFX.unlock();
+        SFX.navSwitch();
+        prompt.classList.add('hidden');
+        lines.style.display = '';
+        SFX.bootBgStart();
+        next();
+      }
+      document.addEventListener('keydown', startBoot,   { once: true });
+      screen.addEventListener('pointerdown', startBoot, { once: true });
     })();
   </script>
 </body>
