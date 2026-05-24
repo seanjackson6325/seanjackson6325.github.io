@@ -1286,8 +1286,21 @@
 
 
 
+    #bootMobileNote { display: none; }
+
     @media (max-width: 768px) {
       html { font-size: 15px; }
+      .crt-scanlines { display: none !important; }
+      #bootMobileNote {
+        display: block;
+        font-family: var(--font-dos);
+        font-size: 1.8rem;
+        color: var(--text-dim);
+        text-align: center;
+        margin-top: 1.5rem;
+        letter-spacing: 0.1em;
+        animation: blink 1.4s step-end infinite;
+      }
 
       /* Nav bars */
       .nav-bar { height: auto; min-height: 44px; padding: 3px 0.25rem; flex-wrap: wrap; }
@@ -1336,6 +1349,7 @@
   <div id="bootScreen">
     <div id="bootPrompt">PRESS ANY KEY TO BOOT<span id="bootPromptCursor">_</span></div>
     <div id="bootLines" style="display:none"><span id="bootCursor"></span></div>
+    <div id="bootMobileNote">* BEST VIEWED ON DESKTOP *</div>
   </div>
 
   <!-- SPACE BACKGROUND -->
@@ -1899,11 +1913,8 @@
       return {
         unlock: function () {
           ac();
-          // Prime Audio elements so they can play without gesture later
-          [_themeAudio].forEach(function (a) {
-            var p = a.play();
-            if (p) p.then(function () { a.pause(); a.currentTime = 0; }).catch(function () {});
-          });
+          var p = _themeAudio.play();
+          if (p) p.then(function () { _themeAudio.pause(); _themeAudio.currentTime = 0; }).catch(function () {});
         },
 
         click:     function () { tone(520, 0.08, 0.045, 0, 360); },
@@ -3301,8 +3312,9 @@
         SFX.bootBgStart();
         next();
       }
-      document.addEventListener('keydown', startBoot,   { once: true });
-      screen.addEventListener('pointerdown', startBoot, { once: true });
+      document.addEventListener('keydown',    startBoot, { once: true });
+      document.addEventListener('touchstart', startBoot, { once: true });
+      screen.addEventListener('pointerdown',  startBoot, { once: true });
     })();
   </script>
 
