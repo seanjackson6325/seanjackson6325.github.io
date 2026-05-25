@@ -25,7 +25,11 @@
       "Bash(curl -sL \"https://gifcities.org/search?q=smoke+cloud&offset=0&page_size=200\")",
       "Bash(curl -sL \"https://gifcities.org/search?q=explosion+cloud&offset=0&page_size=200\")",
       "Bash(ls \"c:\\\\Users\\\\shank\\\\Desktop\\\\Website\\\\\" | grep -i \"\\\\.mp3\\\\|\\\\.wav\\\\|\\\\.ogg\")",
-      "Read(//c/Users/shank/Desktop/**)"
+      "Read(//c/Users/shank/Desktop/**)",
+      "Bash(pip install *)",
+      "Bash(Remove-Item \"c:\\\\Users\\\\shank\\\\Desktop\\\\Website\\\\transcript.pdf\")",
+      "WebFetch(domain:api.github.com)",
+      "WebFetch(domain:github.com)"
     ]
   }
 }

@@ -4,8 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sean Jackson — ML Engineer & Physicist</title>
+  <meta name="color-scheme" content="dark">
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <link rel="dns-prefetch" href="https://hacker-news.firebaseio.com">
+  <link rel="dns-prefetch" href="https://api.coingecko.com">
+  <link rel="dns-prefetch" href="https://corsproxy.io">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -185,32 +190,9 @@
       top: 0; left: 0;
       width: 36px; height: 36px;
       pointer-events: none;
-      z-index: 9999;
+      z-index: 100008;
       background-repeat: no-repeat;
       image-rendering: pixelated;
-    }
-
-    /* Rolling camera "hot band" sweep */
-    .scanlines::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 120px;
-      background: linear-gradient(
-        180deg,
-        transparent 0%,
-        rgba(140, 255, 180, 0.012) 35%,
-        rgba(180, 255, 210, 0.022) 50%,
-        rgba(140, 255, 180, 0.012) 65%,
-        transparent 100%
-      );
-      animation: hotband 7s linear infinite;
-      pointer-events: none;
-    }
-
-    @keyframes hotband {
-      0%   { transform: translateY(-120px); }
-      100% { transform: translateY(100vh); }
     }
 
     /* ===== WIN95-STYLE TERMINAL WINDOW PANEL ===== */
@@ -301,12 +283,6 @@
       animation: reconstruct 0.55s steps(8, end) forwards;
       transform-origin: center center;
     }
-
-    /* ===== 90s GIF DECORATIONS ===== */
-    .gif90 { image-rendering: pixelated; display: inline-block; vertical-align: middle; flex-shrink: 0; }
-    .gif-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 0.4rem 0; }
-    .gif-r { float: right; margin: 0 0 6px 10px; }
-    .gif-l { float: left; margin: 0 10px 6px 0; }
 
     /* ===== APP SHELL LAYOUT ===== */
     .app-shell {
@@ -420,10 +396,12 @@
       border-bottom: 3px solid #404040;
       box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #dfdfdf;
       display: flex;
+      flex-wrap: nowrap;
       align-items: center;
       padding: 5px 0.5rem;
       flex-shrink: 0;
       height: 62px;
+      overflow: hidden;
       transition: height 0.25s ease, opacity 0.25s ease;
     }
     .nav-bar.collapsed { height: 0; opacity: 0; overflow: hidden; pointer-events: none; border: none; }
@@ -450,16 +428,18 @@
     /* Scrollable portion */
     .nav-scroll {
       display: flex;
+      flex-wrap: nowrap;
       align-items: center;
       flex: 1;
       overflow-x: auto;
+      overflow-y: hidden;
       scrollbar-width: none;
       min-width: 0;
       gap: 2px;
     }
     .nav-scroll::-webkit-scrollbar { display: none; }
 
-    .nav-group { display: flex; align-items: center; flex-shrink: 0; gap: 2px; }
+    .nav-group { display: flex; flex-wrap: nowrap; align-items: center; flex-shrink: 0; gap: 2px; }
 
     .nav-sep {
       width: 2px; height: 32px;
@@ -734,8 +714,6 @@
     .page { display: none; }
     .page.active { display: block; }
 
-    .page-header { display: none; }
-
     /* ===== HOME PAGE ===== */
     .home-panel {
       padding: 44px 2rem 2rem;
@@ -797,8 +775,6 @@
       background: silver;
       color: #424242;
     }
-    .btn-green { color: #000000; }
-    .btn-blue  { color: #000000; }
 
     /* ===== CARD COMPONENTS ===== */
     .card-grid {
@@ -841,7 +817,7 @@
     /* ===== SKILLS ===== */
     .skills-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 0.8rem;
     }
 
@@ -977,6 +953,143 @@
                   inset -2px -2px #aa7700, inset 2px 2px #ffeeaa;
     }
 
+    /* ===== COURSES PANEL — Win95 Explorer Theme ===== */
+    .courses-panel {
+      padding: 44px 0 0;
+      background: #c0c0c0 !important;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .cw-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 6px;
+      border-bottom: 1px solid #808080;
+      font-family: var(--font-dos);
+      font-size: 0.85rem;
+      color: #000000;
+      background: #c0c0c0;
+    }
+    .cw-ab-label {
+      color: #000000;
+      white-space: nowrap;
+    }
+    .cw-ab-path {
+      background: #c0c0c0;
+      border-top: 2px solid #808080;
+      border-left: 2px solid #808080;
+      border-right: 2px solid #ffffff;
+      border-bottom: 2px solid #ffffff;
+      padding: 1px 6px;
+      flex: 1;
+      color: #000000;
+      font-family: var(--font-dos);
+      font-size: 0.85rem;
+    }
+
+    .cw-listview {
+      margin: 6px;
+      background: #c0c0c0;
+      border-top: 2px solid #808080;
+      border-left: 2px solid #808080;
+      border-right: 2px solid #dfdfdf;
+      border-bottom: 2px solid #dfdfdf;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .cw-section-title {
+      background: #000080;
+      color: #ffffff;
+      font-family: var(--font-dos);
+      font-size: 1rem;
+      padding: 3px 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0;
+      border-bottom: none;
+      user-select: none;
+    }
+    .cw-section-title:not(:first-child) { margin-top: 0; }
+
+    .cw-course {
+      font-family: var(--font-dos);
+      font-size: 0.9rem;
+      color: #000000;
+      padding: 2px 8px 2px 24px;
+      display: flex;
+      gap: 0.8rem;
+      border-bottom: 1px solid #a8a8a8;
+      background: #c0c0c0;
+      cursor: default;
+    }
+    .cw-course:hover {
+      background: #000080;
+      color: #ffffff;
+    }
+    .cw-course .cw-code {
+      color: #000080;
+      min-width: 9ch;
+      flex-shrink: 0;
+      font-weight: bold;
+    }
+    .cw-course:hover .cw-code { color: #ffffff; }
+
+    .cw-statusbar {
+      background: #c0c0c0;
+      border-top: 1px solid #808080;
+      padding: 2px 10px;
+      font-family: var(--font-dos);
+      font-size: 0.8rem;
+      color: #000000;
+      display: flex;
+      gap: 12px;
+    }
+    .cw-statusbar-sep {
+      border-left: 1px solid #808080;
+      border-right: 1px solid #ffffff;
+      width: 2px;
+      align-self: stretch;
+    }
+
+    .cw-desc {
+      padding: 5px 10px;
+      font-family: var(--font-dos);
+      font-size: 0.88rem;
+      color: #000000;
+      background: #c0c0c0;
+      border-bottom: 1px solid #808080;
+      font-style: italic;
+    }
+
+    .cw-note-row {
+      font-family: var(--font-dos);
+      font-size: 0.9rem;
+      color: #000000;
+      padding: 3px 8px 3px 24px;
+      display: flex;
+      gap: 1rem;
+      border-bottom: 1px solid #a8a8a8;
+      background: #c0c0c0;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .cw-note-row:hover { background: #000080; color: #ffffff; }
+    .cw-note-row.soon { opacity: 0.45; cursor: default; pointer-events: none; }
+    .cw-note-icon {
+      color: #000080;
+      font-weight: bold;
+      min-width: 5ch;
+      flex-shrink: 0;
+    }
+    .cw-note-row:hover .cw-note-icon { color: #ffffff; }
+    .cw-note-meta { color: #555555; margin-left: auto; flex-shrink: 0; }
+    .cw-note-row:hover .cw-note-meta { color: #aaaaff; }
+
     /* ===== PROJECTS ===== */
     .proj-grid { display: grid; gap: 1rem; }
 
@@ -1054,114 +1167,6 @@
     .pub-card .meta { font-family: var(--font-dos); font-size: 0.95rem; color: var(--cyan); margin-bottom: 0.6rem; }
     .pub-card p { font-size: 0.95rem; color: var(--text); line-height: 1.75; }
 
-    /* ===== NOTES ===== */
-    .notes-subject { margin-bottom: 1.2rem; }
-    .notes-subject-title {
-      font-family: var(--font-dos);
-      font-size: 1.1rem;
-      color: var(--cyan);
-      letter-spacing: 0.1em;
-      margin-bottom: 0.65rem;
-      padding-bottom: 0.3rem;
-      border-bottom: 1px solid rgba(51,255,102,0.15);
-    }
-    .notes-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-      gap: 0.6rem;
-    }
-    .note-card {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      padding: 44px 1rem 0.85rem;
-      text-decoration: none;
-      color: inherit;
-      transition: all 0.2s;
-      cursor: pointer;
-    }
-    .note-card:hover { border-color: var(--cyan); }
-    .note-card.soon { opacity: 0.45; cursor: default; pointer-events: none; }
-    .note-icon {
-      font-family: var(--font-dos);
-      font-size: 0.95rem;
-      color: var(--green);
-      background: rgba(0,8,12,0.85);
-      border-top: 2px solid rgba(51,255,102,0.7);
-      border-left: 2px solid rgba(51,255,102,0.7);
-      border-right: 2px solid rgba(51,255,102,0.12);
-      border-bottom: 2px solid rgba(51,255,102,0.12);
-      padding: 0.2rem 0.5rem;
-      flex-shrink: 0;
-      letter-spacing: 0.05em;
-      box-shadow: 2px 2px 0 rgba(0,0,0,0.75), 0 0 4px rgba(51,255,102,0.1);
-    }
-    .note-icon.soon-ico { color: var(--text-dim); background: none; border-color: rgba(68,68,100,0.25); }
-    .note-title {
-      font-family: var(--font-dos);
-      font-size: 1rem;
-      color: var(--cyan);
-      letter-spacing: 0.04em;
-      margin-bottom: 0.12rem;
-    }
-    .note-meta { font-family: var(--font-dos); font-size: 0.9rem; color: var(--text-dim); }
-
-    /* ===== FUN / BLOG ===== */
-    .fun-intro { margin-bottom: 1.6rem; }
-    .fun-grid { display: flex; flex-direction: column; gap: 1rem; }
-    .fun-card { padding: 44px 1.4rem 1.4rem; position: relative; transition: border-color 0.2s; }
-    .fun-card:hover { border-color: rgba(85,170,255,0.35); }
-    /* Win98 document icon before category label */
-    .fun-tag {
-      font-family: var(--font-dos);
-      font-size: 0.9rem;
-      background: none;
-      border: none;
-      padding: 0;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      margin-bottom: 0.5rem;
-      letter-spacing: 0.08em;
-    }
-    .fun-tag::before {
-      content: '';
-      display: inline-block;
-      width: 12px; height: 15px;
-      flex-shrink: 0;
-      background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='12' height='15' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h8v4h4v11H0z' fill='%23fff'/%3E%3Cpath d='M8 0l4 4H8z' fill='%23ccc'/%3E%3Crect x='2' y='6' width='8' height='1' fill='%23999'/%3E%3Crect x='2' y='8' width='8' height='1' fill='%23999'/%3E%3Crect x='2' y='10' width='5' height='1' fill='%23999'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-    }
-    .fun-tag.enjoy   { color: var(--cyan); }
-    .fun-tag.thought { color: var(--green); }
-    .fun-card h3 {
-      font-family: var(--font-dos);
-      font-size: 1.2rem;
-      color: var(--cyan);
-      letter-spacing: 0.06em;
-      margin-bottom: 0.5rem;
-      text-shadow: 0 0 8px var(--cyan-glow);
-    }
-    .fun-card p { font-size: 0.95rem; color: var(--text); line-height: 1.78; margin-bottom: 0.6rem; }
-    .fun-card p:last-child { margin-bottom: 0; }
-    .fun-date { font-family: var(--font-dos); font-size: 0.9rem; color: var(--text-dim); margin-top: 0.6rem; }
-    .fun-links { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.6rem; }
-    .fun-links a {
-      font-family: var(--font-dos);
-      font-size: 0.95rem;
-      color: var(--cyan);
-      border-style: solid;
-      border-width: 1px;
-      border-top-color: var(--bevel-lt);
-      border-left-color: var(--bevel-lt);
-      border-right-color: var(--bevel-dk);
-      border-bottom-color: var(--bevel-dk);
-      padding: 0.1rem 0.5rem;
-      background: #001428;
-    }
-    .fun-links a:hover { color: var(--green); }
-
-
     /* ===== CONTACT ===== */
     .contact-card { padding: 44px 1.5rem 1.5rem; max-width: 440px; }
     .contact-card .ch-label { font-family: var(--font-dos); font-size: 1.1rem; color: var(--cyan); margin-bottom: 0.7rem; }
@@ -1220,6 +1225,76 @@
     }
     #bootPromptCursor { animation: blinkCursor 0.7s step-end infinite; }
     #bootPrompt.hidden { display: none; }
+
+    /* ===== AUDIO DIALOG (boot screen) ===== */
+    #audioDialog {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #c0c0c0;
+      border: 2px solid;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      box-shadow: 4px 4px 0 #000000;
+      width: 310px;
+      z-index: 3;
+      font-family: 'Share Tech Mono', monospace;
+    }
+    .adlg-title {
+      background: #000080;
+      color: #ffffff;
+      font-size: 0.82rem;
+      padding: 3px 5px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      user-select: none;
+    }
+    .adlg-title span { flex: 1; }
+    .adlg-title-x {
+      background: #c0c0c0;
+      color: #000;
+      border: 2px solid;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      width: 16px; height: 14px;
+      font-size: 0.7rem;
+      line-height: 12px;
+      text-align: center;
+      cursor: default;
+      flex-shrink: 0;
+    }
+    .adlg-body {
+      padding: 14px 14px 10px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      border-bottom: 1px solid #808080;
+    }
+    .adlg-icon { font-size: 2.2rem; line-height: 1; flex-shrink: 0; }
+    .adlg-text { font-size: 0.78rem; color: #000000; line-height: 1.55; }
+    .adlg-btns {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 14px;
+    }
+    .adlg-btn {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.78rem;
+      background: #c0c0c0;
+      color: #000000;
+      border: 2px solid;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      padding: 4px 0;
+      width: 118px;
+      cursor: pointer;
+      text-align: center;
+    }
+    .adlg-btn:active {
+      border-color: #808080 #ffffff #ffffff #808080;
+      padding: 5px 0 3px;
+    }
+    .adlg-btn:focus { outline: 1px dotted #000; outline-offset: -3px; }
 
     /* CRT scanline overlay on boot screen */
     #bootScreen::after {
@@ -1303,8 +1378,8 @@
       }
 
       /* Nav bars */
-      .nav-bar { height: auto; min-height: 44px; padding: 3px 0.25rem; flex-wrap: wrap; }
-      .sub-bar  { flex-wrap: wrap; padding: 3px 0.25rem; }
+      .nav-bar { height: 44px; min-height: 44px; padding: 3px 0.25rem; flex-wrap: nowrap; overflow-x: auto; }
+      .sub-bar  { flex-wrap: nowrap; overflow-x: auto; padding: 3px 0.25rem; }
       .nav-btn, .ext-link { height: 32px; padding: 2px 8px; font-size: 0.9rem; }
       .help-btn { height: 32px; padding: 2px 8px; font-size: 0.9rem; }
 
@@ -1347,7 +1422,26 @@
   <!-- DOS BOOT SCREEN -->
   <div id="bootVeil"></div>
   <div id="bootScreen">
-    <div id="bootPrompt">PRESS ANY KEY TO BOOT<span id="bootPromptCursor">_</span></div>
+    <!-- Win95 audio consent dialog -->
+    <div id="audioDialog">
+      <div class="adlg-title">
+        <span>&#9834; SJackson/BIOS &mdash; Audio Settings</span>
+        <div class="adlg-title-x">&#215;</div>
+      </div>
+      <div class="adlg-body">
+        <div class="adlg-icon">&#9888;</div>
+        <div class="adlg-text">
+          This website uses<br>
+          <strong>audio effects &amp; music.</strong><br><br>
+          Would you like to<br>enable sound?
+        </div>
+      </div>
+      <div class="adlg-btns">
+        <button class="adlg-btn" id="audioEnableBtn">&#9834; Enable Sound</button>
+        <button class="adlg-btn" id="audioMuteBtn">&#215; Mute</button>
+      </div>
+    </div>
+    <div id="bootPrompt" class="hidden">PRESS ANY KEY TO BOOT<span id="bootPromptCursor">_</span></div>
     <div id="bootLines" style="display:none"><span id="bootCursor"></span></div>
     <div id="bootMobileNote">* BEST VIEWED ON DESKTOP *</div>
   </div>
@@ -1355,7 +1449,6 @@
   <!-- SPACE BACKGROUND -->
   <canvas id="starCanvas"></canvas>
   <div class="nebula-overlay"></div>
-  <div class="scanlines"></div>
 
   <!-- CRT EFFECT STACK -->
   <div class="crt-phosphor"></div>
@@ -1377,11 +1470,11 @@
           <button class="nav-btn active" data-page="home"><span class="ico">></span> Home</button>
           <button class="nav-btn" data-page="about"><span class="ico">></span> About</button>
           <button class="nav-btn" data-page="skills"><span class="ico">></span> Skills</button>
+          <button class="nav-btn" data-page="education"><span class="ico">></span> Education</button>
           <button class="nav-btn" data-page="experience"><span class="ico">></span> Experience</button>
           <button class="nav-btn" data-page="projects"><span class="ico">></span> Projects</button>
           <button class="nav-btn" data-page="publications"><span class="ico">></span> Publications</button>
           <button class="nav-btn" data-page="notes"><span class="ico">></span> Notes</button>
-          <button class="nav-btn" data-page="interests"><span class="ico">></span> Interests</button>
           <button class="nav-btn" data-page="contact"><span class="ico">></span> Contact</button>
         </div>
         <div class="nav-sep"></div>
@@ -1434,6 +1527,8 @@
         </div>
       </div>
 
+      <button class="help-btn" id="muteBtn" style="margin-left:auto;">[&#9834;] Sound</button>
+
       <div class="help-menu">
         <button class="help-btn" id="helpBtn">[?] Keys</button>
         <div class="help-dropdown" id="helpDropdown">
@@ -1449,7 +1544,6 @@
               <div class="hd-row"><span>Publications</span><span class="hd-key">Ctrl+K → U</span></div>
               <div class="hd-row"><span>Notes</span><span class="hd-key">Ctrl+K → N</span></div>
               <div class="hd-row"><span>Journal</span><span class="hd-key">Ctrl+K → F</span></div>
-              <div class="hd-row"><span>Interests</span><span class="hd-key">Ctrl+K → I</span></div>
               <div class="hd-row"><span>Contact</span><span class="hd-key">Ctrl+K → C</span></div>
               <div class="hd-section">Interface</div>
               <div class="hd-row"><span>Toggle menu bar</span><span class="hd-key">Ctrl+K → M</span></div>
@@ -1483,7 +1577,7 @@
             <div class="home-lines">
               <strong><u>University of Toronto</u></strong> &nbsp;&middot;&nbsp; BSc Physics, Minors in CS &amp; Mathematics<br>
               <strong><u>Lawrence Livermore National Laboratory</u></strong> &nbsp;&middot;&nbsp; Machine Learning Engineer<br>
-              First-author published researcher in Computer Vision &amp; Deep Learning
+              First-author researcher in Computer Vision &amp; Deep Learning (paper under review)
             </div>
             <div class="home-name">Sean Jackson</div>
             <div class="home-title">Machine Learning Engineer & Physicist</div>
@@ -1493,22 +1587,21 @@
               materials discovery for advanced manufacturing at <strong><u>Lawrence Livermore National Laboratory</u></strong>.
             </p>
             <div class="home-actions">
-              <button class="btn btn-green" onclick="switchPage('projects')">View Projects</button>
-              <button class="btn btn-blue" onclick="switchPage('contact')">Get in Touch</button>
+              <button class="btn btn-green" onclick="SFX.navSwitch(); switchPage('projects')">View Projects</button>
+              <button class="btn btn-blue" onclick="SFX.navSwitch(); switchPage('contact')">Get in Touch</button>
             </div>
           </div>
         </div>
 
         <!-- ABOUT -->
         <div class="page" id="about">
-          <div class="page-header"><span class="bracket">[</span><h2>About</h2><div class="line"></div><span class="bracket">]</span></div>
           <div class="card-grid">
             <div class="stat-card glass" data-title="Education.inf" style="padding-right:140px;"><img src="uoft.png" alt="UofT" style="width:110px; position:absolute; top:48px; right:14px; image-rendering:pixelated;"><div class="label">Education</div><div class="title"><strong><u>University of Toronto</u></strong></div><div class="text-block">Honours BSc. Physics; Duel Minors in Computer Science and Mathematics<br>Focus on Quantum Information &amp; Condensed Matter Physics</div></div>
             <div class="stat-card glass" data-title="Citizenship.inf"><div class="label">Citizenship</div><div class="value">US / UK / CA</div><div class="sub">Triple Citizenship</div>
-              <div class="gif-row" style="margin-top:0.3rem;">
-                <img class="gif90" src="usa.gif" alt="US" style="width:120px;">
-                <img class="gif90" src="uk.gif" alt="UK">
-                <img class="gif90" src="ca.gif" alt="CA">
+              <div style="display:flex;gap:6px;align-items:center;margin-top:0.5rem;">
+                <img src="usa.gif" alt="USA" style="image-rendering:pixelated;transform:scale(1.7);transform-origin:left center;">
+                <img src="uk.gif"  alt="UK"  style="image-rendering:pixelated;margin-left:70px;">
+                <img src="ca.gif"  alt="CA"  style="image-rendering:pixelated;">
               </div>
             </div>
           </div>
@@ -1526,7 +1619,6 @@
 
         <!-- SKILLS -->
         <div class="page" id="skills">
-          <div class="page-header"><span class="bracket">[</span><h2>Skills</h2><div class="line"></div><span class="bracket">]</span></div>
           <div class="skills-grid">
             <div class="skill-card glass" data-title="DeepLearning.dll">
               <h4>Deep Learning & Vision</h4>
@@ -1555,17 +1647,39 @@
               <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p"></div><div class="p"></div></div><span class="name">Qiskit / Cirq</span></div>
               <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p"></div><div class="p"></div></div><span class="name">Quantum Algorithms</span></div>
             </div>
+            <div class="skill-card glass" data-title="Physics.dll">
+              <h4>Physics</h4>
+              <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div></div><span class="name">Classical Mechanics</span></div>
+              <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div></div><span class="name">Electromagnetism</span></div>
+              <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p half"></div></div><span class="name">Quantum Mechanics</span></div>
+              <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p"></div></div><span class="name">Thermodynamics</span></div>
+              <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p"></div></div><span class="name">Quantum Information</span></div>
+              <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p half"></div><div class="p"></div></div><span class="name">Condensed Matter</span></div>
+              <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p half"></div><div class="p"></div></div><span class="name">Nonlinear Physics</span></div>
+            </div>
+            <div class="skill-card glass" data-title="Mathematics.dll">
+              <h4>Mathematics</h4>
+              <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div></div><span class="name">Real Analysis &amp; &epsilon;-&delta; Proofs</span></div>
+              <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div></div><span class="name">Proof Writing &amp; Formal Logic</span></div>
+              <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div></div><span class="name">Abstract Linear Algebra</span></div>
+              <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p half"></div></div><span class="name">Point-Set Topology</span></div>
+              <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p half"></div></div><span class="name">Multivariable Analysis</span></div>
+              <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p"></div></div><span class="name">Complex Analysis</span></div>
+              <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p"></div></div><span class="name">ODEs &amp; PDEs</span></div>
+              <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p half"></div></div><span class="name">Probability Theory</span></div>
+              <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p"></div></div><span class="name">Statistical Inference</span></div>
+              <div class="skill-row"><div class="pips"><div class="p on"></div><div class="p on"></div><div class="p on"></div><div class="p half"></div><div class="p"></div></div><span class="name">Stochastic Processes</span></div>
+            </div>
           </div>
         </div>
 
         <!-- EXPERIENCE -->
         <div class="page" id="experience">
-          <div class="page-header"><span class="bracket">[</span><h2>Experience</h2><div class="line"></div><span class="bracket">]</span></div>
           <div class="exp-list">
             <div class="exp-card glass has-logos" data-title="LLNL_MED.job">
               <div class="exp-logos">
-                <img src="llnl.png" alt="LLNL">
-                <img src="eng_llnl.png" alt="Engineering LLNL">
+                <img src="llnl.png" alt="LLNL" loading="lazy">
+                <img src="eng_llnl.png" alt="Engineering LLNL" loading="lazy">
               </div>
               <div class="badge">Internship</div>
               <h3>Machine Learning Engineer</h3>
@@ -1576,9 +1690,9 @@
             </div>
             <div class="exp-card glass has-logos" data-title="LLNL_MLE.job">
               <div class="exp-logos">
-                <img src="llnl.png" alt="LLNL">
-                <img src="dssi.png" alt="DSSI">
-                <img src="eng_llnl.png" alt="Engineering LLNL">
+                <img src="llnl.png" alt="LLNL" loading="lazy">
+                <img src="dssi.png" alt="DSSI" loading="lazy">
+                <img src="eng_llnl.png" alt="Engineering LLNL" loading="lazy">
               </div>
               <div class="badge">Internship</div>
               <h3>Machine Learning Engineer</h3>
@@ -1589,38 +1703,122 @@
               <p><strong>CV Design Challenge:</strong> Competed in a two-week computer vision challenge, designing generative decoding models capable of tracking occluded objects through walls using temporal feature representations.</p>
               <span class="status-pill done">Completed</span>
             </div>
+            <div class="exp-card glass has-logos" data-title="Pascack_Pioneers.club">
+              <div class="exp-logos">
+                <img src="pascack.png" alt="Pascack Pi-oneers" loading="lazy">
+                <img src="first.png" alt="FIRST Robotics" loading="lazy">
+              </div>
+              <div class="badge">Extracurricular</div>
+              <h3>Team Leader &mdash; Mechanical Division</h3>
+              <div class="org">Pascack Pi-oneers &mdash; FIRST Robotics Team (Grades 6&ndash;12)</div>
+              <div class="date">New Jersey &mdash; 2019 - 2022</div>
+              <p>Elected Mechanical Division Team Leader of a multi-school robotics club. During build season the team operated 6 days/week for months at a time. Off-season, led a subgroup that built an assistive robot with <strong>West Virginia University</strong> enabling non-ambulatory students to kick a soccer ball.</p>
+              <p><strong>Competitions:</strong> Freshman year (2019) &mdash; FIRST World Championship Detroit Darwin Sub-Division (undefeated in qualifications, Semi-Finalist); FMA Bridgewater-Raritan District (Finalist); FMA Montgomery District (Semi-Finalist); FIRST Mid-Atlantic District Championship (Quarter-Finalist). Led the build team in designing and machining the full robot assembly in Autodesk Inventor CAD.</p>
+              <p><strong>Community:</strong> During Covid, individually 3D-printed mask straps for local frontline workers, distributed club-wide. Mentored middle schoolers, hosted STEM events, and helped establish international FIRST clubs.</p>
+              <span class="status-pill done">Completed</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- EDUCATION -->
+        <div class="page" id="education">
+          <div class="exp-list">
             <div class="exp-card glass has-logos" data-title="UofT_Physics.edu">
               <div class="exp-logos">
-                <img src="uoft.png" alt="UofT">
+                <img src="uoft.png" alt="UofT" loading="lazy">
               </div>
               <div class="badge">Education</div>
               <h3>Honours BSc. Physics</h3>
               <div class="org"><strong><u>University of Toronto</u></strong></div>
               <div class="date">Toronto, ON &mdash; September 2022 - May 2026</div>
               <p>Minors in Computer Science and Mathematics. Coursework includes Quantum Information & Key Encryption. Developing a strong theoretical and computational foundation spanning physics, machine learning, and applied mathematics.</p>
-              <span class="status-pill wip">In Progress</span>
-            </div>
-            <div class="exp-card glass has-logos" data-title="Pascack_Pioneers.club">
-              <div class="exp-logos">
-                <img src="pascack.png" alt="Pascack Pi-oneers">
-                <img src="first.png" alt="FIRST Robotics">
+              <p><strong>Clubs:</strong></p>
+              <div class="tags">
+                <span>UofT AI Club</span>
+                <span>UofT Quantum Computing Club</span>
+                <span>UofT Physics Student Union</span>
+                <span>UofT Computer Science Student Union</span>
               </div>
-              <div class="badge">Extracurricular</div>
-              <h3>Team Leader &mdash; Mechanical Division</h3>
-              <div class="org">Pascack Pi-oneers &mdash; FIRST Robotics Team (Grades 6&ndash;12)</div>
-              <div class="date">New Jersey &mdash; 2019 - 2022</div>
-              <p>Elected Mechanical Division Team Leader of a multi-school robotics club. During build season the team operates 6 days/week for months at a time. Off-season, led a subgroup building an assistive robot with <strong>West Virginia University</strong> enabling non-ambulatory students to kick a soccer ball.</p>
-              <p><strong>Competitions:</strong> Freshman year (2019) &mdash; FIRST World Championship Detroit Darwin Sub-Division (undefeated in qualifications, Semi-Finalist); FMA Bridgewater-Raritan District (Finalist); FMA Montgomery District (Semi-Finalist); FIRST Mid-Atlantic District Championship (Quarter-Finalist). Led build team designing and machining the full robot assembly in Autodesk Inventor CAD.</p>
-              <p><strong>Community:</strong> During Covid, individually 3D-printed mask straps for local frontline workers, distributed club-wide. Mentors middle schoolers, hosts STEM events, and helps establish international FIRST clubs.</p>
-              <span class="status-pill done">Completed</span>
+            </div>
+
+            <div class="glass courses-panel" data-title="Relevant Courses Taken">
+              <div class="cw-toolbar">
+                <span class="cw-ab-label">Address&nbsp;</span>
+                <span class="cw-ab-path">C:\UofT\Transcript\Courses.txt</span>
+              </div>
+              <div class="cw-listview">
+                <div class="cw-section-title">&#128193; Physics</div>
+                <div class="cw-course"><span class="cw-code">PHY151H1</span><span>Foundations of Physics I</span></div>
+                <div class="cw-course"><span class="cw-code">PHY152H1</span><span>Foundations of Physics II</span></div>
+                <div class="cw-course"><span class="cw-code">PHY224H1</span><span>Practical Physics I</span></div>
+                <div class="cw-course"><span class="cw-code">PHY250H1</span><span>Electricity &amp; Magnetism</span></div>
+                <div class="cw-course"><span class="cw-code">PHY252H1</span><span>Thermal Physics</span></div>
+                <div class="cw-course"><span class="cw-code">PHY254H1</span><span>Classical Mechanics</span></div>
+                <div class="cw-course"><span class="cw-code">PHY256H1</span><span>Introduction to Quantum Physics</span></div>
+                <div class="cw-course"><span class="cw-code">PHY324H1</span><span>Practical Physics II</span></div>
+                <div class="cw-course"><span class="cw-code">PHY350H1</span><span>Electromagnetic Theory</span></div>
+                <div class="cw-course"><span class="cw-code">PHY354H1</span><span>Advanced Classical Mechanics</span></div>
+                <div class="cw-course"><span class="cw-code">PHY356H1</span><span>Quantum Mechanics I</span></div>
+                <div class="cw-course"><span class="cw-code">PHY358H1</span><span>Quantum Materials: From Atoms to Crystals</span></div>
+                <div class="cw-course"><span class="cw-code">PHY365H1</span><span>Quantum Information &amp; Computing</span></div>
+                <div class="cw-course"><span class="cw-code">PHY407H1</span><span>Computational Physics</span></div>
+                <div class="cw-course"><span class="cw-code">PHY460H1</span><span>Nonlinear Physics</span></div>
+                <div class="cw-course"><span class="cw-code">PHY487H1</span><span>Condensed Matter Physics I</span></div>
+
+                <div class="cw-section-title">&#128193; Mathematics</div>
+                <div class="cw-course"><span class="cw-code">MAT137Y1</span><span>Calculus with Proofs</span></div>
+                <div class="cw-course"><span class="cw-code">MAT223H1</span><span>Linear Algebra I</span></div>
+                <div class="cw-course"><span class="cw-code">MAT327H1</span><span>Multivariable Calculus with Topology and Proofs</span></div>
+                <div class="cw-course"><span class="cw-code">MAT244H1</span><span>Ordinary Differential Equations</span></div>
+                <div class="cw-course"><span class="cw-code">MAT334H1</span><span>Complex Variables</span></div>
+                <div class="cw-course"><span class="cw-code">APM346H1</span><span>Partial Differential Equations</span></div>
+
+                <div class="cw-section-title">&#128193; Computer Science</div>
+                <div class="cw-course"><span class="cw-code">CSC108H1</span><span>Introduction to Computer Programming</span></div>
+                <div class="cw-course"><span class="cw-code">CSC148H1</span><span>Introduction to Computer Science</span></div>
+                <div class="cw-course"><span class="cw-code">CSC165H1</span><span>Mathematical Expression &amp; Reasoning for Computer Science</span></div>
+                <div class="cw-course"><span class="cw-code">CSC207H1</span><span>Software Engineering and Design</span></div>
+                <div class="cw-course"><span class="cw-code">CSC209H1</span><span>C and Linux Kernel Programming</span></div>
+                <div class="cw-course"><span class="cw-code">CSC336H1</span><span>Theory of Computation (Algorithms and Data Structures)</span></div>
+                <div class="cw-course"><span class="cw-code">CSC318H1</span><span>Interactive Computing &amp; Media</span></div>
+                <div class="cw-course"><span class="cw-code">CSC343H1</span><span>Introduction to Databases</span></div>
+              </div>
+              <div class="cw-statusbar">
+                <span>30 object(s)</span>
+                <div class="cw-statusbar-sep"></div>
+                <span>University of Toronto &mdash; 2022&ndash;2026</span>
+              </div>
             </div>
           </div>
         </div>
 
         <!-- PROJECTS -->
         <div class="page" id="projects">
-          <div class="page-header"><span class="bracket">[</span><h2>Projects</h2><div class="line"></div><span class="bracket">]</span></div>
+
+          <div style="font-family:var(--font-dos);font-size:1.05rem;color:var(--cyan);letter-spacing:0.1em;padding-bottom:0.5rem;border-bottom:1px solid rgba(0,238,255,0.25);margin-bottom:0.8rem;">&#128193; Large Projects</div>
           <div class="proj-grid">
+            <div class="proj-card glass" data-title="GRACE.py">
+              <div class="top">
+                <h3>GRACE &mdash; GRinding Automated Classification Engine</h3>
+                <div class="links">
+                  <a href="https://github.com/seanjackson6325/GRACE---GRinding-Automated-Classification-Engine" target="_blank" rel="noopener">GitHub</a>
+                  <a href="#">Paper</a>
+                </div>
+              </div>
+              <p>End-to-end computer-vision framework for automated materials surface quality assessment in self-driving laboratory environments. Includes custom architectures, training pipelines, statistical benchmarking, and uncertainty analysis for real-time feedback in accelerated materials discovery. First-author research manuscript currently under review.</p>
+              <div class="tags"><span>PyTorch</span><span>Computer Vision</span><span>Research</span><span>First Author</span></div>
+            </div>
+            <div class="proj-card glass" data-title="SmartQueue.tsx">
+              <div class="top">
+                <h3>SmartQueue</h3>
+                <div class="links">
+                  <a href="https://github.com/mushroomcarbon/SmartQueue" target="_blank" rel="noopener">GitHub</a>
+                  <a href="https://smartqueuecsc318.netlify.app/" target="_blank" rel="noopener">Website</a>
+                </div>
+              </div>
+              <p>University office hours queue management system built at the University of Toronto. Features dynamic wait-time estimation, structured question intake, thematic clustering via DBScan + SBERT embeddings, public queue visibility for passive learning, and hybrid in-person/remote support.</p>
+              <div class="tags"><span>React</span><span>TypeScript</span><span>Firebase</span><span>ML / NLP</span><span>Human-Centered Design</span></div>
+            </div>
             <div class="proj-card glass" data-title="TMM_Scheduler.py">
               <div class="top">
                 <h3>Time Management Manager (TMM)</h3>
@@ -1629,20 +1827,48 @@
               <p>Group-oriented time management system designed to streamline task scheduling and coordination. Accounts for dynamic availability across multiple users, enabling efficient task assignment with minimal manual coordination.</p>
               <div class="tags"><span>Python</span><span>Scheduling</span><span>Multi-user</span></div>
             </div>
-            <div class="proj-card glass" data-title="MatQual_CV.py">
+          </div>
+
+          <div style="font-family:var(--font-dos);font-size:1.05rem;color:var(--cyan);letter-spacing:0.1em;padding-bottom:0.5rem;border-bottom:1px solid rgba(0,238,255,0.25);margin-top:1.4rem;margin-bottom:0.8rem;">&#128193; Small Projects</div>
+          <div class="proj-grid">
+            <div class="proj-card glass" data-title="RGL.c">
               <div class="top">
-                <h3>Material Quality Classification</h3>
-                <div class="links"><a href="#">Paper</a></div>
+                <h3>Retro Graphics Layer (RGL)</h3>
+                <div class="links"><a href="https://github.com/seanjackson6325/Retro-Graphics-Layer-RGL-" target="_blank" rel="noopener">GitHub</a></div>
               </div>
-              <p>End-to-end computer-vision framework for automated materials surface quality assessment in self-driving laboratory environments. Includes custom architectures, training pipelines, statistical benchmarking, and uncertainty analysis for real-time feedback in accelerated materials discovery.</p>
-              <div class="tags"><span>PyTorch</span><span>Computer Vision</span><span>Research</span><span>First Author</span></div>
+              <p>C/C++ software layer on top of SDL2 for generating convincing retro graphics effects.</p>
+              <div class="tags"><span>C</span><span>SDL2</span><span>Graphics</span></div>
+            </div>
+            <div class="proj-card glass" data-title="Epoch.h">
+              <div class="top">
+                <h3>Epoch</h3>
+                <div class="links"><a href="https://github.com/seanjackson6325/Epoch" target="_blank" rel="noopener">GitHub</a></div>
+              </div>
+              <p>High-resolution, cross-platform time library for C/C++.</p>
+              <div class="tags"><span>C</span><span>C++</span><span>Library</span></div>
+            </div>
+            <div class="proj-card glass" data-title="Breakout.java">
+              <div class="top">
+                <h3>Super Breakout</h3>
+                <div class="links"><a href="https://github.com/seanjackson6325/Honors-Compsi-Final" target="_blank" rel="noopener">GitHub</a></div>
+              </div>
+              <p>Unique super breakout game built for high school honours computer science.</p>
+              <div class="tags"><span>Java</span><span>Game Dev</span></div>
+            </div>
+            <div class="proj-card glass" data-title="CryptoSim.java">
+              <div class="top">
+                <h3>Crypto Simulator</h3>
+                <div class="links"><a href="https://github.com/seanjackson6325/APCS-2021-Final-Project" target="_blank" rel="noopener">GitHub</a></div>
+              </div>
+              <p>Final project for Advanced Topics in Computer Science (high school), built during the 2021 cryptocurrency craze.</p>
+              <div class="tags"><span>Java</span><span>Simulation</span></div>
             </div>
           </div>
+
         </div>
 
         <!-- PUBLICATIONS -->
         <div class="page" id="publications">
-          <div class="page-header"><span class="bracket">[</span><h2>Publications</h2><div class="line"></div><span class="bracket">]</span></div>
           <div class="pub-card glass" data-title="Publications.bib">
             <h3>Material Quality Classification Algorithms</h3>
             <div class="meta">First Author &mdash; Under Review (2025)</div>
@@ -1652,153 +1878,51 @@
 
         <!-- NOTES -->
         <div class="page" id="notes">
-          <div class="page-header"><span class="bracket">[</span><h2>Notes</h2><div class="line"></div><span class="bracket">]</span></div>
-          <div class="text-panel glass" data-title="Notes Index" style="margin-bottom:1.6rem;">
-            <img class="gif90 gif-r" src="https://blob.gifcities.org/gifcities/G5KXEPEMTL4FWQL3ZZFFW3ZTBKLNOGWP.gif" alt="">
-            <p class="text-block">Notes, derivations, and write-ups I've put together for various courses and topics. Click any entry to open the PDF.</p>
-          </div>
+          <div class="glass courses-panel" data-title="Notes">
+            <div class="cw-toolbar">
+              <span class="cw-ab-label">Address&nbsp;</span>
+              <span class="cw-ab-path">C:\SJackson\Notes\</span>
+            </div>
+            <div class="cw-desc">Notes I've made in the past. I've converted them to LaTeX and put them into a textbook format.</div>
+            <div class="cw-listview">
 
-          <div class="notes-subject">
-            <div class="notes-subject-title">Quantum Mechanics</div>
-            <div class="gif-row" style="margin-bottom:0.4rem;">
-              <img class="gif90" src="https://blob.gifcities.org/gifcities/4POQMBYDCU5ANQKVIUACZQSNHOGQ4QBL.gif" alt="">
-              <img class="gif90" src="https://blob.gifcities.org/gifcities/AETOJO542NSXFY7S2HQDPPBQ2LLT7NGO.gif" alt="">
-              <img class="gif90" src="https://blob.gifcities.org/gifcities/JUPY4DDDPTUTZCIV35CYOMY5D7NOXD63.gif" alt="">
-            </div>
-            <div class="notes-grid">
-              <a class="note-card glass soon" data-title="QM1_Foundations.pdf" href="#">
-                <div class="note-icon soon-ico">PDF</div>
-                <div><div class="note-title">Foundations & Postulates</div><div class="note-meta">QM I &mdash; Coming Soon</div></div>
-              </a>
-              <a class="note-card glass soon" data-title="QM1_Harmonic.pdf" href="#">
-                <div class="note-icon soon-ico">PDF</div>
-                <div><div class="note-title">Harmonic Oscillator</div><div class="note-meta">QM I &mdash; Coming Soon</div></div>
-              </a>
-              <a class="note-card glass soon" data-title="QM2_Perturbation.pdf" href="#">
-                <div class="note-icon soon-ico">PDF</div>
-                <div><div class="note-title">Perturbation Theory</div><div class="note-meta">QM II &mdash; Coming Soon</div></div>
-              </a>
-            </div>
-          </div>
+              <div class="cw-section-title">&#128193; Quantum Mechanics</div>
+              <a class="cw-note-row soon"><span class="cw-note-icon">PDF</span><span>Foundations &amp; Postulates</span><span class="cw-note-meta">QM I &mdash; Coming Soon</span></a>
+              <a class="cw-note-row soon"><span class="cw-note-icon">PDF</span><span>Harmonic Oscillator</span><span class="cw-note-meta">QM I &mdash; Coming Soon</span></a>
+              <a class="cw-note-row soon"><span class="cw-note-icon">PDF</span><span>Perturbation Theory</span><span class="cw-note-meta">QM II &mdash; Coming Soon</span></a>
 
-          <div class="notes-subject">
-            <div class="notes-subject-title">Classical Mechanics</div>
-            <div class="gif-row" style="margin-bottom:0.4rem;">
-              <img class="gif90" src="https://blob.gifcities.org/gifcities/ASN7YSB5VYVOWBDT3WTDGTMN7QAGJDGI.gif" alt="">
-              <img class="gif90" src="https://blob.gifcities.org/gifcities/E47ZJBID57WBH5ZXYB7SL2OCE22C5HH7.gif" alt="">
-              <img class="gif90" src="https://blob.gifcities.org/gifcities/KAXTCLQ675NNDECORE7QSCXMOHD7NDNF.gif" alt="">
-            </div>
-            <div class="notes-grid">
-              <a class="note-card glass soon" data-title="CM_Lagrangian.pdf" href="#">
-                <div class="note-icon soon-ico">PDF</div>
-                <div><div class="note-title">Lagrangian Dynamics</div><div class="note-meta">Classical Mechanics &mdash; Coming Soon</div></div>
-              </a>
-              <a class="note-card glass soon" data-title="CM_Hamiltonian.pdf" href="#">
-                <div class="note-icon soon-ico">PDF</div>
-                <div><div class="note-title">Hamiltonian Mechanics</div><div class="note-meta">Classical Mechanics &mdash; Coming Soon</div></div>
-              </a>
-            </div>
-          </div>
+              <div class="cw-section-title">&#128193; Classical Mechanics</div>
+              <a class="cw-note-row" href="notes/Classical_Mechanics_Notes.pdf" target="_blank"><span class="cw-note-icon">PDF</span><span>Classical Mechanics</span><span class="cw-note-meta">PHY254H1 &mdash; Full Notes</span></a>
+              <a class="cw-note-row" href="notes/Advanced_Mechanics_Notes.pdf" target="_blank"><span class="cw-note-icon">PDF</span><span>Advanced Mechanics (Lagrangian &amp; Hamiltonian)</span><span class="cw-note-meta">PHY354H1 &mdash; Full Notes</span></a>
 
-          <div class="notes-subject">
-            <div class="notes-subject-title">Electromagnetism</div>
-            <div class="gif-row" style="margin-bottom:0.4rem;">
-              <img class="gif90" src="https://blob.gifcities.org/gifcities/3BRQCUJYYW2BZTHNT5NCVMX7GBP3AKFT.gif" alt="">
-              <img class="gif90" src="https://blob.gifcities.org/gifcities/5SAYDEDXUAM7XUK5PSV4HZSGDHVNXS6R.gif" alt="">
-              <img class="gif90" src="https://blob.gifcities.org/gifcities/WBCA2EZ6GOAGXZCIUCEE4UH4P24DNZ5V.gif" alt="">
-            </div>
-            <div class="notes-grid">
-              <a class="note-card glass soon" data-title="EM_Maxwell.pdf" href="#">
-                <div class="note-icon soon-ico">PDF</div>
-                <div><div class="note-title">Maxwell's Equations</div><div class="note-meta">E&amp;M &mdash; Coming Soon</div></div>
-              </a>
-              <a class="note-card glass soon" data-title="EM_Radiation.pdf" href="#">
-                <div class="note-icon soon-ico">PDF</div>
-                <div><div class="note-title">Radiation &amp; Waves</div><div class="note-meta">E&amp;M &mdash; Coming Soon</div></div>
-              </a>
-            </div>
-          </div>
+              <div class="cw-section-title">&#128193; Computational Physics</div>
+              <a class="cw-note-row" href="notes/Computational_Physics_Notes.pdf" target="_blank"><span class="cw-note-icon">PDF</span><span>Computational Physics</span><span class="cw-note-meta">PHY407H1 &mdash; Full Notes</span></a>
 
-          <div class="notes-subject">
-            <div class="notes-subject-title">Machine Learning</div>
-            <div class="gif-row" style="margin-bottom:0.4rem;">
-              <img class="gif90" src="https://blob.gifcities.org/gifcities/EHPOIL7BZOJE6THR2QCECU3VOYXUAH4R.gif" alt="">
-              <img class="gif90" src="https://blob.gifcities.org/gifcities/74K4QOJ4HQNNDONNV6KIHAJIV5IATLJV.gif" alt="">
-              <img class="gif90" src="https://blob.gifcities.org/gifcities/NJVJOAOD6LA4W2G247EXVLGF6B2VG45M.gif" alt="">
-            </div>
-            <div class="notes-grid">
-              <a class="note-card glass soon" data-title="DL_Backprop.pdf" href="#">
-                <div class="note-icon soon-ico">PDF</div>
-                <div><div class="note-title">Backpropagation Derivation</div><div class="note-meta">Deep Learning &mdash; Coming Soon</div></div>
-              </a>
-              <a class="note-card glass soon" data-title="DL_Transformer.pdf" href="#">
-                <div class="note-icon soon-ico">PDF</div>
-                <div><div class="note-title">Transformer Architecture</div><div class="note-meta">Deep Learning &mdash; Coming Soon</div></div>
-              </a>
-            </div>
-          </div>
-        </div>
+              <div class="cw-section-title">&#128193; Electromagnetism</div>
+              <a class="cw-note-row soon"><span class="cw-note-icon">PDF</span><span>Maxwell's Equations</span><span class="cw-note-meta">E&amp;M &mdash; Coming Soon</span></a>
+              <a class="cw-note-row soon"><span class="cw-note-icon">PDF</span><span>Radiation &amp; Waves</span><span class="cw-note-meta">E&amp;M &mdash; Coming Soon</span></a>
 
-        <!-- JOURNAL -->
-        <!-- INTERESTS -->
-        <div class="page" id="interests">
-          <div class="page-header"><span class="bracket">[</span><h2>Interests</h2><div class="line"></div><span class="bracket">]</span></div>
-          <div class="fun-grid">
+              <div class="cw-section-title">&#128193; Machine Learning</div>
+              <a class="cw-note-row soon"><span class="cw-note-icon">PDF</span><span>Backpropagation Derivation</span><span class="cw-note-meta">Deep Learning &mdash; Coming Soon</span></a>
+              <a class="cw-note-row soon"><span class="cw-note-icon">PDF</span><span>Transformer Architecture</span><span class="cw-note-meta">Deep Learning &mdash; Coming Soon</span></a>
 
-            <div class="fun-card glass" data-title="Quantum_Physics.note">
-              <div class="fun-tag thought">Science</div>
-              <h3>Quantum Mechanics</h3>
-              <p>There's something uniquely compelling about a theory that forces you to abandon classical intuition entirely. I spend a lot of time with the formalism — Hilbert spaces, operators, measurement — and even more thinking about what it actually means. Quantum information is a particular fixation right now: the idea that information is physical, and that entanglement is a resource, still feels like it shouldn't be true.</p>
-              <div class="fun-date">Ongoing</div>
             </div>
-
-            <div class="fun-card glass" data-title="ML_Research.note">
-              <div class="fun-tag enjoy">Research</div>
-              <h3>ML Research</h3>
-              <p>Outside of work projects, I try to stay current with the ML literature — particularly computer vision, geometric deep learning, and physics-informed neural networks. The intersection of physical priors and learned representations is where I think a lot of the most interesting open problems live right now.</p>
-              <div class="fun-date">Ongoing</div>
+            <div class="cw-statusbar">
+              <span>12 object(s)</span>
+              <div class="cw-statusbar-sep"></div>
+              <span>3 available</span>
             </div>
-
-            <div class="fun-card glass" data-title="Simulations.py">
-              <div class="fun-tag enjoy">Hobby</div>
-              <h3>Physics Simulations</h3>
-              <p>Writing n-body gravity sims, wave equation solvers, and chaotic pendulum integrators in Python whenever I want to see something click visually. There's something uniquely satisfying about watching an algorithm produce the same orbit Kepler described 400 years ago.</p>
-              <div class="fun-date">Ongoing</div>
-            </div>
-
-            <div class="fun-card glass" data-title="MathReading.note">
-              <div class="fun-tag thought">Science</div>
-              <h3>Pure Mathematics</h3>
-              <p>Taking a math minor changed how I think about everything. Real analysis, linear algebra, and abstract algebra have a kind of austere beauty that feels completely separate from their applications — even when those applications are everywhere. I read math textbooks recreationally, which I'm told is a personality flaw.</p>
-              <div class="fun-date">Ongoing</div>
-            </div>
-
-            <div class="fun-card glass" data-title="MechKB.txt">
-              <div class="fun-tag enjoy">Hobby</div>
-              <h3>Mechanical Keyboards</h3>
-              <p>Deep into the rabbit hole of custom boards. Currently daily-driving a 65% with lubed Boba U4Ts. The tactile bump hits differently when you're writing code at 2am.</p>
-              <div class="fun-date">Ongoing</div>
-            </div>
-
           </div>
         </div>
 
         <!-- CONTACT -->
         <div class="page" id="contact">
-          <div class="page-header"><span class="bracket">[</span><h2>Contact</h2><div class="line"></div><span class="bracket">]</span></div>
           <div style="display:flex; gap:1rem; align-items:flex-start; flex-wrap:wrap;">
-          <div class="text-panel glass" data-title="Contact" style="flex:1; min-width:260px; padding-right:110px;">
-            <img class="gif90" src="https://blob.gifcities.org/gifcities/77WFEBP66I4ARTA5T3UEKCZO3WDUQPAU.gif" alt="" style="position:absolute; top:48px; right:14px; width:90px;">
+          <div class="text-panel glass" data-title="Contact" style="flex:1; min-width:260px;">
             <p class="text-block" style="margin-bottom:0;">I'm always open to discussing research collaborations, engineering roles, or interesting problems. Feel free to reach out through any of the channels below.</p>
           </div>
           <div class="contact-card glass" data-title="Contact.vcf" style="flex:1; min-width:260px;">
             <div class="ch-label">Get in Touch</div>
-            <div class="gif-row">
-              <img class="gif90" src="https://blob.gifcities.org/gifcities/AIMVDJYWPSI7HXEABRN256QLGBFKLPB7.gif" alt="">
-              <img class="gif90" src="https://blob.gifcities.org/gifcities/BXODCCH4IPIJWZETL4NOJQ6CZI5RMFED.gif" alt="">
-              <img class="gif90" src="https://blob.gifcities.org/gifcities/ENS44DPGCNOA6IF2WGOFOZDRKCSFLKJ7.gif" alt="">
-              <img class="gif90" src="https://blob.gifcities.org/gifcities/NXKB5AHZ4VN3IE6OE42UPNUONWE2AV3V.gif" alt="">
-            </div>
             <div class="ch-row"><span class="ch-ico">✉</span><a href="mailto:sjackson6325@gmail.com">sjackson6325@gmail.com</a></div>
             <div class="ch-row"><span class="ch-ico">in</span><a href="http://www.linkedin.com/in/sean-jackson-b4b965278" target="_blank">LinkedIn</a></div>
             <div class="ch-row"><span class="ch-ico">gh</span><a href="https://github.com/" target="_blank">GitHub</a></div>
@@ -1828,6 +1952,7 @@
       var _ctx   = null;
       var _irbuf = null;
       var _decGen = 0;
+      var _muted = false;
 
       // MP3-backed sounds
       var _clickAudio = new Audio('mouseclick.mp3');
@@ -1874,6 +1999,7 @@
 
       // For user-triggered sounds: queues via .then() if context is resuming
       function tone(freq, vol, dur, delay, freqEnd, reverb) {
+        if (_muted) return;
         var c = ac();
         if (!c) return;
         var play = function () {
@@ -1893,7 +2019,7 @@
 
       // For boot sounds: plays only if context is already running — never queues
       function bootTone(freq, vol, dur, reverb) {
-        if (!_ctx || _ctx.state !== 'running') return;
+        if (_muted || !_ctx || _ctx.state !== 'running') return;
         var t0 = _ctx.currentTime;
         var osc = _ctx.createOscillator(), g = _ctx.createGain();
         osc.type = 'sine'; osc.frequency.value = freq;
@@ -1919,10 +2045,12 @@
 
         click:     function () { tone(520, 0.08, 0.045, 0, 360); },
         navSwitch: function () {
+          if (_muted) return;
           _clickAudio.currentTime = 0;
           _clickAudio.play().catch(function () {});
         },
         deny: function () {
+          if (_muted) return;
           var c = ac(); if (!c) return;
           var play = function () {
             var t0 = c.currentTime;
@@ -1941,6 +2069,7 @@
         menuClose: function () { tone(1047, 0.055, 0.18, 0, null, true); tone(784, 0.055, 0.18, 0.1, null, true); },
 
         decryptStart: function () {
+          if (_muted) return;
           var gen = ++_decGen;
           var c = ac();
           if (!c) return;
@@ -1967,6 +2096,7 @@
         decryptStop: function () { _decGen++; },
 
         bootBgStart: function () {
+          if (_muted) return;
           _bootAudio.currentTime = 0;
           _bootAudio.play().catch(function () {});
         },
@@ -1986,14 +2116,17 @@
           }, 50);
         },
         bootTheme: function () {
+          if (_muted) return;
           _themeAudio.currentTime = 0;
           _themeAudio.play().catch(function () {});
         },
         appear: function () {
+          if (_muted) return;
           _appearAudio.currentTime = 0;
           _appearAudio.play().catch(function () {});
         },
         poof: function () {
+          if (_muted) return;
           var c = ac(); if (!c) return;
           var play = function () {
             var t0 = c.currentTime;
@@ -2024,7 +2157,10 @@
             src.start(t0); src.stop(t0 + 0.38);
           };
           if (c.state === 'running') play(); else c.resume().then(play);
-        }
+        },
+        setMuted:   function (v) { _muted = !!v; },
+        isMuted:    function ()  { return _muted; },
+        toggleMute: function ()  { _muted = !_muted; return _muted; }
       };
     })();
 
@@ -2179,10 +2315,17 @@
       closeHelpMenu();
       // Reset all window positions on page switch
       document.querySelectorAll('.glass').forEach(function(win) {
-        win.style.transform = '';
-        win.style.zIndex = '';
-        win._dragTx = 0;
-        win._dragTy = 0;
+        win.style.transition = '';
+        win.style.transform  = '';
+        win.style.zIndex     = '';
+        win.style.position   = '';
+        win.style.left = win.style.top = win.style.width = win.style.height = win.style.opacity = '';
+        win.style.visibility = '';
+        win._dragTx    = 0;
+        win._dragTy    = 0;
+        win._maximized  = false;
+        win._minimizing = false;
+        win._poofing    = false;
       });
       preScramblePage(newPage);
       setTimeout(runDecryptOnActivePage, 280);
@@ -2216,8 +2359,8 @@
         thumb.style.top    = top + 'px';
       }
 
-      ca.addEventListener('scroll', updateThumb);
-      window.addEventListener('resize', updateThumb);
+      ca.addEventListener('scroll', updateThumb, { passive: true });
+      window.addEventListener('resize', updateThumb, { passive: true });
 
       // Expose for page-switch resets
       window._sbUpdate = updateThumb;
@@ -2279,7 +2422,11 @@
         thumbEl.style.height = thumbH + 'px';
         thumbEl.style.top    = top + 'px';
       }
-      (function tick() { updateThumb(); requestAnimationFrame(tick); })();
+      viewport.addEventListener('scroll', updateThumb, { passive: true });
+      if (window.MutationObserver) {
+        new MutationObserver(updateThumb).observe(trackEl, { childList: true, subtree: false });
+      }
+      updateThumb();
 
       var _rep = null;
       function startRep(d) { viewport.scrollTop += d; _rep = setInterval(function() { viewport.scrollTop += d; }, 50); }
@@ -2391,7 +2538,6 @@
           case 'p': switchPage('projects');     break;
           case 'u': switchPage('publications'); break;
           case 'n': switchPage('notes');        break;
-          case 'i': switchPage('interests');    break;
           case 'c': switchPage('contact');      break;
           case 'm': toggleNavBar();             break;
           case '/': toggleHelpMenu();           break;
@@ -2420,7 +2566,7 @@
         e.stopPropagation();
         var wasOpen = newsDd.classList.contains('open');
         closeAll();
-        if (!wasOpen) { SFX.menuOpen(); newsDd.classList.add('open'); }
+        if (!wasOpen) { SFX.menuOpen(); newsDd.classList.add('open'); if (window._loadNewsFeed) window._loadNewsFeed(); }
         else { SFX.menuClose(); }
       });
 
@@ -2428,7 +2574,7 @@
         e.stopPropagation();
         var wasOpen = mktsDd.classList.contains('open');
         closeAll();
-        if (!wasOpen) { SFX.menuOpen(); mktsDd.classList.add('open'); }
+        if (!wasOpen) { SFX.menuOpen(); mktsDd.classList.add('open'); if (window._loadMarketsFeed) window._loadMarketsFeed(); }
         else { SFX.menuClose(); }
       });
 
@@ -2448,12 +2594,22 @@
 
       // Patch closeHelpMenu to also close feeds
       window._closeAllDropdowns = closeAll;
+
+      // Mute toggle button
+      document.getElementById('muteBtn').addEventListener('click', function(e) {
+        e.stopPropagation();
+        closeAll();
+        var nowMuted = SFX.toggleMute();
+        this.textContent = nowMuted ? '[×] Muted' : '[♪] Sound';
+        SFX.navSwitch(); // plays click only if now unmuted
+      });
     })();
 
-    // ===== NEWS DROPDOWN — Hacker News feed =====
+    // ===== NEWS DROPDOWN — Hacker News feed (lazy: loads on first open) =====
     (function() {
       var track    = document.getElementById('newsTrack');
       var viewport = document.getElementById('newsViewport');
+      var _loaded  = false;
 
       function escHtml(s) {
         return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -2471,33 +2627,39 @@
         viewport.scrollTop = 0;
       }
 
-      var N = 20;
-      fetch('https://hacker-news.firebaseio.com/v0/topstories.json')
-        .then(function(r) { return r.json(); })
-        .then(function(ids) {
-          return Promise.all(ids.slice(0, N).map(function(id) {
-            return fetch('https://hacker-news.firebaseio.com/v0/item/' + id + '.json')
-              .then(function(r) { return r.json(); })
-              .catch(function() { return null; });
-          }));
-        })
-        .then(function(stories) {
-          var items = stories
-            .filter(function(s) { return s && s.title; })
-            .map(function(s) { return { title: s.title, url: s.url || ('https://news.ycombinator.com/item?id=' + s.id) }; });
-          if (items.length) buildFeed(items);
-          else buildFeed([{ title: 'Hacker News feed unavailable', url: 'https://news.ycombinator.com' }]);
-        })
-        .catch(function() {
-          buildFeed([{ title: 'Hacker News feed unavailable', url: 'https://news.ycombinator.com' }]);
-        });
+      window._loadNewsFeed = function() {
+        if (_loaded) return;
+        _loaded = true;
+        var N = 20;
+        fetch('https://hacker-news.firebaseio.com/v0/topstories.json')
+          .then(function(r) { return r.json(); })
+          .then(function(ids) {
+            return Promise.all(ids.slice(0, N).map(function(id) {
+              return fetch('https://hacker-news.firebaseio.com/v0/item/' + id + '.json')
+                .then(function(r) { return r.json(); })
+                .catch(function() { return null; });
+            }));
+          })
+          .then(function(stories) {
+            var items = stories
+              .filter(function(s) { return s && s.title; })
+              .map(function(s) { return { title: s.title, url: s.url || ('https://news.ycombinator.com/item?id=' + s.id) }; });
+            if (items.length) buildFeed(items);
+            else buildFeed([{ title: 'Hacker News feed unavailable', url: 'https://news.ycombinator.com' }]);
+          })
+          .catch(function() {
+            buildFeed([{ title: 'Hacker News feed unavailable', url: 'https://news.ycombinator.com' }]);
+          });
+      };
     })();
 
-    // ===== MARKETS DROPDOWN — live quotes =====
+    // ===== MARKETS DROPDOWN — live quotes (lazy: loads on first open) =====
     (function() {
       var track    = document.getElementById('mktsTrack');
       var viewport = document.getElementById('mktsViewport');
       var _firstLoad = true;
+      var _loaded = false;
+      var _interval = null;
 
       function fmt(n, dec) { return n.toFixed(dec !== undefined ? dec : 2); }
       function arrow(chg) { return chg > 0 ? '▲' : chg < 0 ? '▼' : '—'; }
@@ -2594,8 +2756,12 @@
         });
       }
 
-      fetchQuotes();
-      setInterval(fetchQuotes, 60000);
+      window._loadMarketsFeed = function() {
+        if (_loaded) return;
+        _loaded = true;
+        fetchQuotes();
+        _interval = setInterval(fetchQuotes, 60000);
+      };
     })();
 
 
@@ -2613,22 +2779,10 @@
       var N = 70, DEPTH = 900, SPEED = 5;
       var TRAIL = 18; // frames of streak history to project backward
 
-      // Bayer 4×4 ordered dithering matrix (values 0–15)
-      var BAYER = [
-        [ 0, 8, 2,10],
-        [12, 4,14, 6],
-        [ 3,11, 1, 9],
-        [15, 7,13, 5]
-      ];
-
-      // Quantize one channel to the nearest web-safe step (multiples of 51)
-      function ws(v) { return Math.max(0, Math.min(255, Math.round(v / 51) * 51)); }
-
-      // Apply Bayer dithering then snap to web-safe 216-color palette
-      function dither(r, g, b, px, py) {
-        var noise = (BAYER[py & 3][px & 3] / 16 - 0.5) * 48;
-        return [ws(r + noise), ws(g + noise), ws(b + noise)];
-      }
+      // Precomputed Bayer 4×4 noise table — avoids nested array lookups + allocation per pixel
+      var BAYER_NOISE = new Float32Array(16);
+      var _bf = [0,8,2,10, 12,4,14,6, 3,11,1,9, 15,7,13,5];
+      for (var _i = 0; _i < 16; _i++) BAYER_NOISE[_i] = (_bf[_i] / 16 - 0.5) * 48;
 
       function mkStar(atDepth) {
         var angle = Math.random() * 6.2832;
@@ -2702,14 +2856,16 @@
           ctx.shadowBlur = 0;
         }
 
-        // Apply 256-colour Bayer dithering to every pixel
+        // Apply 256-colour Bayer dithering — typed array lookup, no allocations
         var img  = ctx.getImageData(0, 0, RW, RH);
         var data = img.data;
         for (var py = 0; py < RH; py++) {
           for (var px = 0; px < RW; px++) {
-            var k = (py * RW + px) * 4;
-            var q = dither(data[k], data[k+1], data[k+2], px, py);
-            data[k] = q[0]; data[k+1] = q[1]; data[k+2] = q[2];
+            var k = (py * RW + px) << 2;
+            var noise = BAYER_NOISE[((py & 3) << 2) | (px & 3)];
+            data[k]   = Math.round((data[k]   + noise) / 51) * 51;
+            data[k+1] = Math.round((data[k+1] + noise) / 51) * 51;
+            data[k+2] = Math.round((data[k+2] + noise) / 51) * 51;
           }
         }
         ctx.putImageData(img, 0, 0);
@@ -2747,6 +2903,77 @@
       });
     })();
 
+    function minimizeWindow(win) {
+      if (win._minimizing || win._poofing) return;
+      win._minimizing = true;
+      SFX.navSwitch();
+
+      // Determine restore target — if currently maximized, restore to pre-maximize state
+      var restoreTransform, restoreTx, restoreTy, restoreZIndex;
+      if (win._maximized) {
+        restoreTransform = win._savedTransform;
+        restoreTx        = win._savedTx;
+        restoreTy        = win._savedTy;
+        restoreZIndex    = win._savedZIndex;
+        win._maximized   = false;
+      } else {
+        restoreTransform = win.style.transform || '';
+        restoreTx        = win._dragTx;
+        restoreTy        = win._dragTy;
+        restoreZIndex    = win.style.zIndex || '';
+      }
+
+      // Pin to current rendered position so CSS transition has a start point
+      var rect = win.getBoundingClientRect();
+      win.style.transition = '';
+      win.style.position   = 'fixed';
+      win.style.left       = rect.left   + 'px';
+      win.style.top        = rect.top    + 'px';
+      win.style.width      = rect.width  + 'px';
+      win.style.height     = rect.height + 'px';
+      win.style.transform  = 'none';
+      win.style.zIndex     = '91';
+
+      // Animate to bottom-left corner
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          win.style.transition = 'left 0.3s ease-in, top 0.3s ease-in, width 0.3s ease-in, height 0.3s ease-in, opacity 0.2s ease-in';
+          win.style.left    = '4px';
+          win.style.top     = (window.innerHeight - 28) + 'px';
+          win.style.width   = '100px';
+          win.style.height  = '24px';
+          win.style.opacity = '0';
+        });
+      });
+
+      // Hide after animation finishes, then restore after ~1s total
+      setTimeout(function() {
+        win.style.visibility = 'hidden';
+        win.style.transition = '';
+
+        setTimeout(function() {
+          win.style.position   = '';
+          win.style.left       = '';
+          win.style.top        = '';
+          win.style.width      = '';
+          win.style.height     = '';
+          win.style.opacity    = '';
+          win.style.transform  = restoreTransform;
+          win.style.zIndex     = restoreZIndex;
+          win._dragTx          = restoreTx;
+          win._dragTy          = restoreTy;
+
+          SFX.appear();
+          win.style.visibility = '';
+          win.classList.add('reconstructing');
+          setTimeout(function() {
+            win.classList.remove('reconstructing');
+            win._minimizing = false;
+          }, 600);
+        }, 700);
+      }, 300);
+    }
+
     function poofWindow(win) {
       if (win._poofing) return;
       win._poofing = true;
@@ -2759,8 +2986,11 @@
       setTimeout(function() {
         win._dragTx = 0;
         win._dragTy = 0;
-        win.style.transform = '';
-        win.style.zIndex = '';
+        win.style.transform  = '';
+        win.style.zIndex     = '';
+        win.style.position   = '';
+        win.style.left = win.style.top = win.style.width = win.style.height = '';
+        win._maximized = false;
         SFX.appear();
         win.style.visibility = '';
         win.classList.add('reconstructing');
@@ -2785,20 +3015,57 @@
         }
 
         win.addEventListener('mousemove', function(e) {
-          if (window.setFakeCursor) window.setFakeCursor(inTitleBar(e) ? 'move' : 'arrow');
+          if (!window.setFakeCursor) return;
+          if (e.target && e.target.closest && e.target.closest('.win-btn')) {
+            window.setFakeCursor('pointer');
+          } else {
+            window.setFakeCursor(inTitleBar(e) ? 'move' : 'arrow');
+          }
         });
 
         win.addEventListener('mouseleave', function() {
           if (window.setFakeCursor) window.setFakeCursor('arrow');
         });
 
-        // Win-btn clicks: close = poof, others = deny
+        // Win-btn clicks: close = poof, max = maximize/restore, min = deny
+        win._maximized = false;
         win.querySelectorAll('.win-btn').forEach(function(btn) {
           btn.style.pointerEvents = 'auto';
           btn.addEventListener('click', function(e) {
             e.stopPropagation();
             if (btn.classList.contains('win-btn-close')) {
               poofWindow(win);
+            } else if (btn.classList.contains('win-btn-max')) {
+              SFX.navSwitch();
+              if (!win._maximized) {
+                win._savedTransform = win.style.transform || '';
+                win._savedTx        = win._dragTx;
+                win._savedTy        = win._dragTy;
+                win._savedZIndex    = win.style.zIndex || '';
+                var sw = document.getElementById('scrollWrapper');
+                var r  = sw.getBoundingClientRect();
+                win.style.position  = 'fixed';
+                win.style.left      = r.left   + 'px';
+                win.style.top       = r.top    + 'px';
+                win.style.width     = r.width  + 'px';
+                win.style.height    = r.height + 'px';
+                win.style.transform = 'none';
+                win.style.zIndex    = '91';
+                win._maximized = true;
+              } else {
+                win.style.position  = '';
+                win.style.left      = '';
+                win.style.top       = '';
+                win.style.width     = '';
+                win.style.height    = '';
+                win.style.transform = win._savedTransform;
+                win.style.zIndex    = win._savedZIndex;
+                win._dragTx = win._savedTx;
+                win._dragTy = win._savedTy;
+                win._maximized = false;
+              }
+            } else if (btn.classList.contains('win-btn-min')) {
+              minimizeWindow(win);
             } else {
               SFX.deny();
             }
@@ -2806,6 +3073,7 @@
         });
 
         win.addEventListener('mousedown', function(e) {
+          if (win._maximized) return;
           zCounter++;
           win.style.zIndex = Math.min(zCounter, 90);
 
@@ -2819,15 +3087,18 @@
           var oy = e.clientY - win._dragTy;
 
           document.body.style.userSelect = 'none';
+          if (window.setFakeCursor) window.setFakeCursor('move');
 
           function onMove(e) {
             win._dragTx = e.clientX - ox;
             win._dragTy = e.clientY - oy;
             win.style.transform = 'translate(' + win._dragTx + 'px, ' + win._dragTy + 'px)';
+            if (window.setFakeCursor) window.setFakeCursor('move');
           }
 
           function onUp() {
             document.body.style.userSelect = '';
+            if (window.setFakeCursor) window.setFakeCursor('arrow');
             document.removeEventListener('mousemove', onMove);
             document.removeEventListener('mouseup', onUp);
           }
@@ -2979,17 +3250,21 @@
         [0,0,0,0,0,0,0,0],
       ];
 
-      // 4-way move — hotspot at center (col 4, row 4)
+      // 4-way move — hotspot at center (col 6, row 6)
       var move = [
-        [0,0,0,0,1,0,0,0,0],
-        [0,0,0,1,2,1,0,0,0],
-        [0,0,0,0,1,0,0,0,0],
-        [0,1,0,0,1,0,0,1,0],
-        [1,2,1,1,2,1,1,2,1],
-        [0,1,0,0,1,0,0,1,0],
-        [0,0,0,0,1,0,0,0,0],
-        [0,0,0,1,2,1,0,0,0],
-        [0,0,0,0,1,0,0,0,0],
+        [0,0,0,0,0,0,1,0,0,0,0,0,0],
+        [0,0,0,0,0,1,2,1,0,0,0,0,0],
+        [0,0,0,0,1,2,2,2,1,0,0,0,0],
+        [0,0,0,0,0,0,1,0,0,0,0,0,0],
+        [0,0,0,0,0,0,1,0,0,0,0,0,0],
+        [0,1,1,0,0,0,1,0,0,0,1,1,0],
+        [1,2,2,1,0,0,1,0,0,1,2,2,1],
+        [0,1,1,0,0,0,1,0,0,0,1,1,0],
+        [0,0,0,0,0,0,1,0,0,0,0,0,0],
+        [0,0,0,0,0,0,1,0,0,0,0,0,0],
+        [0,0,0,0,1,2,2,2,1,0,0,0,0],
+        [0,0,0,0,0,1,2,1,0,0,0,0,0],
+        [0,0,0,0,0,0,1,0,0,0,0,0,0],
       ];
 
       // ns-resize (↕) — hotspot at center (col 2, row 5)
@@ -3143,88 +3418,190 @@
       }
 
       var SEQ = [
-        // BIOS POST
-        { text: 'SJACKSON/BIOS Version 2.09  Copyright (C) 1994  AMI BIOS Inc., All Rights Reserved', cls: 'boot-hi', delay: 0,   pause: 80  },
+        // ===== BIOS POST =====
+        { text: 'SJackson/BIOS Version 2.26  Copyright (C) 2026  SJackson Labs Inc., All Rights Reserved', cls: 'boot-hi', delay: 0, pause: 80 },
         { text: '', delay: 0, pause: 20 },
-        { text: 'CPU: Intel 80486DX2-66       FPU: Internal', delay: 40, pause: 30 },
-        { text: 'BIOS Build Date: 09/14/94', delay: 30, pause: 20 },
+        { text: 'CPU : SJacksonCore ML-1 @ 2026 MHz              FPU : Integrated', delay: 40, pause: 20 },
+        { text: 'GPU : StarCanvas Accelerator v2  (WebGL / Canvas 2D hybrid)', delay: 30, pause: 20 },
+        { text: 'BIOS Build Date : 05/24/2026     PnP Devices : 9', delay: 30, pause: 20 },
         { text: '', delay: 0, pause: 15 },
-        { text: 'Memory Test :     655360 OK', cls: 'boot-ok', delay: 60, pause: 10 },
-        { text: 'Extended Memory : 8388608 OK', cls: 'boot-ok', delay: 40, pause: 10 },
-        { text: '', delay: 0, pause: 15 },
-
-        // Hardware detection
-        { text: 'Detecting Primary IDE Master   . . .  QUANTUM FIREBALL TM3.2A (3.2GB)', delay: 70, pause: 10 },
-        { text: 'Detecting Primary IDE Slave    . . .  Not Detected', cls: 'boot-dim', delay: 50, pause: 10 },
-        { text: 'Detecting Secondary IDE Master . . .  MITSUMI CRMC-FX4830TE CD-ROM', delay: 50, pause: 10 },
-        { text: 'Detecting Secondary IDE Slave  . . .  Not Detected', cls: 'boot-dim', delay: 40, pause: 10 },
-        { text: '', delay: 0, pause: 10 },
-        { text: 'COM1 : 3F8h  IRQ4     COM2 : 2F8h  IRQ3', delay: 30, pause: 10 },
-        { text: 'LPT1 : 378h  IRQ7', delay: 20, pause: 10 },
-        { text: '', delay: 0, pause: 10 },
-        { text: 'Plug and Play BIOS Extension v1.0A  Copyright 1994  Microsoft Corp.', delay: 40, pause: 10 },
-        { text: '3 Plug and Play devices detected', delay: 30, pause: 20 },
+        { text: 'DOM Heap Memory  :     14892 nodes allocated                     OK', cls: 'boot-ok', delay: 60, pause: 10 },
+        { text: 'CSS Rule Memory  :      3847 declarations verified               OK', cls: 'boot-ok', delay: 40, pause: 10 },
+        { text: 'JS Heap Memory   :   8388608 bytes reserved                      OK', cls: 'boot-ok', delay: 40, pause: 10 },
         { text: '', delay: 0, pause: 15 },
 
-        // AUTOEXEC / CONFIG
-        { text: 'Starting MS-DOS . . .', cls: 'boot-hi', delay: 120, pause: 180 },
+        // Font & asset detection
+        { text: 'Detecting font   : Share Tech Mono  . . .  woff2  16.4 KB        OK', delay: 70, pause: 10 },
+        { text: 'Detecting font   : VT323             . . .  woff2  11.2 KB        OK', delay: 50, pause: 10 },
+        { text: 'Detecting font   : Press Start 2P    . . .  woff2  18.7 KB        OK', delay: 50, pause: 10 },
         { text: '', delay: 0, pause: 10 },
-        { text: 'HIMEM is testing extended memory . . . done.', delay: 60, pause: 20 },
-        { text: 'HIMEM.SYS Version 3.09 loaded', delay: 30, pause: 20 },
-        { text: 'EMM386 Expanded Memory Manager Version 4.48  (C) Microsoft Corp 1986-1992', delay: 30, pause: 20 },
-        { text: 'Expanded memory services unavailable.', cls: 'boot-dim', delay: 20, pause: 30 },
+        { text: 'Detecting image  : llnl.png          . . .  312x120  PNG          OK', delay: 60, pause: 8 },
+        { text: 'Detecting image  : dssi.png          . . .  280x140  PNG          OK', delay: 40, pause: 8 },
+        { text: 'Detecting image  : eng_llnl.png      . . .  300x120  PNG          OK', delay: 40, pause: 8 },
+        { text: 'Detecting image  : uoft.png          . . .  280x140  PNG          OK', delay: 40, pause: 8 },
+        { text: 'Detecting image  : pascack.png       . . .  260x180  PNG          OK', delay: 40, pause: 8 },
+        { text: 'Detecting image  : first.png         . . .  220x180  PNG          OK', delay: 40, pause: 8 },
         { text: '', delay: 0, pause: 10 },
-        { text: 'MSCDEX Version 2.25  Copyright (C) Microsoft Corp. 1986-1993', delay: 40, pause: 10 },
-        { text: 'Drive D: = Driver MSCD001 unit 0', delay: 20, pause: 20 },
+        { text: 'Web Audio API    : AudioContext SR=44100Hz  2ch stereo             OK', delay: 50, pause: 8 },
+        { text: 'Canvas 2D context: StarCanvas 1920x1080  256 star particles       OK', delay: 40, pause: 8 },
+        { text: 'WebGL context    : NebulaOverlay  RGBA8  3-pass radial blur       OK', delay: 40, pause: 10 },
         { text: '', delay: 0, pause: 10 },
-        { text: 'C:\\AUTOEXEC.BAT', cls: 'boot-hi', delay: 50, pause: 20 },
-        { text: '  MOUSE.COM  . . . . Mouse driver installed (COM1)', delay: 30, pause: 10 },
-        { text: '  SMARTDRV.EXE  . . . Cache = 2048 KB', delay: 20, pause: 10 },
-        { text: '  DOSKEY installed.', delay: 20, pause: 30 },
+        { text: 'Plug and Play BIOS Extension v1.0  Copyright 2026  SJackson Labs', delay: 40, pause: 8 },
+        { text: '9 Plug and Play components detected', delay: 30, pause: 20 },
+        { text: '', delay: 0, pause: 15 },
+
+        // CONFIG.SYS
+        { text: 'C:\\SJACKSON\\CONFIG.SYS', cls: 'boot-hi', delay: 80, pause: 20 },
+        { text: '  DEVICE=css\\variables.css    . . .  CSS custom properties (--green, --cyan, --blue)', delay: 30, pause: 10 },
+        { text: '  DEVICE=css\\reset.css        . . .  Box model normalised, overflow clipped', delay: 20, pause: 10 },
+        { text: '  DEVICE=css\\glass.css        . . .  Win95 bevel panel system (.glass)', delay: 20, pause: 10 },
+        { text: '  DEVICE=css\\nav.css          . . .  Nav bar + sub-bar layout', delay: 20, pause: 10 },
+        { text: '  DEVICE=css\\cards.css        . . .  Exp / proj / skill / stat cards', delay: 20, pause: 10 },
+        { text: '  DEVICE=css\\courses.css      . . .  Win95 Explorer courses panel', delay: 20, pause: 10 },
+        { text: '  DEVICE=css\\crt.css          . . .  Scanline + hotband + RGB noise', delay: 20, pause: 10 },
+        { text: '  DEVICE=css\\animations.css   . . .  Keyframe registry (14 animations)', delay: 20, pause: 10 },
+        { text: '  DEVICE=css\\boot.css         . . .  Boot sequence renderer', delay: 20, pause: 10 },
+        { text: '  DEVICE=css\\mobile.css       . . .  Responsive scale-down (max 768px)', delay: 20, pause: 20 },
+        { text: '', delay: 0, pause: 15 },
+
+        // AUTOEXEC.BAT
+        { text: 'C:\\SJACKSON\\AUTOEXEC.BAT', cls: 'boot-hi', delay: 50, pause: 20 },
+        { text: '  LOAD audio\\bootbg.wav     . . .  Boot ambience armed', delay: 30, pause: 10 },
+        { text: '  LOAD audio\\theme.wav      . . .  Theme music armed', delay: 20, pause: 10 },
+        { text: '  LOAD audio\\navswitch.wav  . . .  Navigation click SFX armed', delay: 20, pause: 10 },
+        { text: '  LOAD audio\\click.wav      . . .  Button click SFX armed', delay: 20, pause: 10 },
+        { text: '  SET STARCOUNT=256', delay: 20, pause: 8 },
+        { text: '  SET FONTSIZE=34px', delay: 20, pause: 8 },
+        { text: '  SET THEME=WIN95_DARK', delay: 20, pause: 8 },
+        { text: '  SET SCANLINES=ON  OPACITY=0.45', delay: 20, pause: 8 },
+        { text: '  DECRYPT.EXE  . . .  Character scramble tables precomputed', delay: 20, pause: 10 },
+        { text: '  DRAG.EXE     . . .  Window drag system installed', delay: 20, pause: 10 },
+        { text: '  SMARTDRV.EXE . . .  Tab cache = 2048 KB', delay: 20, pause: 30 },
         { text: '', delay: 0, pause: 20 },
 
-        // Kernel load
-        { text: 'Loading kernel . . .', cls: 'boot-grn', delay: 100, pause: 60 },
-        { text: '  [kernel] Initialising memory management unit', delay: 50, pause: 20 },
-        { text: '  [kernel] Mounting root filesystem (FAT32) . . . OK', cls: 'boot-grn', delay: 60, pause: 20 },
-        { text: '  [kernel] Enumerating PCI bus . . . 7 devices found', delay: 50, pause: 20 },
-        { text: '  [kernel] Loading VGA driver (SVGA 640x480x256) . . . OK', cls: 'boot-grn', delay: 50, pause: 20 },
-        { text: '  [kernel] SoundBlaster 16 detected on port 0x220 IRQ5 DMA1', delay: 40, pause: 20 },
-        { text: '  [kernel] Network adapter: 3Com 3C509B Ethernet . . . OK', cls: 'boot-grn', delay: 50, pause: 20 },
-        { text: '  [kernel] TCP/IP stack initialised  IP: 192.168.1.42', delay: 40, pause: 20 },
-        { text: '', delay: 0, pause: 20 },
-
-        // OS boot
-        { text: 'Starting Windows 95 . . .', cls: 'boot-hi', delay: 120, pause: 30 },
-        { text: bar(0),   cls: 'boot-bar', delay: 80,  pause: 55, barTarget: 25  },
-        { text: bar(25),  cls: 'boot-bar', delay: 0,   pause: 55, barTarget: 50  },
-        { text: bar(50),  cls: 'boot-bar', delay: 0,   pause: 55, barTarget: 75  },
-        { text: bar(75),  cls: 'boot-bar', delay: 0,   pause: 55, barTarget: 100 },
-        { text: bar(100), cls: 'boot-bar', delay: 0,   pause: 100 },
+        // Starting
+        { text: 'Starting SJackson.exe . . .', cls: 'boot-hi', delay: 120, pause: 30 },
+        { text: bar(0),   cls: 'boot-bar', delay: 80,  pause: 65, isLoad: true, loadStep: 0 },
+        { text: bar(25),  cls: 'boot-bar', delay: 0,   pause: 65, isLoad: true, loadStep: 1 },
+        { text: bar(50),  cls: 'boot-bar', delay: 0,   pause: 65, isLoad: true, loadStep: 2 },
+        { text: bar(75),  cls: 'boot-bar', delay: 0,   pause: 65, isLoad: true, loadStep: 3 },
+        { text: bar(100), cls: 'boot-bar', delay: 0,   pause: 130, isLoad: true, loadStep: 4 },
         { text: '', delay: 0, pause: 30 },
 
-        // Custom portfolio boot
-        { text: '┌' + '─'.repeat(60) + '┐', cls: 'boot-cyan', delay: 80, pause: 10 },
-        { text: '│   SJACKSON_LABS  v1.0   │  Personal OS  │  Build 2024.12  │   ', cls: 'boot-cyan', delay: 20, pause: 10 },
-        { text: '└' + '─'.repeat(60) + '┘', cls: 'boot-cyan', delay: 20, pause: 30 },
+        // Portfolio header
+        { text: '┌' + '─'.repeat(64) + '┐', cls: 'boot-cyan', delay: 80, pause: 10 },
+        { text: '│       SJACKSON_PORTFOLIO  v2026.5        BUILD 2026-05-24        │', cls: 'boot-cyan', delay: 20, pause: 10 },
+        { text: '└' + '─'.repeat(64) + '┘', cls: 'boot-cyan', delay: 20, pause: 30 },
         { text: '', delay: 0, pause: 10 },
         { text: 'Initialising subsystems . . .', delay: 60, pause: 20 },
-        { text: '  [neural]    Loading personality matrix      . . . OK', cls: 'boot-grn', delay: 60, pause: 20 },
-        { text: '  [physics]   Importing quantum field models  . . . OK', cls: 'boot-grn', delay: 50, pause: 20 },
-        { text: '  [ml]        Calibrating inference engines   . . . OK', cls: 'boot-grn', delay: 50, pause: 20 },
-        { text: '  [portfolio] Mounting project archive        . . . OK', cls: 'boot-grn', delay: 50, pause: 20 },
-        { text: '  [ui]        Rendering starfield (256 color) . . . OK', cls: 'boot-grn', delay: 50, pause: 20 },
-        { text: '', delay: 0, pause: 20 },
+        { text: '', delay: 0, pause: 10 },
 
-        // Final loading bar
-        { text: 'System load:  ' + bar(0, '█'), cls: 'boot-bar', delay: 80, pause: 50, isLoad: true, loadStep: 0 },
-        { text: 'System load:  ' + bar(20, '█'), cls: 'boot-bar', delay: 0, pause: 50, isLoad: true, loadStep: 1 },
-        { text: 'System load:  ' + bar(45, '█'), cls: 'boot-bar', delay: 0, pause: 45, isLoad: true, loadStep: 2 },
-        { text: 'System load:  ' + bar(70, '█'), cls: 'boot-bar', delay: 0, pause: 40, isLoad: true, loadStep: 3 },
-        { text: 'System load:  ' + bar(90, '█'), cls: 'boot-bar', delay: 0, pause: 35, isLoad: true, loadStep: 4 },
-        { text: 'System load:  ' + bar(100, '█'), cls: 'boot-bar', delay: 0, pause: 80, isLoad: true, loadStep: 5 },
+        // Renderer
+        { text: '  [renderer]  Spawning star canvas (256 particles, requestAnimationFrame) . . . OK', cls: 'boot-grn', delay: 50, pause: 13 },
+        { text: '  [renderer]  Randomising star positions, velocities and depths           . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
+        { text: '  [renderer]  Mounting nebula overlay (3-layer radial gradient)           . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
+        { text: '  [renderer]  Starting nebula-drift animation (18s ease-in-out)           . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
+        { text: '  [renderer]  Enabling CRT scanlines  (1px on / 3px off, 0.45 opacity)   . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
+        { text: '  [renderer]  Enabling CRT hotband    (7s vertical sweep, z-index 100006) . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
+        { text: '  [renderer]  Enabling RGB subpixel noise layer (z-index 100005)          . . . OK', cls: 'boot-grn', delay: 40, pause: 20 },
+        { text: '', delay: 0, pause: 10 },
+
+        // UI system
+        { text: '  [ui]        Building Win95 bevel panel system (.glass, 3px inset/outset) . . . OK', cls: 'boot-grn', delay: 50, pause: 13 },
+        { text: '  [ui]        Injecting title bars via .glass::before (attr data-title)    . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
+        { text: '  [ui]        Injecting pixel-art Win95 close/maximise/minimise buttons    . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
+        { text: '  [ui]        Wiring window drag: mousedown on title bar (link-safe)       . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
+        { text: '  [ui]        Wiring window drag: touchstart (mobile)                      . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
+        { text: '  [ui]        Building navigation bar (9 tabs, Win95 button bevel)         . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
+        { text: '  [ui]        Building sub-bar (News / Markets / Keys) right-aligned       . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
+        { text: '  [ui]        Wiring News feed dropdown    (560px, silver #c0c0c0)          . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
+        { text: '  [ui]        Wiring Markets feed dropdown (560px, silver #c0c0c0)          . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
+        { text: '  [ui]        Wiring Keys panel overlay   (420px, Win95 legend rows)       . . . OK', cls: 'boot-grn', delay: 40, pause: 20 },
+        { text: '', delay: 0, pause: 10 },
+
+        // Pages
+        { text: '  [pages]     Mounting HOME page                                           . . . OK', cls: 'boot-grn', delay: 50, pause: 11 },
+        { text: '  [pages]       -> home-panel.glass (SeanML.exe title)                    . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
+        { text: '  [pages]       -> Decrypt animation: character scramble on home text      . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
+        { text: '  [pages]       -> Home buttons: [Contact] [Projects]  (click SFX)        . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
+        { text: '  [pages]     Mounting ABOUT page                                          . . . OK', cls: 'boot-grn', delay: 40, pause: 11 },
+        { text: '  [pages]       -> Education.inf stat card  (uoft.png 110px)              . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
+        { text: '  [pages]       -> Citizenship.inf stat card (US / UK / CA)               . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
+        { text: '  [pages]       -> Location.inf stat card                                  . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
+        { text: '  [pages]     Mounting SKILLS page                                         . . . OK', cls: 'boot-grn', delay: 40, pause: 11 },
+        { text: '  [pages]       -> Languages & Frameworks skill grid                       . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
+        { text: '  [pages]       -> ML / AI skill grid                                     . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
+        { text: '  [pages]       -> Physics & Mathematics skill grid                       . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
+        { text: '  [pages]       -> Tools & Systems skill grid                              . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
+        { text: '  [pages]     Mounting EDUCATION page                                      . . . OK', cls: 'boot-grn', delay: 40, pause: 11 },
+        { text: '  [pages]       -> UofT_Physics.edu exp card  (uoft.png 280px)            . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
+        { text: '  [pages]       -> Club tags: AI / Quantum Computing / Physics / CS       . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
+        { text: '  [pages]       -> UofT_Courses.txt Win95 Explorer panel                  . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
+        { text: '  [pages]           -> [Physics]      PHY151-PHY487  16 courses           . . . OK', cls: 'boot-grn', delay: 20, pause: 9  },
+        { text: '  [pages]           -> [Mathematics]  MAT137-APM346   6 courses           . . . OK', cls: 'boot-grn', delay: 20, pause: 9  },
+        { text: '  [pages]           -> [Comp Sci]     CSC108-CSC343   8 courses           . . . OK', cls: 'boot-grn', delay: 20, pause: 11 },
+        { text: '  [pages]       -> Win95 address bar: C:\\UofT\\Transcript\\Courses.txt     . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
+        { text: '  [pages]       -> Win95 status bar: 30 object(s)                         . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
+        { text: '  [pages]     Mounting EXPERIENCE page                                     . . . OK', cls: 'boot-grn', delay: 40, pause: 11 },
+        { text: '  [pages]       -> LLNL_MED.job       ML Engineer  May 2026-Present  WIP  . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
+        { text: '  [pages]       -> LLNL_MLE.job        ML Engineer  May-Sep 2025    DONE  . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
+        { text: '  [pages]       -> Pascack_Pioneers.club  FIRST Robotics 2019-22   DONE   . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
+        { text: '  [pages]       -> Logos: llnl.png  dssi.png  eng_llnl.png  first.png    . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
+        { text: '  [pages]     Mounting PROJECTS page  (6 project cards)                   . . . OK', cls: 'boot-grn', delay: 40, pause: 11 },
+        { text: '  [pages]       -> TMM_Scheduler.py                                       . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
+        { text: '  [pages]       -> MatQual_CV.py                                          . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
+        { text: '  [pages]       -> QKeyDist.py                                            . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
+        { text: '  [pages]     Mounting PUBLICATIONS page                                   . . . OK', cls: 'boot-grn', delay: 40, pause: 11 },
+        { text: '  [pages]     Mounting NOTES page                                          . . . OK', cls: 'boot-grn', delay: 40, pause: 11 },
+        { text: '  [pages]     Mounting CONTACT page                                        . . . OK', cls: 'boot-grn', delay: 40, pause: 11 },
+        { text: '  [pages]       -> Email.exe contact window                                . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
+        { text: '  [pages]       -> Links.exe contact window (GitHub / LinkedIn / CV)       . . . OK', cls: 'boot-grn', delay: 30, pause: 20 },
+        { text: '', delay: 0, pause: 10 },
+
+        // Status LEDs
+        { text: '  [status]     LLNL_MED internship      WIP  amber LED blink              . . . OK', cls: 'boot-grn', delay: 50, pause: 12 },
+        { text: '  [status]     LLNL_DSSI internship      DONE green LED solid             . . . OK', cls: 'boot-grn', delay: 40, pause: 12 },
+        { text: '  [status]     UofT BSc. Physics         WIP  amber LED blink              . . . OK', cls: 'boot-grn', delay: 40, pause: 12 },
+        { text: '  [status]     Pascack Pi-oneers          DONE green LED solid             . . . OK', cls: 'boot-grn', delay: 40, pause: 20 },
+        { text: '', delay: 0, pause: 10 },
+
+        // Audio
+        { text: '  [audio]     Web Audio API context: SR=44100Hz  latency=0.01s             . . . OK', cls: 'boot-grn', delay: 50, pause: 13 },
+        { text: '  [audio]     Boot ambience armed   bootbg.wav   (loop=true)               . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
+        { text: '  [audio]     Theme music armed     theme.wav    (loop=false, on-reveal)   . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
+        { text: '  [audio]     SFX navswitch armed   navswitch.wav                          . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
+        { text: '  [audio]     SFX button click armed click.wav                             . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
+        { text: '  [audio]     iOS unlock gate: touchstart -> AudioContext.resume()          . . . OK', cls: 'boot-grn', delay: 40, pause: 20 },
+        { text: '', delay: 0, pause: 10 },
+
+        // Network
+        { text: '  [net]       DNS resolve fonts.googleapis.com                             . . . OK', cls: 'boot-grn', delay: 60, pause: 13 },
+        { text: '  [net]       GET Share Tech Mono  woff2  16.4 KB  200 OK                 . . . OK', cls: 'boot-grn', delay: 50, pause: 13 },
+        { text: '  [net]       GET VT323             woff2  11.2 KB  200 OK                 . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
+        { text: '  [net]       GET Press Start 2P    woff2  18.7 KB  200 OK                 . . . OK', cls: 'boot-grn', delay: 40, pause: 20 },
+        { text: '', delay: 0, pause: 10 },
+
+        // Boot event wiring
+        { text: '  [boot]      Listener: keydown    -> startBoot  (desktop)                 . . . OK', cls: 'boot-grn', delay: 50, pause: 13 },
+        { text: '  [boot]      Listener: touchstart -> startBoot  (mobile)                  . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
+        { text: '  [boot]      Listener: pointerdown -> startBoot (pointer devices)         . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
+        { text: '  [boot]      Veil fade-out: 500ms opacity transition                      . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
+        { text: '  [boot]      Nav reveal: 350ms post-veil delay                            . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
+        { text: '  [boot]      Content reveal: 700ms post-veil, triggers decrypt            . . . OK', cls: 'boot-grn', delay: 40, pause: 20 },
+        { text: '', delay: 0, pause: 10 },
+
+        // Final load bar
+        { text: 'System load:  ' + bar(0,   '█'), cls: 'boot-bar', delay: 80, pause: 42, isLoad: true, loadStep: 0 },
+        { text: 'System load:  ' + bar(11,  '█'), cls: 'boot-bar', delay: 0,  pause: 38, isLoad: true, loadStep: 1 },
+        { text: 'System load:  ' + bar(24,  '█'), cls: 'boot-bar', delay: 0,  pause: 36, isLoad: true, loadStep: 2 },
+        { text: 'System load:  ' + bar(38,  '█'), cls: 'boot-bar', delay: 0,  pause: 34, isLoad: true, loadStep: 3 },
+        { text: 'System load:  ' + bar(53,  '█'), cls: 'boot-bar', delay: 0,  pause: 32, isLoad: true, loadStep: 4 },
+        { text: 'System load:  ' + bar(67,  '█'), cls: 'boot-bar', delay: 0,  pause: 30, isLoad: true, loadStep: 5 },
+        { text: 'System load:  ' + bar(80,  '█'), cls: 'boot-bar', delay: 0,  pause: 28, isLoad: true, loadStep: 6 },
+        { text: 'System load:  ' + bar(91,  '█'), cls: 'boot-bar', delay: 0,  pause: 26, isLoad: true, loadStep: 7 },
+        { text: 'System load:  ' + bar(100, '█'), cls: 'boot-bar', delay: 0,  pause: 90, isLoad: true, loadStep: 8 },
         { text: '', delay: 0, pause: 20 },
-        { text: 'All systems nominal.  Welcome, Sean.', cls: 'boot-hi', delay: 80, pause: 400 },
+        { text: 'All systems nominal.  Welcome.', cls: 'boot-hi', delay: 80, pause: 400 },
         { text: '', delay: 0, pause: 20 },
         { text: 'C:\\SJACKSON> _', cls: 'boot-grn', delay: 100, pause: 800 },
       ];
@@ -3312,11 +3689,28 @@
         SFX.bootBgStart();
         next();
       }
-      document.addEventListener('keydown',    startBoot, { once: true });
-      document.addEventListener('touchstart', startBoot, { once: true });
-      screen.addEventListener('pointerdown',  startBoot, { once: true });
+
+      // Audio dialog — user picks sound preference, then boot begins
+      var _audioChosen = false;
+      function pickAudio(mute) {
+        if (_audioChosen) return;
+        _audioChosen = true;
+        SFX.setMuted(mute);
+        document.getElementById('audioDialog').style.display = 'none';
+        // Update mute button label to reflect the chosen state
+        var mb = document.getElementById('muteBtn');
+        if (mb) mb.textContent = mute ? '[×] Muted' : '[♪] Sound';
+        startBoot();
+      }
+      document.getElementById('audioEnableBtn').addEventListener('click', function(e) {
+        e.stopPropagation(); pickAudio(false);
+      });
+      document.getElementById('audioMuteBtn').addEventListener('click', function(e) {
+        e.stopPropagation(); pickAudio(true);
+      });
     })();
   </script>
+
 
 </body>
 </html>
