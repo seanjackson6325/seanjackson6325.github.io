@@ -29,7 +29,15 @@
       "Bash(pip install *)",
       "Bash(Remove-Item \"c:\\\\Users\\\\shank\\\\Desktop\\\\Website\\\\transcript.pdf\")",
       "WebFetch(domain:api.github.com)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(python -c \"import cairosvg\")",
+      "Bash(python -c \"from PIL import Image\")",
+      "Bash(node -e \"require\\('canvas'\\)\")",
+      "Bash(where inkscape *)",
+      "Bash(where magick *)",
+      "Bash(python -m pip show Pillow)",
+      "Bash(python3 -m pip show Pillow)",
+      "Bash(python -)"
     ]
   }
 }
