@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sean Jackson — ML Engineer & Physicist</title>
+  <title>Sean Jackson — AI Engineer & Physicist</title>
   <meta name="color-scheme" content="dark">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,7 +30,7 @@
       --text: #b0cedd;
       --text-bright: #cce8ff;
       --text-dim: #446688;
-      --panel-bg: rgba(0, 6, 18, 0.87);
+      --panel-bg: #000a1c;
       --win-gray: #787878;
       --win-gray-lt: #a8a8a8;
       --bevel-lt: #c0c0c0;
@@ -39,6 +39,21 @@
       --font-hud: 'VT323', monospace;
       --font-pixel: 'Press Start 2P', monospace;
       --font-dos: 'VT323', monospace;
+
+      /* 256-colour title bar: the Win98 gradient quantised into hard bands */
+      --title-grad: linear-gradient(to right,
+        #08216b 0 10%, #19347b 0 20%, #2b478a 0 30%, #3c5b9a 0 40%, #4e6ea9 0 50%,
+        #5f81b9 0 60%, #7194c8 0 70%, #82a8d8 0 80%, #94bbe7 0 90%, #a5cef7 0);
+      /* 2×2 ordered-dither checker (each "pixel" is 2 CSS px) */
+      --checker: conic-gradient(#000 25%, transparent 0 50%, #000 0 75%, transparent 0) 0 0 / 4px 4px;
+      /* Raised Win95 window frame, drawn at 2× pixel scale (9-slice) */
+      --frame: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' shape-rendering='crispEdges'%3E%3Crect width='14' height='14' fill='%230a0a0a'/%3E%3Crect width='12' height='12' fill='%23dfdfdf'/%3E%3Crect x='2' y='2' width='10' height='10' fill='%23808080'/%3E%3Crect x='2' y='2' width='8' height='8' fill='%23fff'/%3E%3Crect x='4' y='4' width='6' height='6' fill='%23c0c0c0'/%3E%3C/svg%3E");
+      /* Win95 button bevels at 2× pixel scale */
+      --bevel-up:   inset -2px -2px #0a0a0a, inset 2px 2px #fff, inset -4px -4px #808080, inset 4px 4px #dfdfdf;
+      --bevel-down: inset -2px -2px #fff, inset 2px 2px #0a0a0a, inset -4px -4px #dfdfdf, inset 4px 4px #808080;
+      --bevel-well: inset 2px 2px #808080, inset -2px -2px #fff, inset 4px 4px #0a0a0a, inset -4px -4px #dfdfdf;
+      /* Hard 1-pixel drop shadow used on all coloured text (no blur, ever) */
+      --px-shadow: 2px 2px 0 #000;
     }
 
     html { font-size: 34px; }
@@ -49,11 +64,15 @@
       color: var(--text);
       line-height: 1.7;
       background: #050505;
+      -webkit-font-smoothing: none;
+      font-smooth: never;
     }
 
+    img { image-rendering: pixelated; }
+
     ::selection { background: var(--green); color: #000; }
-    a { color: var(--cyan); text-decoration: none; transition: color 0.15s; }
-    a:hover { color: var(--green); text-shadow: 0 0 8px var(--green-glow); }
+    a { color: var(--cyan); text-decoration: none; }
+    a:hover { color: var(--green); }
 
     /* ===== SPACE BACKGROUND ===== */
     #starCanvas {
@@ -66,23 +85,6 @@
       image-rendering: crisp-edges;
     }
 
-    .nebula-overlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      z-index: 1;
-      pointer-events: none;
-      background:
-        radial-gradient(ellipse at 72% 28%, rgba(80,0,180,0.09) 0%, transparent 52%),
-        radial-gradient(ellipse at 18% 75%, rgba(0,50,150,0.08) 0%, transparent 48%),
-        radial-gradient(ellipse at 50% 55%, rgba(0,20,60,0.06) 0%, transparent 60%);
-      animation: nebula-drift 18s ease-in-out infinite alternate;
-    }
-
-    @keyframes nebula-drift {
-      0%   { opacity: 0.75; }
-      100% { opacity: 1.0; }
-    }
-
     /* ===== CRT MONITOR EFFECT STACK ===== */
 
     /* 1 — Scanlines */
@@ -93,8 +95,8 @@
       z-index: 100007;
       background: repeating-linear-gradient(
         to bottom,
-        rgba(0,0,0,0.72) 0px,
-        rgba(0,0,0,0.72) 1px,
+        rgba(0,0,0,0.5) 0px,
+        rgba(0,0,0,0.5) 1px,
         transparent       1px,
         transparent       3px
       );
@@ -172,10 +174,10 @@
       z-index: 100006;
       border-radius: 8px;
       box-shadow:
-        inset 0 0   80px rgba(0,0,0,0.55),
-        inset 0 0   20px rgba(0,0,0,0.40),
-        inset 4px  4px 16px rgba(0,0,0,0.35),
-        inset -4px 4px 16px rgba(0,0,0,0.35);
+        inset 0 0   80px rgba(0,0,0,0.45),
+        inset 0 0   20px rgba(0,0,0,0.32),
+        inset 4px  4px 16px rgba(0,0,0,0.28),
+        inset -4px 4px 16px rgba(0,0,0,0.28);
     }
 
     /* App-shell gets rounded corners so the curvature shadow clips properly */
@@ -198,34 +200,39 @@
     /* ===== WIN95-STYLE TERMINAL WINDOW PANEL ===== */
     .glass {
       background: var(--panel-bg);
-      border-style: solid;
-      border-width: 3px;
-      border-top-color: var(--bevel-lt);
-      border-left-color: var(--bevel-lt);
-      border-right-color: var(--bevel-dk);
-      border-bottom-color: var(--bevel-dk);
-      box-shadow:
-        inset 2px 2px 0 rgba(255, 255, 255, 0.18),
-        inset -2px -2px 0 rgba(0, 0, 0, 0.55),
-        5px 5px 0 #000000;
+      border: 6px solid #c0c0c0;
+      border-image: var(--frame) 6 / 6px stretch;
+      /* sunken client area inside the raised frame */
+      box-shadow: var(--bevel-well);
       position: relative;
       contain: layout;
     }
 
-    /* Win95 title bar — authentic blue gradient, pixel buttons injected via JS */
+    /* Dithered 50% drop shadow — classic 16-colour "transparency" */
+    .glass::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: -12px; bottom: -12px;
+      background: var(--checker);
+      pointer-events: none;
+      clip-path: polygon(calc(100% - 6px) 0, 100% 0, 100% 100%, 0 100%, 0 calc(100% - 6px), calc(100% - 6px) calc(100% - 6px));
+    }
+
+    /* Win95 title bar — banded 256-colour gradient, pixel buttons injected via JS */
     .glass::before {
       content: attr(data-title);
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 40px;
-      background: linear-gradient(to right, #08216b, #a5cef7);
-      border-bottom: 1px solid #06194f;
+      background: var(--title-grad);
+      /* silver strip + etched edge separating title bar from the sunken client area */
+      box-shadow: 0 2px 0 #c0c0c0, 0 4px 0 #808080;
       z-index: 1;
       pointer-events: none;
       font-family: 'VT323', monospace;
       font-size: 1.4rem;
       color: #ffffff;
-      text-shadow: 1px 1px 0 #000040;
+      text-shadow: 2px 2px 0 #000040;
       line-height: 40px;
       padding-left: 28px;
       padding-right: 100px;
@@ -402,7 +409,6 @@
       flex-shrink: 0;
       height: 62px;
       overflow: hidden;
-      transition: height 0.25s ease, opacity 0.25s ease;
     }
     .nav-bar.collapsed { height: 0; opacity: 0; overflow: hidden; pointer-events: none; border: none; }
 
@@ -421,7 +427,6 @@
       padding: 3px 0.5rem;
       gap: 4px;
       flex-shrink: 0;
-      transition: height 0.25s ease, opacity 0.25s ease;
     }
     .sub-bar.collapsed { height: 0; opacity: 0; overflow: hidden; pointer-events: none; border: none; }
 
@@ -452,45 +457,60 @@
     .nav-bar .nav-btn {
       display: flex;
       align-items: center;
-      gap: 0.3rem;
-      padding: 2px 10px;
+      gap: 4px;
+      padding: 2px 8px 0 6px;
       height: 38px;
       font-family: var(--font-dos);
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: #000000;
-      letter-spacing: 0.05em;
-      border: 2px outset #c0c0c0;
+      letter-spacing: 0;
+      border: none;
+      box-shadow: var(--bevel-up);
       background: silver;
       cursor: pointer;
       white-space: nowrap;
       flex-shrink: 0;
     }
     .nav-bar .nav-btn:hover { color: #000080; }
+    .nav-bar .nav-btn:active { box-shadow: var(--bevel-down); }
+    /* Latched toolbar button: pressed bevel over a white/silver dither, like Win95 toggle buttons */
     .nav-bar .nav-btn.active {
-      border: 2px inset #c0c0c0;
-      background: silver;
+      box-shadow: var(--bevel-down);
+      background: conic-gradient(#fff 25%, #c0c0c0 0 50%, #fff 0 75%, #c0c0c0 0) 0 0 / 4px 4px;
       color: #000000;
+      padding: 4px 6px 0 8px;
     }
-    .nav-bar .nav-btn .ico { display: none; }
+    /* 12×12 pixel-art icons, painted at 2× by JS (see PIXEL ICONS) */
+    .nav-bar .ico {
+      display: inline-block;
+      width: 24px; height: 24px;
+      flex-shrink: 0;
+      font-size: 0; color: transparent;
+      background-repeat: no-repeat;
+      background-size: 24px 24px;
+      image-rendering: pixelated;
+    }
+    .nav-bar .ico:not([style]) { display: none; }
 
     .nav-bar .ext-link {
       display: flex;
       align-items: center;
-      gap: 0.3rem;
-      padding: 2px 10px;
+      gap: 4px;
+      padding: 2px 8px 0 6px;
       height: 38px;
       font-family: var(--font-dos);
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: #000000;
-      letter-spacing: 0.05em;
+      letter-spacing: 0;
       text-decoration: none;
-      border: 2px outset #c0c0c0;
+      border: none;
+      box-shadow: var(--bevel-up);
       background: silver;
       white-space: nowrap;
       flex-shrink: 0;
     }
     .nav-bar .ext-link:hover { color: #000080; text-decoration: none; }
-    .nav-bar .ext-link .ico { display: none; }
+    .nav-bar .ext-link:active { box-shadow: var(--bevel-down); }
 
     .nav-spacer { flex: 0; min-width: 0.5rem; }
 
@@ -507,12 +527,14 @@
       font-size: 1rem;
       color: #000000;
       letter-spacing: 0.08em;
-      border: 2px outset #c0c0c0;
+      border: none;
+      box-shadow: var(--bevel-up);
       background: silver;
       cursor: pointer;
       white-space: nowrap;
     }
     .help-btn:hover { color: #000080; }
+    .help-btn:active { box-shadow: var(--bevel-down); }
 
     .help-dropdown {
       display: none;
@@ -555,7 +577,8 @@
       padding: 0.5rem 1rem;
       border-bottom: 1px solid #808080;
       letter-spacing: 0.08em;
-      background: linear-gradient(to right, #08216b, #a5cef7);
+      background: var(--title-grad);
+      text-shadow: 2px 2px 0 #000040;
     }
     .help-dropdown .hd-section {
       font-family: var(--font-dos);
@@ -721,22 +744,28 @@
       text-align: center;
     }
 
+    /* Game-title-screen logo: banded fill + stepped pixel extrusion */
     .home-name {
-      font-family: var(--font-dos);
-      font-size: clamp(1rem, 3vw, 1.6rem);
-      color: var(--green);
-      text-shadow: 0 0 16px var(--green), 0 0 40px var(--green-glow);
-      margin-bottom: 0.8rem;
-      line-height: 1.6;
+      display: inline-block;
+      font-family: var(--font-pixel);
+      font-size: 56px;
+      line-height: 1.25;
+      color: #55ff55;
+      background: linear-gradient(#ffffaa 0 30%, #55ff55 0 62%, #00aa00 0);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(2px 2px 0 #005500) drop-shadow(2px 2px 0 #003300) drop-shadow(2px 2px 0 #000);
+      margin: 0.4rem 0 1rem;
     }
 
     .home-title {
       font-family: var(--font-dos);
       font-size: clamp(1.1rem, 2vw, 1.4rem);
-      color: var(--cyan);
+      color: #ffff55;
       letter-spacing: 0.15em;
       margin-bottom: 1.5rem;
-      text-shadow: 0 0 8px var(--cyan-glow);
+      text-shadow: var(--px-shadow);
     }
 
     .home-lines {
@@ -745,6 +774,7 @@
       color: var(--cyan);
       margin-bottom: 1.5rem;
       line-height: 1.7;
+      text-shadow: var(--px-shadow);
     }
 
     .home-desc {
@@ -763,18 +793,51 @@
       font-size: 1.1rem;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      padding: 4px 20px;
+      padding: 8px 24px;
       cursor: pointer;
-      border: 2px outset #c0c0c0;
+      border: none;
+      box-shadow: var(--bevel-up), 4px 4px 0 #000;
       background: silver;
       color: #000000;
     }
     .btn:hover { color: #000080; background: silver; }
     .btn:active {
-      border: 2px inset #c0c0c0;
+      box-shadow: var(--bevel-down);
       background: silver;
-      color: #424242;
+      color: #000000;
+      transform: translate(4px, 4px);
     }
+
+    /* ===== CLASSIC WEB GIFS ===== */
+    .gif { image-rendering: pixelated; vertical-align: middle; }
+    .gif-2x-globe { width: 80px; height: 80px; }
+    .gif-2x-new   { width: 128px; height: 64px; }
+    .gif-2x-badge { width: 176px; height: 62px; }
+
+    .home-logo-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
+      margin: 0.4rem 0 1rem;
+    }
+    .home-logo-row .home-name { margin: 0; }
+
+    /* 88x31 "web button" strip, like the bottom of every 1998 homepage */
+    .web-badges {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin-top: 1.6rem;
+      padding-top: 1.2rem;
+      border-top: 2px solid #000;
+      box-shadow: inset 0 2px 0 #1c3a5a;
+    }
+
+    .cw-desc-row { display: flex; align-items: center; gap: 12px; justify-content: space-between; }
+    .cw-desc-row .gif { flex-shrink: 0; }
 
     /* ===== CARD COMPONENTS ===== */
     .card-grid {
@@ -790,6 +853,7 @@
       font-family: var(--font-dos);
       font-size: 1rem;
       color: var(--blue-bright);
+      text-shadow: var(--px-shadow);
       margin-bottom: 0.2rem;
     }
 
@@ -797,7 +861,7 @@
       font-family: var(--font-dos);
       font-size: 1.5rem;
       color: var(--green);
-      text-shadow: 0 0 8px var(--green-glow);
+      text-shadow: var(--px-shadow);
     }
 
     .stat-card .sub { font-family: var(--font-dos); font-size: 0.9rem; color: var(--text-dim); margin-top: 0.1rem; }
@@ -830,30 +894,34 @@
       letter-spacing: 0.06em;
       margin-bottom: 0.9rem;
       padding-bottom: 0.5rem;
-      border-bottom: 2px solid rgba(0,238,255,0.35);
-      box-shadow: 0 2px 0 rgba(0,0,0,0.4);
-      text-shadow: 0 0 6px rgba(0,238,255,0.3);
+      border-bottom: 2px solid #000;
+      box-shadow: 0 2px 0 #1c3a5a;
+      text-shadow: var(--px-shadow);
     }
 
     .skill-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.5rem; }
-    .pips { display: flex; gap: 3px; align-items: flex-end; }
+    /* Rating bar: beveled segments sitting in a sunken black well */
+    .pips {
+      display: flex; gap: 2px; align-items: stretch;
+      padding: 4px;
+      background: #000;
+      box-shadow: inset 2px 2px #808080, inset -2px -2px #fff;
+    }
 
     .pips .p {
-      width: 10px; height: 20px;
-      background: rgba(0,238,255,0.05);
-      border: 1px solid rgba(0,238,255,0.12);
+      width: 12px; height: 20px;
+      background: #002a2a;
+      box-shadow: inset 2px 2px #001414;
     }
 
     .pips .p.on {
-      background: var(--cyan);
-      border-color: var(--cyan);
-      box-shadow: 0 0 6px rgba(0,238,255,0.6), inset 0 1px 0 rgba(255,255,255,0.3);
+      background: #55ffff;
+      box-shadow: inset -2px -2px #00aaaa, inset 2px 2px #ccffff;
     }
 
     .pips .p.half {
-      background: var(--cyan-dim);
-      border-color: var(--cyan-dim);
-      box-shadow: 0 0 3px rgba(0,136,153,0.4);
+      background: #00aaaa;
+      box-shadow: inset -2px -2px #005555, inset 2px 2px #55ffff;
     }
 
     .skill-row .name { font-size: 0.88rem; color: var(--text-bright); }
@@ -861,8 +929,7 @@
     /* ===== EXPERIENCE ===== */
     .exp-list { display: flex; flex-direction: column; gap: 1rem; }
 
-    .exp-card { padding: 44px 1.4rem 1.4rem; border-left: 4px solid var(--blue-dim); transition: border-color 0.3s, box-shadow 0.3s; }
-    .exp-card:hover { border-left-color: var(--cyan); box-shadow: inset 1px 1px 0 rgba(255,255,255,0.22), inset -1px -1px 0 rgba(0,0,0,0.45), 4px 4px 0 #000, -4px 0 12px rgba(0,238,255,0.12); }
+    .exp-card { padding: 44px 1.4rem 1.4rem; }
 
     /* Win98 folder icon before badge text */
     .exp-card .badge {
@@ -894,14 +961,14 @@
       color: var(--green);
       letter-spacing: 0.06em;
       margin-bottom: 0.2rem;
-      text-shadow: 0 0 8px var(--green-glow);
+      text-shadow: var(--px-shadow);
     }
 
-    .exp-card .org { font-family: var(--font-dos); font-size: 1rem; color: var(--cyan); letter-spacing: 0.05em; margin-bottom: 0.15rem; }
+    .exp-card .org { font-family: var(--font-dos); font-size: 1rem; color: var(--cyan); letter-spacing: 0.05em; margin-bottom: 0.15rem; text-shadow: var(--px-shadow); }
     .exp-card .date { font-family: var(--font-dos); font-size: 0.9rem; color: var(--text-dim); margin-bottom: 0.7rem; }
     .exp-card p { font-size: 0.95rem; color: var(--text); line-height: 1.75; }
     .exp-card p + p { margin-top: 0.5rem; }
-    .exp-card p strong { color: var(--cyan); }
+    .exp-card p strong { color: var(--cyan); text-shadow: var(--px-shadow); }
 
     .exp-card .exp-logos {
       position: absolute;
@@ -917,8 +984,8 @@
       height: auto;
       image-rendering: pixelated;
       display: block;
-      border: 2px solid var(--bevel-dk);
-      box-shadow: inset 1px 1px 0 rgba(255,255,255,0.15);
+      border: 4px solid #c0c0c0;
+      border-image: var(--frame) 6 / 4px stretch;
     }
     .exp-card.has-logos { padding-right: 306px; }
 
@@ -1090,46 +1157,59 @@
     .cw-note-meta { color: #555555; margin-left: auto; flex-shrink: 0; }
     .cw-note-row:hover .cw-note-meta { color: #aaaaff; }
 
+    /* Pixel folder sprite (replaces colour emoji, which render as modern Segoe glyphs) */
+    .px-folder::before {
+      content: '';
+      display: inline-block;
+      width: 32px; height: 28px;
+      flex-shrink: 0;
+      vertical-align: -4px;
+      margin-right: 10px;
+      background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='14' shape-rendering='crispEdges'%3E%3Crect x='1' y='0' width='6' height='3' fill='%23000'/%3E%3Crect x='0' y='2' width='15' height='12' fill='%23000'/%3E%3Crect x='2' y='1' width='4' height='2' fill='%23ffff80'/%3E%3Crect x='1' y='3' width='13' height='10' fill='%23ffff00'/%3E%3Crect x='1' y='3' width='13' height='1' fill='%23ffffc0'/%3E%3Crect x='1' y='4' width='1' height='9' fill='%23ffffc0'/%3E%3Crect x='2' y='12' width='12' height='1' fill='%23c0a000'/%3E%3Crect x='13' y='4' width='1' height='9' fill='%23c0a000'/%3E%3Crect x='15' y='3' width='1' height='11' fill='%23000' fill-opacity='.5'/%3E%3C/svg%3E") no-repeat 0 0 / 32px 28px;
+      image-rendering: pixelated;
+    }
+
+    /* Section heading with an etched (groove) divider */
+    .sec-head {
+      font-family: var(--font-dos);
+      font-size: 1.05rem;
+      color: #ffff55;
+      letter-spacing: 0.1em;
+      text-shadow: var(--px-shadow);
+      padding-bottom: 0.4rem;
+      border-bottom: 2px solid #000;
+      box-shadow: 0 2px 0 #3a5a7a;
+      margin-bottom: 1rem;
+    }
+    .sec-head + .proj-grid { margin-bottom: 1.6rem; }
+
     /* ===== PROJECTS ===== */
     .proj-grid { display: grid; gap: 1rem; }
 
-    .proj-card { padding: 44px 1.4rem 1.4rem; overflow: hidden; position: relative; transition: all 0.3s; }
-
-    .proj-card::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    .proj-card:hover::after { opacity: 1; }
+    .proj-card { padding: 44px 1.4rem 1.4rem; position: relative; }
 
     .proj-card .top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
 
-    .proj-card h3 { font-family: var(--font-dos); font-size: 1.2rem; color: var(--green); letter-spacing: 0.05em; text-shadow: 0 0 6px var(--green-glow); }
+    .proj-card h3 { font-family: var(--font-dos); font-size: 1.2rem; color: var(--green); letter-spacing: 0.05em; text-shadow: var(--px-shadow); }
 
     .proj-card .links a {
       font-family: var(--font-dos);
       font-size: 0.95rem;
       color: #000000;
-      padding: 2px 10px;
       margin-left: 0.4rem;
       display: inline-block;
       background: silver;
       border: none;
-      box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff,
-                  inset -2px -2px grey,    inset 2px 2px #dfdfdf;
+      box-shadow: var(--bevel-up), 4px 4px 0 #000;
       text-decoration: none;
       min-width: 60px;
       text-align: center;
+      padding: 4px 14px;
     }
     .proj-card .links a:hover { color: #000080; background: silver; }
     .proj-card .links a:active {
-      box-shadow: inset -1px -1px #fff,    inset 1px 1px #0a0a0a,
-                  inset -2px -2px #dfdfdf, inset 2px 2px grey;
-      padding: 3px 9px 1px 11px;
+      box-shadow: var(--bevel-down);
+      transform: translate(4px, 4px);
     }
 
     .proj-card p { font-size: 0.95rem; color: var(--text); margin-bottom: 0.8rem; line-height: 1.75; }
@@ -1161,33 +1241,34 @@
     }
 
     /* ===== PUBLICATIONS ===== */
-    .pub-card { padding: 44px 1.4rem 1.4rem; border-left: 4px solid var(--green); transition: box-shadow 0.3s; }
-    .pub-card:hover { box-shadow: inset 1px 1px 0 rgba(255,255,255,0.22), inset -1px -1px 0 rgba(0,0,0,0.45), 4px 4px 0 #000, -4px 0 12px rgba(51,255,102,0.12); }
-    .pub-card h3 { font-family: var(--font-dos); font-size: 1.1rem; color: var(--green); letter-spacing: 0.04em; margin-bottom: 0.3rem; text-shadow: 0 0 6px var(--green-glow); }
-    .pub-card .meta { font-family: var(--font-dos); font-size: 0.95rem; color: var(--cyan); margin-bottom: 0.6rem; }
+    .pub-card { padding: 44px 1.4rem 1.4rem; }
+    .pub-card h3 { font-family: var(--font-dos); font-size: 1.1rem; color: var(--green); letter-spacing: 0.04em; margin-bottom: 0.3rem; text-shadow: var(--px-shadow); }
+    .pub-card .meta { font-family: var(--font-dos); font-size: 0.95rem; color: var(--cyan); margin-bottom: 0.6rem; text-shadow: var(--px-shadow); }
     .pub-card p { font-size: 0.95rem; color: var(--text); line-height: 1.75; }
 
     /* ===== CONTACT ===== */
     .contact-card { padding: 44px 1.5rem 1.5rem; max-width: 440px; }
-    .contact-card .ch-label { font-family: var(--font-dos); font-size: 1.1rem; color: var(--cyan); margin-bottom: 0.7rem; }
+    .contact-card .ch-label { font-family: var(--font-dos); font-size: 1.1rem; color: var(--cyan); margin-bottom: 0.7rem; text-shadow: var(--px-shadow); }
 
     .ch-row {
       display: flex;
       align-items: center;
       gap: 0.7rem;
       padding: 0.55rem 0;
-      border-bottom: 1px solid rgba(0,136,255,0.08);
+      border-bottom: 2px solid #000;
+      box-shadow: 0 2px 0 #1c3a5a;
       font-size: 0.88rem;
     }
-    .ch-row:last-child { border-bottom: none; }
+    .ch-row:last-child { border-bottom: none; box-shadow: none; }
 
     .ch-row .ch-ico {
       font-family: var(--font-dos);
       font-size: 1.1rem;
       color: var(--green);
-      width: 20px;
+      width: 96px;
+      flex-shrink: 0;
       text-align: center;
-      text-shadow: 0 0 6px var(--green-glow);
+      text-shadow: var(--px-shadow);
     }
 
     .ch-row a { color: var(--text-bright); }
@@ -1383,6 +1464,15 @@
       .nav-btn, .ext-link { height: 32px; padding: 2px 8px; font-size: 0.9rem; }
       .help-btn { height: 32px; padding: 2px 8px; font-size: 0.9rem; }
 
+      /* Home logo: Press Start 2P stays crisp on multiples of 8px */
+      .home-name { font-size: 24px; }
+      .gif-2x-globe { width: 40px; height: 40px; }
+      .gif-2x-new   { width: 64px; height: 32px; }
+      .gif-2x-badge { width: 88px; height: 31px; }
+      .home-logo-row { gap: 0.5rem; }
+      .cw-desc-row .gif { width: 100px; height: 75px; }
+      .nav-bar .ico { width: 20px; height: 20px; background-size: 20px 20px; }
+
       /* Content */
       .content-area { padding: 0.8rem; -webkit-overflow-scrolling: touch; }
 
@@ -1448,7 +1538,6 @@
 
   <!-- SPACE BACKGROUND -->
   <canvas id="starCanvas"></canvas>
-  <div class="nebula-overlay"></div>
 
   <!-- CRT EFFECT STACK -->
   <div class="crt-phosphor"></div>
@@ -1573,14 +1662,18 @@
 
         <!-- HOME -->
         <div class="page active" id="home">
-          <div class="home-panel glass" data-title="SeanML.exe">
+          <div class="home-panel glass" data-title="">
+            <div class="home-logo-row">
+              <img class="gif gif-2x-globe" src="gifs/globe.gif" alt="">
+              <div class="home-name">Sean Jackson</div>
+              <img class="gif gif-2x-globe" src="gifs/globe.gif" alt="">
+            </div>
+            <div class="home-title">AI Engineer & Physicist</div>
             <div class="home-lines">
               <strong><u>University of Toronto</u></strong> &nbsp;&middot;&nbsp; BSc Physics, Minors in CS &amp; Mathematics<br>
               <strong><u>Lawrence Livermore National Laboratory</u></strong> &nbsp;&middot;&nbsp; Machine Learning Engineer<br>
               First-author researcher in Computer Vision &amp; Deep Learning (paper under review)
             </div>
-            <div class="home-name">Sean Jackson</div>
-            <div class="home-title">Machine Learning Engineer & Physicist</div>
             <p class="home-desc">
               Physics graduate from the <strong><u>University of Toronto</u></strong>, proficient in deep learning,
               quantum computing, and robotics. I currently build systems that automate
@@ -1590,6 +1683,11 @@
               <button class="btn btn-green" onclick="SFX.navSwitch(); switchPage('projects')">View Projects</button>
               <button class="btn btn-blue" onclick="SFX.navSwitch(); switchPage('contact')">Get in Touch</button>
               <a class="btn btn-blue" href="Resume_2026.pdf" target="_blank" rel="noopener" onclick="SFX.navSwitch()" style="text-decoration:none;">View Resume</a>
+            </div>
+            <div class="web-badges">
+              <img class="gif gif-2x-badge" src="gifs/badge-800x600.gif" alt="Optimized for 800x600">
+              <a href="#" onclick="SFX.navSwitch(); switchPage('contact'); return false;" title="E-mail me!"><img class="gif" src="gifs/email.gif" alt="E-mail me" style="width:96px;height:60px;"></a>
+              <img class="gif gif-2x-badge" src="gifs/badge-caffeine.gif" alt="Powered by caffeine">
             </div>
           </div>
         </div>
@@ -1713,6 +1811,7 @@
               <div class="date">Livermore, CA &mdash; May 2026 - Present</div>
               <p>Working within the Materials Engineering Division (MED). Details to follow.</p>
               <span class="status-pill wip">In Progress</span>
+              <img class="gif gif-2x-new" src="gifs/new.gif" alt="New!" style="margin-left:0.6rem;">
             </div>
             <div class="exp-card glass has-logos" data-title="LLNL_MLE.job">
               <div class="exp-logos">
@@ -1773,7 +1872,7 @@
                 <span class="cw-ab-path">C:\UofT\Transcript\Courses.txt</span>
               </div>
               <div class="cw-listview">
-                <div class="cw-section-title">&#128193; Physics</div>
+                <div class="cw-section-title px-folder">Physics</div>
                 <div class="cw-course"><span class="cw-code">PHY151H1</span><span>Foundations of Physics I</span></div>
                 <div class="cw-course"><span class="cw-code">PHY152H1</span><span>Foundations of Physics II</span></div>
                 <div class="cw-course"><span class="cw-code">PHY224H1</span><span>Practical Physics I</span></div>
@@ -1791,7 +1890,7 @@
                 <div class="cw-course"><span class="cw-code">PHY460H1</span><span>Nonlinear Physics</span></div>
                 <div class="cw-course"><span class="cw-code">PHY487H1</span><span>Condensed Matter Physics I</span></div>
 
-                <div class="cw-section-title">&#128193; Mathematics</div>
+                <div class="cw-section-title px-folder">Mathematics</div>
                 <div class="cw-course"><span class="cw-code">MAT137Y1</span><span>Calculus with Proofs</span></div>
                 <div class="cw-course"><span class="cw-code">MAT223H1</span><span>Linear Algebra I</span></div>
                 <div class="cw-course"><span class="cw-code">MAT327H1</span><span>Multivariable Calculus with Topology and Proofs</span></div>
@@ -1799,7 +1898,7 @@
                 <div class="cw-course"><span class="cw-code">MAT334H1</span><span>Complex Variables</span></div>
                 <div class="cw-course"><span class="cw-code">APM346H1</span><span>Partial Differential Equations</span></div>
 
-                <div class="cw-section-title">&#128193; Computer Science</div>
+                <div class="cw-section-title px-folder">Computer Science</div>
                 <div class="cw-course"><span class="cw-code">CSC108H1</span><span>Introduction to Computer Programming</span></div>
                 <div class="cw-course"><span class="cw-code">CSC148H1</span><span>Introduction to Computer Science</span></div>
                 <div class="cw-course"><span class="cw-code">CSC165H1</span><span>Mathematical Expression &amp; Reasoning for Computer Science</span></div>
@@ -1821,7 +1920,7 @@
         <!-- PROJECTS -->
         <div class="page" id="projects">
 
-          <div style="font-family:var(--font-dos);font-size:1.05rem;color:var(--cyan);letter-spacing:0.1em;padding-bottom:0.5rem;border-bottom:1px solid rgba(0,238,255,0.25);margin-bottom:0.8rem;">&#128193; Large Projects</div>
+          <div class="sec-head px-folder">Large Projects</div>
           <div class="proj-grid">
             <div class="proj-card glass" data-title="GRACE.py">
               <div class="top">
@@ -1855,7 +1954,7 @@
             </div>
           </div>
 
-          <div style="font-family:var(--font-dos);font-size:1.05rem;color:var(--cyan);letter-spacing:0.1em;padding-bottom:0.5rem;border-bottom:1px solid rgba(0,238,255,0.25);margin-top:1.4rem;margin-bottom:0.8rem;">&#128193; Small Projects</div>
+          <div class="sec-head px-folder">Small Projects</div>
           <div class="proj-grid">
             <div class="proj-card glass" data-title="RGL.c">
               <div class="top">
@@ -1881,13 +1980,13 @@
               <p>Unique super breakout game built for high school honours computer science.</p>
               <div class="tags"><span>Java</span><span>Game Dev</span></div>
             </div>
-            <div class="proj-card glass" data-title="CryptoSim.java">
+            <div class="proj-card glass" data-title="CryptoGame.java">
               <div class="top">
-                <h3>Crypto Simulator</h3>
+                <h3>Crypto Game</h3>
                 <div class="links"><a href="https://github.com/seanjackson6325/APCS-2021-Final-Project" target="_blank" rel="noopener">GitHub</a></div>
               </div>
-              <p>Final project for Advanced Topics in Computer Science (high school), built during the 2021 cryptocurrency craze.</p>
-              <div class="tags"><span>Java</span><span>Simulation</span></div>
+              <p>Flappy Bird-style arcade game built as a final project for Advanced Topics in Computer Science (high school). Themed around the 2021 cryptocurrency craze.</p>
+              <div class="tags"><span>Java</span><span>Game Dev</span></div>
             </div>
           </div>
 
@@ -1909,26 +2008,29 @@
               <span class="cw-ab-label">Address&nbsp;</span>
               <span class="cw-ab-path">C:\SJackson\Notes\</span>
             </div>
-            <div class="cw-desc">Notes I've made in the past. I've converted them to LaTeX and put them into a textbook format.</div>
+            <div class="cw-desc cw-desc-row">
+              <span>Notes I've made in the past. I've converted them to LaTeX and put them into a textbook format.</span>
+              <img class="gif" src="gifs/under-construction.gif" alt="Under construction" width="200" height="150">
+            </div>
             <div class="cw-listview">
 
-              <div class="cw-section-title">&#128193; Quantum Mechanics</div>
+              <div class="cw-section-title px-folder">Quantum Mechanics</div>
               <a class="cw-note-row soon"><span class="cw-note-icon">PDF</span><span>Foundations &amp; Postulates</span><span class="cw-note-meta">QM I &mdash; Coming Soon</span></a>
               <a class="cw-note-row soon"><span class="cw-note-icon">PDF</span><span>Harmonic Oscillator</span><span class="cw-note-meta">QM I &mdash; Coming Soon</span></a>
               <a class="cw-note-row soon"><span class="cw-note-icon">PDF</span><span>Perturbation Theory</span><span class="cw-note-meta">QM II &mdash; Coming Soon</span></a>
 
-              <div class="cw-section-title">&#128193; Classical Mechanics</div>
+              <div class="cw-section-title px-folder">Classical Mechanics</div>
               <a class="cw-note-row" href="notes/Classical_Mechanics_Notes.pdf" target="_blank"><span class="cw-note-icon">PDF</span><span>Classical Mechanics</span><span class="cw-note-meta">PHY254H1 &mdash; Full Notes</span></a>
               <a class="cw-note-row" href="notes/Advanced_Mechanics_Notes.pdf" target="_blank"><span class="cw-note-icon">PDF</span><span>Advanced Mechanics (Lagrangian &amp; Hamiltonian)</span><span class="cw-note-meta">PHY354H1 &mdash; Full Notes</span></a>
 
-              <div class="cw-section-title">&#128193; Computational Physics</div>
+              <div class="cw-section-title px-folder">Computational Physics</div>
               <a class="cw-note-row" href="notes/Computational_Physics_Notes.pdf" target="_blank"><span class="cw-note-icon">PDF</span><span>Computational Physics</span><span class="cw-note-meta">PHY407H1 &mdash; Full Notes</span></a>
 
-              <div class="cw-section-title">&#128193; Electromagnetism</div>
+              <div class="cw-section-title px-folder">Electromagnetism</div>
               <a class="cw-note-row soon"><span class="cw-note-icon">PDF</span><span>Maxwell's Equations</span><span class="cw-note-meta">E&amp;M &mdash; Coming Soon</span></a>
               <a class="cw-note-row soon"><span class="cw-note-icon">PDF</span><span>Radiation &amp; Waves</span><span class="cw-note-meta">E&amp;M &mdash; Coming Soon</span></a>
 
-              <div class="cw-section-title">&#128193; Machine Learning</div>
+              <div class="cw-section-title px-folder">Machine Learning</div>
               <a class="cw-note-row soon"><span class="cw-note-icon">PDF</span><span>Backpropagation Derivation</span><span class="cw-note-meta">Deep Learning &mdash; Coming Soon</span></a>
               <a class="cw-note-row soon"><span class="cw-note-icon">PDF</span><span>Transformer Architecture</span><span class="cw-note-meta">Deep Learning &mdash; Coming Soon</span></a>
 
@@ -1949,7 +2051,7 @@
           </div>
           <div class="contact-card glass" data-title="Contact.vcf" style="flex:1; min-width:260px;">
             <div class="ch-label">Get in Touch</div>
-            <div class="ch-row"><span class="ch-ico">✉</span><a href="mailto:sjackson6325@gmail.com">sjackson6325@gmail.com</a></div>
+            <div class="ch-row"><span class="ch-ico"><img class="gif" src="gifs/email.gif" alt="" width="96" height="60"></span><a href="mailto:sjackson6325@gmail.com">sjackson6325@gmail.com</a></div>
             <div class="ch-row"><span class="ch-ico">in</span><a href="http://www.linkedin.com/in/sean-jackson-b4b965278" target="_blank">LinkedIn</a></div>
             <div class="ch-row"><span class="ch-ico">gh</span><a href="https://github.com/" target="_blank">GitHub</a></div>
             <div class="ch-row"><span class="ch-ico">☎</span><span style="color:var(--text)">201-937-9681</span></div>
@@ -2817,6 +2919,12 @@
         return { x: Math.cos(angle)*rad, y: Math.sin(angle)*rad, z: z, hue: Math.random()*360 };
       }
 
+      var NEBULA = [
+        { x: 230, y: 56,  r: 150, c: 'rgba(90,0,190,0.30)' },
+        { x: 58,  y: 150, r: 130, c: 'rgba(0,60,170,0.28)' },
+        { x: 160, y: 110, r: 110, c: 'rgba(0,30,90,0.25)' }
+      ];
+
       var stars = [];
       canvas.width  = RW;
       canvas.height = RH;
@@ -2832,6 +2940,20 @@
         // Deep-space black background
         ctx.fillStyle = '#000004';
         ctx.fillRect(0, 0, RW, RH);
+
+        // Nebula clouds — drawn into the framebuffer so the Bayer pass below
+        // turns their soft falloff into ordered-dither stipple (256-colour look)
+        var drift = now * 0.00004;
+        for (var n = 0; n < NEBULA.length; n++) {
+          var nb = NEBULA[n];
+          var nx = nb.x + Math.sin(drift + n * 2.1) * 14;
+          var ny = nb.y + Math.cos(drift * 0.8 + n) * 9;
+          var g = ctx.createRadialGradient(nx, ny, 0, nx, ny, nb.r);
+          g.addColorStop(0, nb.c);
+          g.addColorStop(1, 'rgba(0,0,0,0)');
+          ctx.fillStyle = g;
+          ctx.fillRect(0, 0, RW, RH);
+        }
 
         // Draw rainbow streak lines
         for (var i = 0; i < N; i++) {
@@ -2905,7 +3027,6 @@
       document.querySelectorAll('.glass').forEach(function(el) {
         var heading = el.querySelector('h3')
                    || el.querySelector('h4')
-                   || el.querySelector('.home-name')
                    || el.querySelector('.label')
                    || el.querySelector('.note-title')
                    || el.querySelector('.ch-label');
@@ -2926,6 +3047,93 @@
           span.className = 'win-btn ' + cls;
           el.appendChild(span);
         });
+      });
+    })();
+
+    // ===== PIXEL ICONS (nav toolbar) =====
+    // 12×12 sprites in the 16-colour VGA palette, painted to PNG at 2× like the cursors.
+    (function() {
+      var PAL = {
+        k: '#000000', w: '#ffffff', s: '#c0c0c0', g: '#808080',
+        r: '#ff5555', m: '#aa0000', y: '#ffff55', o: '#aa5500',
+        b: '#5555ff', n: '#0000aa', c: '#55ffff', t: '#00aaaa',
+        G: '#55ff55', d: '#00aa00'
+      };
+      var ICONS = {
+        home: [
+          '.....kk.....', '....krrk....', '...krrrrk...', '..krrrrrrk..',
+          '.krrrrrrrrk.', 'kkkkkkkkkkkk', '.kwwwwwwwwk.', '.kwcckwkkwk.',
+          '.kwcckwkowk.', '.kwwwwwkowk.', '.kwwwwwkowk.', '.kkkkkkkkkk.'
+        ],
+        about: [
+          '....kkkk....', '...kyyyyk...', '...kykkyk...', '...kyyyyk...',
+          '....kyyk....', '..kkkkkkkk..', '.kbbbbbbbbk.', '.kbbbwwbbbk.',
+          '.kbbbwwbbbk.', '.kbbbbbbbbk.', '.kkkkkkkkkk.', '............'
+        ],
+        skills: [
+          '......kkkk..', '.....kyyyk..', '....kyyyk...', '...kyyyk....',
+          '..kyyykkkk..', '.kyyyyyyyk..', '.kkkkyyyk...', '....kyyk....',
+          '...kyyk.....', '..kyyk......', '..kyk.......', '..kk........'
+        ],
+        education: [
+          '.....kk.....', '...kknnkk...', '.kknnnnnnkk.', 'knnnnnnnnnnk',
+          '.kknnnnnnkky', '...kknnkk.y.', '...kkkkkk.y.', '...knnnnk.y.',
+          '...knnnnk.yy', '...kkkkkk.yy', '............', '............'
+        ],
+        experience: [
+          '............', '....kkkk....', '...k....k...', '.kkkkkkkkkk.',
+          'kooooooooook', 'kooooooooook', 'kkkkkyykkkkk', 'kooooyyooook',
+          'kooooooooook', 'kooooooooook', '.kkkkkkkkkk.', '............'
+        ],
+        projects: [
+          'kkkkkkkkkkk.', 'kbbssssssbbk', 'kbbsskkssbbk', 'kbbsskkssbbk',
+          'kbbssssssbbk', 'kbbbbbbbbbbk', 'kbwwwwwwwwbk', 'kbwkkkkkkwbk',
+          'kbwwwwwwwwbk', 'kbwkkkkkkwbk', 'kbwwwwwwwwbk', 'kkkkkkkkkkkk'
+        ],
+        publications: [
+          '.kkkkkkk....', '.kwwwwwkk...', '.kwwwwwkwk..', '.kwkkkwkkkk.',
+          '.kwwwwwwwwk.', '.kwkkkkkkwk.', '.kwwwwwwwwk.', '.kwkkkkkkwk.',
+          '.kwwwwwwwwk.', '.kwkkkkkwwk.', '.kwwwwwwwwk.', '.kkkkkkkkkk.'
+        ],
+        notes: [
+          '..k.k.k.k...', '.kgkgkgkgkk.', '.kyyyyyyyyk.', '.kykkkkkkyk.',
+          '.kyyyyyyyyk.', '.kykkkkkkyk.', '.kyyyyyyyyk.', '.kykkkkkyyk.',
+          '.kyyyyyyyyk.', '.kyyyyyyyyk.', '.kyyyyyyyyk.', '.kkkkkkkkkk.'
+        ],
+        contact: [
+          '............', '............', 'kkkkkkkkkkkk', 'kkwwwwwwwwkk',
+          'kwkwwwwwwkwk', 'kwwkwwwwkwwk', 'kwwwkwwkwwwk', 'kwwwwkkwwwwk',
+          'kwwwwwwwwwwk', 'kwwwwwwwwwwk', 'kkkkkkkkkkkk', '............'
+        ],
+        globe: [
+          '....kkkk....', '..kkbbGGkk..', '.kbbbGGGbbk.', '.kbGGGGbbbk.',
+          'kbbGGGbbbbbk', 'kbbbGGbbGGbk', 'kbbbbbbGGGbk', 'kbbbbbGGGGbk',
+          '.kbbbbGGGbk.', '.kbbbbbGbbk.', '..kkbbbbkk..', '....kkkk....'
+        ]
+      };
+      var S = 2, cache = {};
+      function paint(name) {
+        if (cache[name]) return cache[name];
+        var grid = ICONS[name];
+        var c = document.createElement('canvas');
+        c.width = 12 * S; c.height = 12 * S;
+        var ctx = c.getContext('2d');
+        for (var y = 0; y < 12; y++) {
+          for (var x = 0; x < 12; x++) {
+            var col = PAL[grid[y].charAt(x)];
+            if (!col) continue;
+            ctx.fillStyle = col;
+            ctx.fillRect(x * S, y * S, S, S);
+          }
+        }
+        return (cache[name] = 'url("' + c.toDataURL('image/png') + '")');
+      }
+      document.querySelectorAll('.nav-bar .nav-btn, .nav-bar .ext-link').forEach(function(btn) {
+        var name = btn.getAttribute('data-page') || 'globe';
+        var ico = btn.querySelector('.ico');
+        if (!ico || !ICONS[name]) return;
+        ico.textContent = '';
+        ico.style.backgroundImage = paint(name);
       });
     })();
 
@@ -3525,8 +3733,8 @@
         // Renderer
         { text: '  [renderer]  Spawning star canvas (256 particles, requestAnimationFrame) . . . OK', cls: 'boot-grn', delay: 50, pause: 13 },
         { text: '  [renderer]  Randomising star positions, velocities and depths           . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
-        { text: '  [renderer]  Mounting nebula overlay (3-layer radial gradient)           . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
-        { text: '  [renderer]  Starting nebula-drift animation (18s ease-in-out)           . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
+        { text: '  [renderer]  Rasterising nebula into framebuffer (3 radial layers)       . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
+        { text: '  [renderer]  Ordered dither: Bayer 4x4, 6x6x6 colour cube                . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
         { text: '  [renderer]  Enabling CRT scanlines  (1px on / 3px off, 0.45 opacity)   . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
         { text: '  [renderer]  Enabling CRT hotband    (7s vertical sweep, z-index 100006) . . . OK', cls: 'boot-grn', delay: 40, pause: 13 },
         { text: '  [renderer]  Enabling RGB subpixel noise layer (z-index 100005)          . . . OK', cls: 'boot-grn', delay: 40, pause: 20 },
@@ -3547,7 +3755,7 @@
 
         // Pages
         { text: '  [pages]     Mounting HOME page                                           . . . OK', cls: 'boot-grn', delay: 50, pause: 11 },
-        { text: '  [pages]       -> home-panel.glass (SeanML.exe title)                    . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
+        { text: '  [pages]       -> home-panel.glass (title screen)                       . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
         { text: '  [pages]       -> Decrypt animation: character scramble on home text      . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
         { text: '  [pages]       -> Home buttons: [Contact] [Projects]  (click SFX)        . . . OK', cls: 'boot-grn', delay: 30, pause: 11 },
         { text: '  [pages]     Mounting ABOUT page                                          . . . OK', cls: 'boot-grn', delay: 40, pause: 11 },
